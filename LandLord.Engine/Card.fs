@@ -145,7 +145,7 @@ module Card =
 
 
 
-    let(|ShunZi|_|) (dup: int) (len: int) (cards: PlayingCard list) =
+    let (|ShunZi|_|) (dup: int) (len: int) (cards: PlayingCard list) =
 
         let mutable values: CardValue list = []
         let rec fillValues(cards: PlayingCard list) = 
