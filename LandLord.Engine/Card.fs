@@ -24,9 +24,31 @@ module Card =
     type PlayingCard =  
         | Joker of JokerType
         | NormalCard of CardValue * Suit
+
+
+    let (|DanZhang| _ |) (cards: PlayingCard list) =
+        match cards with
+        | [danzhang] -> Some(cards)
+        | _ -> None
+
+
+    let (|DuiZi|_|) (cards: PlayingCard list) =
+        match cards with
+        | [NormalCard(a, _); NormalCard(b, _)]
+            when a = b
+                -> Some(cards)
+        | _ -> None
+
+
+    let (|SanZhang|_|) (cards: PlayingCard list) =
+        match cards with
+        | [NormalCard(a, _); NormalCard(b, _); NormalCard(c, _)]
+            when a = b && b = c
+                -> Some(cards)
+        | _ -> None
         
 
-    let internal checkLianShun (values: CardValue list)= 
+    let internal checkDanLianShun (values: CardValue list)= 
         let x = values |> List.map int |> List.sort 
 
         let rec test (values: int list, prev : int) = 
@@ -39,70 +61,66 @@ module Card =
         | head :: tail -> test(tail,head)
         | _ -> false
 
-    let (|DanZhang| _ |) (cards: PlayingCard list) =
-        match cards with
-        | [danzhang] -> Some(cards)
-        | _ -> None
 
     let (|LianShun5|_|) (cards: PlayingCard list) = 
         match cards with
         | [NormalCard(a,_); NormalCard(b,_); NormalCard(c,_); NormalCard(d,_); NormalCard(e,_)]  
-            when checkLianShun [ a; b; c; d; e ]
+            when checkDanLianShun [ a; b; c; d; e ]
                 -> Some(cards)
         | _ -> None
 
     let (|LianShun6|_|) (cards: PlayingCard list) = 
         match cards with
         | [NormalCard(a,_); NormalCard(b,_); NormalCard(c,_); NormalCard(d,_); NormalCard(e,_); NormalCard(f,_)]  
-            when checkLianShun [a; b; c; d; e; f; ] 
+            when checkDanLianShun [a; b; c; d; e; f; ] 
                 -> Some(cards)
         | _ -> None
 
     let (|LianShun7|_|) (cards: PlayingCard list) = 
         match cards with
         | [NormalCard(a,_); NormalCard(b,_); NormalCard(c,_); NormalCard(d,_); NormalCard(e,_); NormalCard(f,_); NormalCard(g,_);]  
-            when checkLianShun [a; b; c; d; e; f; g]
+            when checkDanLianShun [a; b; c; d; e; f; g]
                 -> Some(cards)
         | _ -> None
 
     let (|LianShun8|_|) (cards: PlayingCard list) = 
         match cards with
         | [NormalCard(a,_); NormalCard(b,_); NormalCard(c,_); NormalCard(d,_); NormalCard(e,_); NormalCard(f,_); NormalCard(g,_); NormalCard(h ,_)]  
-            when checkLianShun [a; b; c; d; e; f; g; h]
+            when checkDanLianShun [a; b; c; d; e; f; g; h]
                 -> Some(cards)
         | _ -> None
 
     let (|LianShun9|_|) (cards: PlayingCard list) = 
         match cards with
         | [NormalCard(a,_); NormalCard(b,_); NormalCard(c,_); NormalCard(d,_); NormalCard(e,_); NormalCard(f,_); NormalCard(g,_); NormalCard(h ,_) ; NormalCard(i , _)]  
-            when checkLianShun [a; b; c; d; e; f; g; h; i]
+            when checkDanLianShun [a; b; c; d; e; f; g; h; i]
                 -> Some(cards)
         | _ -> None
 
     let (|LianShun10|_|) (cards: PlayingCard list) = 
         match cards with
         | [NormalCard(a,_); NormalCard(b,_); NormalCard(c,_); NormalCard(d,_); NormalCard(e,_); NormalCard(f,_); NormalCard(g,_); NormalCard(h ,_) ; NormalCard(i , _); NormalCard(j, _)]  
-            when checkLianShun [a; b; c; d; e; f; g; h; i; j]
+            when checkDanLianShun [a; b; c; d; e; f; g; h; i; j]
                 -> Some(cards)
         | _ -> None
 
     let (|LianShun11|_|) (cards: PlayingCard list) = 
         match cards with
         | [NormalCard(a,_); NormalCard(b,_); NormalCard(c,_); NormalCard(d,_); NormalCard(e,_); NormalCard(f,_); NormalCard(g,_); NormalCard(h ,_) ; NormalCard(i , _); NormalCard(j, _); NormalCard(k, _)]  
-            when checkLianShun [a; b; c; d; e; f; g; h; i; j; k]
+            when checkDanLianShun [a; b; c; d; e; f; g; h; i; j; k]
                 -> Some(cards)
         | _ -> None
 
     let (|LianShun12|_|) (cards: PlayingCard list) = 
         match cards with
         | [NormalCard(a,_); NormalCard(b,_); NormalCard(c,_); NormalCard(d,_); NormalCard(e,_); NormalCard(f,_); NormalCard(g,_); NormalCard(h ,_) ; NormalCard(i , _); NormalCard(j, _); NormalCard(k, _); NormalCard(l, _)]  
-            when checkLianShun [a; b; c; d; e; f; g; h; i; j; k; l]
+            when checkDanLianShun [a; b; c; d; e; f; g; h; i; j; k; l]
                 -> Some(cards)
         | _ -> None
 
 
 
-    let internal checkLianShunForDup (dup: int) (len: int) (cards: CardValue list) = 
+    let internal checkDuoLianShun (dup: int) (len: int) (cards: CardValue list) = 
         let x = cards |> List.map int |> List.sort
 
         // group
@@ -121,25 +139,10 @@ module Card =
                 let noneDupcardValues =
                     groups
                     |> List.map(fun i->i |> List.head |> enum )
-                checkLianShun noneDupcardValues
+                checkDanLianShun noneDupcardValues
         | _ -> false 
 
 
-
-    let (|DuiZi|_|) (cards: PlayingCard list) =
-        match cards with
-        | [NormalCard(a, _); NormalCard(b, _)]
-            when a = b
-                -> Some(cards)
-        | _ -> None
-
-
-    let (|SanZhang|_|) (cards: PlayingCard list) =
-        match cards with
-        | [NormalCard(a, _); NormalCard(b, _); NormalCard(c, _)]
-            when a = b && b = c
-                -> Some(cards)
-        | _ -> None
 
 
     let(|ShunZi|_|) (dup: int) (len: int) (cards: PlayingCard list) =
@@ -156,7 +159,7 @@ module Card =
             | _ -> false
 
         if fillValues cards then 
-            if checkLianShunForDup dup len values then
+            if checkDuoLianShun dup len values then
                 Some(cards)
             else 
                 None
