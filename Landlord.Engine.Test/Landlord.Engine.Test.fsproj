@@ -7,9 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="TestFeiJi.fs" />
-    <Compile Include="TestLianDui.fs" />
     <Compile Include="TestLianShun.fs" />
+    <Compile Include="TestLianDui.fs" />
+    <Compile Include="TestFeiJi.fs" />
+    <Compile Include="Test3DaiN.fs" />
   </ItemGroup>
 
   <ItemGroup>

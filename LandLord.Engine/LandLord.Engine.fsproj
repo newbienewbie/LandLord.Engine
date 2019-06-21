@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Compile Include="Card.fs" />
+    <Compile Include="SanDaiN.fs" />
     <Compile Include="Library.fs" />
   </ItemGroup>
 
