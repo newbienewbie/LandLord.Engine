@@ -18,6 +18,17 @@ let lianshun (cards: PlayingCard list) =
     | LianShun12 list -> 12
     | _ -> 0
 
+[<Fact>]
+let ``测试连顺-单张不是顺子`` () =
+
+    let cards : PlayingCard list = 
+        [   NormalCard( CardValue.Seven, Heart); ]
+
+    let x = match cards with 
+    | LianShun 1 cards -> 1
+    | _ -> 0
+
+    Assert.Equal(0,  x)
 
 [<Fact>]
 let ``测试5连顺-顺序`` () =

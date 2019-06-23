@@ -17,14 +17,15 @@ module Card =
         | Ace = 14
         | Two  = 15
 
-    type JokerType = | Red | Black
+    type JokerType = 
+        | Black = 20 
+        | Red  =  21
 
     type Suit = | Spade | Club | Diamond | Heart
 
     type PlayingCard =  
         | Joker of JokerType
         | NormalCard of CardValue * Suit
-
 
     let (|DanZhang| _ |) (cards: PlayingCard list) =
         match cards with
@@ -61,63 +62,74 @@ module Card =
         | head :: tail -> test(tail,head)
         | _ -> false
 
+    let private cardsContinuous (cards: PlayingCard list) : bool= 
+
+        let rec _cardsContinuous (cards: PlayingCard list) (prev: int) = 
+            match cards with
+            | [ NormalCard(a, _);] when prev + 1 = int a 
+                -> true
+            | NormalCard(v, _)::tail when prev + 1 = int v 
+                -> _cardsContinuous tail (int v)
+            | _ -> false
+
+        let sortedCards = 
+            cards 
+            |> List.sortBy (fun c -> match c with 
+               | NormalCard(v, suit) -> int v
+               | Joker(j) -> int j )
+
+        match sortedCards with
+        | NormalCard(v, _) :: tail -> _cardsContinuous tail (int v)
+        | _ -> false
+
+
+    /// 注意单张不是顺子， num > 1
+    let (|LianShun|_|) (num: int) (cards: PlayingCard list) = 
+        match cards with
+        | list when cardsContinuous list  && List.length cards = num 
+            -> Some(list) 
+        | _ -> None
+
 
     let (|LianShun5|_|) (cards: PlayingCard list) = 
         match cards with
-        | [NormalCard(a,_); NormalCard(b,_); NormalCard(c,_); NormalCard(d,_); NormalCard(e,_)]  
-            when checkDanLianShun [ a; b; c; d; e ]
-                -> Some(cards)
+        | LianShun 5 cards -> Some(cards)
         | _ -> None
 
     let (|LianShun6|_|) (cards: PlayingCard list) = 
         match cards with
-        | [NormalCard(a,_); NormalCard(b,_); NormalCard(c,_); NormalCard(d,_); NormalCard(e,_); NormalCard(f,_)]  
-            when checkDanLianShun [a; b; c; d; e; f; ] 
-                -> Some(cards)
+        | LianShun 6 cards -> Some(cards)
         | _ -> None
 
     let (|LianShun7|_|) (cards: PlayingCard list) = 
         match cards with
-        | [NormalCard(a,_); NormalCard(b,_); NormalCard(c,_); NormalCard(d,_); NormalCard(e,_); NormalCard(f,_); NormalCard(g,_);]  
-            when checkDanLianShun [a; b; c; d; e; f; g]
-                -> Some(cards)
+        | LianShun 7 cards -> Some(cards)
         | _ -> None
 
     let (|LianShun8|_|) (cards: PlayingCard list) = 
         match cards with
-        | [NormalCard(a,_); NormalCard(b,_); NormalCard(c,_); NormalCard(d,_); NormalCard(e,_); NormalCard(f,_); NormalCard(g,_); NormalCard(h ,_)]  
-            when checkDanLianShun [a; b; c; d; e; f; g; h]
-                -> Some(cards)
+        | LianShun 8 cards -> Some(cards)
         | _ -> None
 
     let (|LianShun9|_|) (cards: PlayingCard list) = 
         match cards with
-        | [NormalCard(a,_); NormalCard(b,_); NormalCard(c,_); NormalCard(d,_); NormalCard(e,_); NormalCard(f,_); NormalCard(g,_); NormalCard(h ,_) ; NormalCard(i , _)]  
-            when checkDanLianShun [a; b; c; d; e; f; g; h; i]
-                -> Some(cards)
+        | LianShun 9 cards -> Some(cards)
         | _ -> None
 
     let (|LianShun10|_|) (cards: PlayingCard list) = 
         match cards with
-        | [NormalCard(a,_); NormalCard(b,_); NormalCard(c,_); NormalCard(d,_); NormalCard(e,_); NormalCard(f,_); NormalCard(g,_); NormalCard(h ,_) ; NormalCard(i , _); NormalCard(j, _)]  
-            when checkDanLianShun [a; b; c; d; e; f; g; h; i; j]
-                -> Some(cards)
+        | LianShun 10 cards -> Some(cards)
         | _ -> None
 
     let (|LianShun11|_|) (cards: PlayingCard list) = 
         match cards with
-        | [NormalCard(a,_); NormalCard(b,_); NormalCard(c,_); NormalCard(d,_); NormalCard(e,_); NormalCard(f,_); NormalCard(g,_); NormalCard(h ,_) ; NormalCard(i , _); NormalCard(j, _); NormalCard(k, _)]  
-            when checkDanLianShun [a; b; c; d; e; f; g; h; i; j; k]
-                -> Some(cards)
+        | LianShun 11 cards -> Some(cards)
         | _ -> None
 
     let (|LianShun12|_|) (cards: PlayingCard list) = 
         match cards with
-        | [NormalCard(a,_); NormalCard(b,_); NormalCard(c,_); NormalCard(d,_); NormalCard(e,_); NormalCard(f,_); NormalCard(g,_); NormalCard(h ,_) ; NormalCard(i , _); NormalCard(j, _); NormalCard(k, _); NormalCard(l, _)]  
-            when checkDanLianShun [a; b; c; d; e; f; g; h; i; j; k; l]
-                -> Some(cards)
+        | LianShun 12 cards -> Some(cards)
         | _ -> None
-
 
 
     let internal checkDuoLianShun (dup: int) (len: int) (cards: CardValue list) = 
