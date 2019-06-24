@@ -49,14 +49,14 @@ module Card =
         |> List.sortBy (getWeight true)
 
 
-    let (|DanZhang| _ |) (cards: PlayingCard list) =
+    let (|Single| _ |) (cards: PlayingCard list) =
         match cards with
         | [NormalCard(card, suit)] -> Some(NormalCard(card,suit))
         | [Joker(j)] -> Some(Joker(j))
         | _ -> None
 
 
-    let (|DuiZi|_|) (cards: PlayingCard list) =
+    let (|Double|_|) (cards: PlayingCard list) =
         match cards with
         | [NormalCard(a, _); NormalCard(b, _)]
             when a = b
@@ -64,7 +64,7 @@ module Card =
         | _ -> None
 
 
-    let (|SanZhang|_|) (cards: PlayingCard list) =
+    let (|Trible|_|) (cards: PlayingCard list) =
         match cards with
         | [NormalCard(a, _); NormalCard(b, _); NormalCard(c, _)]
             when a = b && b = c

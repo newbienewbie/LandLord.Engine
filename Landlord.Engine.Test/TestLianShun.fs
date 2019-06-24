@@ -7,7 +7,7 @@ open Itminus.LandLord.Engine.Card
 
 let lianshun (cards: PlayingCard list) = 
     match cards with
-    | DanZhang list -> 1
+    | Single list -> 1
     | LianShun5 list -> 5
     | LianShun6 list -> 6
     | LianShun7 list -> 7

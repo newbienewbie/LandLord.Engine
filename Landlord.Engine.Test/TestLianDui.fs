@@ -7,7 +7,7 @@ open Itminus.LandLord.Engine.Card
 
 let private lianshun2 (cards: PlayingCard list) = 
     match cards with
-    | DuiZi list -> 1
+    | Double list -> 1
     | ShunZi 2 3 cards -> 3
     | ShunZi 2 4 cards -> 4
     | ShunZi 2 5 cards -> 5
