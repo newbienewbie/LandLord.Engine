@@ -23,27 +23,10 @@ module SanDaiN=
                 -> Some(cards)
         | _ -> None
 
-
-    let rec internal getCardValues (cards: PlayingCard list) = 
-
-        let mutable values : CardValue list = []
-
-        let rec getValeus cards = 
-            match cards with
-            | NormalCard(v, suit) :: tail -> 
-                values <- values @ [v]
-                getValeus tail
-            | _ -> false
-
-        match getValeus cards with
-        | true -> Some values
-        | false -> None
-
-    
     let (|FeiJiDai2|_|) (cards: PlayingCard list) = 
 
         let ``check3+3+1+1`` (cards: PlayingCard list) : bool = 
-            match getCardValues cards with
+            match getCardsValues cards with
             | Some values ->
                 let groups = 
                     values
@@ -65,7 +48,7 @@ module SanDaiN=
 
     let (|FeiJiDai3|_|) (cards: PlayingCard list) = 
         let ``check3+3+3+1+1+1`` (cards: PlayingCard list) : bool = 
-            match getCardValues cards with
+            match getCardsValues cards with
             | Some values ->
                 let groups = 
                     values 

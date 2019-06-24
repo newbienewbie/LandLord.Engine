@@ -48,6 +48,23 @@ module Card =
         cards 
         |> List.sortBy (getWeight true)
 
+    let rec getCardsValues (cards: PlayingCard list) = 
+
+        let mutable values : CardValue list = []
+
+        let rec getValues cards = 
+            match cards with
+            | [NormalCard(v, suit)] -> 
+                values <- values @ [v]
+                true
+            | NormalCard(v, suit) :: tail -> 
+                values <- values @ [v]
+                getValues tail
+            | _ -> false
+
+        match getValues cards with
+        | true -> Some values
+        | false -> None
 
     let (|Single| _ |) (cards: PlayingCard list) =
         match cards with
@@ -180,24 +197,9 @@ module Card =
 
 
 
-
     let (|ShunZi|_|) (dup: int) (len: int) (cards: PlayingCard list) =
 
-        let mutable values: CardValue list = []
-        let rec fillValues(cards: PlayingCard list) = 
-            match cards with
-            | [ (NormalCard(c, suit))]  ->
-                values<- values @ [c]
-                true
-            | NormalCard(c, suit)::tail->
-                values<- values @ [c]
-                fillValues tail
-            | _ -> false
-
-        if fillValues cards then 
-            if checkDuoLianShun dup len values then
-                Some(cards)
-            else 
-                None
-        else 
-            None
+        match cards |> getCardsValues with
+        | Some(values) when checkDuoLianShun dup len values 
+            -> Some(cards)
+        | _ -> None
