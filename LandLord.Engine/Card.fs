@@ -88,44 +88,29 @@ module Card =
                 -> Some(cards)
         | _ -> None
 
-       
 
-    let internal checkDanLianShun (values: CardValue list)= 
-        let x = values |> List.map int |> List.sort 
-
-        let rec test (values: int list, prev : int) = 
-            match values with
-            | [a] -> true
-            | head :: tail when head = prev + 1 -> test(tail, head)
-            | _ -> false
-
-        match x with 
-        | head :: tail -> test(tail,head)
-        | _ -> false
-
-    let private cardsContinuous (cards: PlayingCard list) : bool= 
-
-        let rec _cardsContinuous (cards: PlayingCard list) (prev: int) = 
-            match cards with
-            | [ NormalCard(a, _);] when prev + 1 = int a 
-                -> true
-            | NormalCard(v, _)::tail when prev + 1 = int v 
-                -> _cardsContinuous tail (int v)
-            | _ -> false
-
-        let sortedCards = 
-            cards 
-            |> List.sortBy (fun c -> match c with 
-               |NormalCard(v, suit) -> int v
-               |Joker(j) -> int j )
-
-        match sortedCards with
-        | NormalCard(v, _) :: tail -> _cardsContinuous tail (int v)
-        | _ -> false
-
-
-    /// 注意单张不是顺子， num > 1
     let (|LianShun|_|) (num: int) (cards: PlayingCard list) = 
+
+        let cardsContinuous (cards: PlayingCard list) : bool= 
+
+            let rec _cardsContinuous (cards: PlayingCard list) (prev: int) = 
+                match cards with
+                | [ NormalCard(a, _);] when prev + 1 = int a 
+                    -> true
+                | NormalCard(v, _)::tail when prev + 1 = int v 
+                    -> _cardsContinuous tail (int v)
+                | _ -> false
+
+            let sortedCards = 
+                cards 
+                |> List.sortBy (fun c -> match c with 
+                   |NormalCard(v, suit) -> int v
+                   |Joker(j) -> int j )
+
+            match sortedCards with
+            | NormalCard(v, _) :: tail -> _cardsContinuous tail (int v)
+            | _ -> false
+
         match cards with
         | list when cardsContinuous list  && List.length cards = num 
             -> Some(list) 
@@ -173,31 +158,42 @@ module Card =
         | _ -> None
 
 
-    let internal checkDuoLianShun (dup: int) (len: int) (cards: CardValue list) = 
-        let x = cards |> List.map int |> List.sort
-
-        // group
-        let groups = x |> List.groupBy(fun i -> i) |> List.map(fun t -> snd t)
-
-        // check group length
-        match groups |> List.length with
-        | l when l = len ->
-            let notDuiZi =
-                groups
-                |> List.map(fun g->List.length g)
-                |> List.exists(fun count->count <> dup)
-            if notDuiZi then
-                false
-            else 
-                let noneDupcardValues =
-                    groups
-                    |> List.map(fun i->i |> List.head |> enum )
-                checkDanLianShun noneDupcardValues
-        | _ -> false 
-
-
-
     let (|ShunZi|_|) (dup: int) (len: int) (cards: PlayingCard list) =
+
+        let checkDanLianShun (values: CardValue list)= 
+            let x = values |> List.map int |> List.sort 
+
+            let rec test (values: int list, prev : int) = 
+                match values with
+                | [a] -> true
+                | head :: tail when head = prev + 1 -> test(tail, head)
+                | _ -> false
+
+            match x with 
+            | head :: tail -> test(tail,head)
+            | _ -> false
+
+        let checkDuoLianShun (dup: int) (len: int) (cards: CardValue list) = 
+            let x = cards |> List.map int |> List.sort
+
+            // group
+            let groups = x |> List.groupBy(fun i -> i) |> List.map(fun t -> snd t)
+
+            // check group length
+            match groups |> List.length with
+            | l when l = len ->
+                let notDuiZi =
+                    groups
+                    |> List.map(fun g->List.length g)
+                    |> List.exists(fun count->count <> dup)
+                if notDuiZi then
+                    false
+                else 
+                    let noneDupcardValues =
+                        groups
+                        |> List.map(fun i->i |> List.head |> enum )
+                    checkDanLianShun noneDupcardValues
+            | _ -> false 
 
         match cards |> getCardsValues with
         | Some(values) when checkDuoLianShun dup len values 
