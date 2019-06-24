@@ -23,3 +23,67 @@ module SanDaiN=
                 -> Some(cards)
         | _ -> None
 
+
+    let rec internal getCardValues (cards: PlayingCard list) = 
+
+        let mutable values : CardValue list = []
+
+        let rec getValeus cards = 
+            match cards with
+            | NormalCard(v, suit) :: tail -> 
+                values <- values @ [v]
+                getValeus tail
+            | _ -> false
+
+        match getValeus cards with
+        | true -> Some values
+        | false -> None
+
+    
+    let (|FeiJiDai2|_|) (cards: PlayingCard list) = 
+
+        let ``check3+3+1+1`` (cards: PlayingCard list) : bool = 
+            match getCardValues cards with
+            | Some values ->
+                let groups = 
+                    values
+                    |> List.groupBy (fun c -> c) 
+                    |> List.map (fun g -> snd g)
+                    |> List.sortBy (fun i -> List.length i )
+                match groups with 
+                | [[v1]; [v2]; [f1;f2;f3]; [s1; s2; s3] ] 
+                    when f1 = f2 && f2 = f3 && v1 <> f1 && v2 <> f1
+                         && s1 = s2 && s2 = s3 && v1 <> s1 && v2 <> s1
+                            -> true
+                | _ -> false
+            | None -> false
+
+        match cards with
+        | list  when ``check3+3+1+1`` list -> Some(cards)
+        | _ -> None
+
+
+    let (|FeiJiDai3|_|) (cards: PlayingCard list) = 
+        let ``check3+3+3+1+1+1`` (cards: PlayingCard list) : bool = 
+            match getCardValues cards with
+            | Some values ->
+                let groups = 
+                    values 
+                    |> List.groupBy (fun c -> c)
+                    |> List.map snd 
+                    |> List.sortBy List.length
+                match groups with
+                | [[v1]; [v2]; [v3]; [f1; f2; f3]; [s1; s2; s3]; [t1; t2; t3]]
+                    when f1 = f2 && f2 = f3 && s1 = s2 && s2 = s3 && t1 = t2 && t2 = t3
+                        && v1 <> f1 && v1 <> s1 && v1 <> t1
+                        && v2 <> f1 && v2 <> s1 && v3 <> t1
+                        && v3 <> f1 && v3 <> s1 && v3 <> t3
+                        && f1 <> s1 && f1 <> t1 && s1 <> t1
+                           -> true
+                | _ -> false
+            | None -> false
+
+        match cards with
+        | list when ``check3+3+3+1+1+1`` list -> Some cards 
+        | _ -> None
+
