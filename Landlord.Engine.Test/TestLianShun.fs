@@ -22,11 +22,11 @@ let lianshun (cards: PlayingCard list) =
 let ``测试连顺-单张不是顺子`` () =
 
     let cards : PlayingCard list = 
-        [   NormalCard( CardValue.Seven, Heart); ]
+        [   NormalCard( CardValue.Seven, Suit.Heart); ]
 
     let x = match cards with 
-    | LianShun 1 cards -> 1
-    | _ -> 0
+    |LianShun 1 cards -> 1
+    |_ -> 0
 
     Assert.Equal(0,  x)
 
@@ -34,11 +34,11 @@ let ``测试连顺-单张不是顺子`` () =
 let ``测试5连顺-顺序`` () =
 
     let cards : PlayingCard list = 
-        [   NormalCard( CardValue.Three, Heart);
-            NormalCard( CardValue.Four, Diamond);
-            NormalCard( CardValue.Five, Heart); 
-            NormalCard( CardValue.Six, Heart); 
-            NormalCard( CardValue.Seven, Heart); ]
+        [   NormalCard( CardValue.Three, Suit.Heart);
+            NormalCard( CardValue.Four, Suit.Diamond);
+            NormalCard( CardValue.Five, Suit.Heart); 
+            NormalCard( CardValue.Six, Suit.Heart); 
+            NormalCard( CardValue.Seven, Suit.Heart); ]
 
     let x = lianshun cards
     Assert.Equal(5,  x)
@@ -48,11 +48,11 @@ let ``测试5连顺-顺序`` () =
 let ``测试5连顺-乱序`` () =
 
     let cards : PlayingCard list = 
-        [   NormalCard( CardValue.Three, Heart);
-            NormalCard( CardValue.Six, Heart); 
-            NormalCard( CardValue.Five, Heart); 
-            NormalCard( CardValue.Four, Diamond);
-            NormalCard( CardValue.Seven, Heart); ]
+        [   NormalCard( CardValue.Three, Suit.Heart);
+            NormalCard( CardValue.Six, Suit.Heart); 
+            NormalCard( CardValue.Five, Suit.Heart); 
+            NormalCard( CardValue.Four, Suit.Diamond);
+            NormalCard( CardValue.Seven, Suit.Heart); ]
 
     let x = lianshun cards
     Assert.Equal(5,  x)
@@ -61,11 +61,11 @@ let ``测试5连顺-乱序`` () =
 let ``测试5连顺-不含A-2-3-4-5`` () =
 
     let cards : PlayingCard list = 
-        [   NormalCard( CardValue.Ace, Heart);
-            NormalCard( CardValue.Two, Heart); 
-            NormalCard( CardValue.Three, Heart); 
-            NormalCard( CardValue.Four, Diamond);
-            NormalCard( CardValue.Five, Heart); ]
+        [   NormalCard( CardValue.Ace, Suit.Heart);
+            NormalCard( CardValue.Two, Suit.Heart); 
+            NormalCard( CardValue.Three, Suit.Heart); 
+            NormalCard( CardValue.Four, Suit.Diamond);
+            NormalCard( CardValue.Five, Suit.Heart); ]
 
     let x = lianshun cards
     Assert.Equal(0,  x)
@@ -74,12 +74,12 @@ let ``测试5连顺-不含A-2-3-4-5`` () =
 let ``测试6连顺`` () =
 
     let cards : PlayingCard list = 
-        [   NormalCard( CardValue.Three, Heart);
-            NormalCard( CardValue.Four, Diamond);
-            NormalCard( CardValue.Five, Heart); 
-            NormalCard( CardValue.Six, Heart); 
-            NormalCard( CardValue.Seven, Heart); 
-            NormalCard( CardValue.Eight, Heart); ]
+        [   NormalCard( CardValue.Three, Suit.Heart);
+            NormalCard( CardValue.Four, Suit.Diamond);
+            NormalCard( CardValue.Five, Suit.Heart); 
+            NormalCard( CardValue.Six, Suit.Heart); 
+            NormalCard( CardValue.Seven, Suit.Heart); 
+            NormalCard( CardValue.Eight, Suit.Heart); ]
 
     let x = lianshun cards
     Assert.Equal(6, x)
@@ -88,12 +88,12 @@ let ``测试6连顺`` () =
 let ``测试6连顺- 9/10/J/Q/K/A`` () =
 
     let cards : PlayingCard list = 
-        [   NormalCard( CardValue.Nine, Heart); 
-            NormalCard( CardValue.Ten, Heart); 
-            NormalCard( CardValue.Jack, Heart); 
-            NormalCard( CardValue.Queen, Heart); 
-            NormalCard( CardValue.King, Heart); 
-            NormalCard( CardValue.Ace, Heart); ]
+        [   NormalCard( CardValue.Nine, Suit.Heart); 
+            NormalCard( CardValue.Ten, Suit.Heart); 
+            NormalCard( CardValue.Jack, Suit.Heart); 
+            NormalCard( CardValue.Queen, Suit.Heart); 
+            NormalCard( CardValue.King, Suit.Heart); 
+            NormalCard( CardValue.Ace, Suit.Heart); ]
 
     let x = lianshun cards
     Assert.Equal(6, x)
@@ -102,12 +102,12 @@ let ``测试6连顺- 9/10/J/Q/K/A`` () =
 let ``测试6连顺- 10/J/Q/K/A/2`` () =
 
     let cards : PlayingCard list = 
-        [   NormalCard( CardValue.Ten, Heart); 
-            NormalCard( CardValue.Jack, Heart); 
-            NormalCard( CardValue.Queen, Heart); 
-            NormalCard( CardValue.King, Heart); 
-            NormalCard( CardValue.Ace, Heart); 
-            NormalCard( CardValue.Two, Heart); ]
+        [   NormalCard( CardValue.Ten, Suit.Heart); 
+            NormalCard( CardValue.Jack, Suit.Heart); 
+            NormalCard( CardValue.Queen, Suit.Heart); 
+            NormalCard( CardValue.King, Suit.Heart); 
+            NormalCard( CardValue.Ace, Suit.Heart); 
+            NormalCard( CardValue.Two, Suit.Heart); ]
 
     let x = lianshun cards
     Assert.Equal(6, x)
@@ -116,13 +116,13 @@ let ``测试6连顺- 10/J/Q/K/A/2`` () =
 let ``测试7连顺-3/4/5/6/7/8/9`` () =
 
     let cards : PlayingCard list = 
-        [   NormalCard( CardValue.Three, Heart);
-            NormalCard( CardValue.Four, Diamond);
-            NormalCard( CardValue.Five, Heart); 
-            NormalCard( CardValue.Six, Heart); 
-            NormalCard( CardValue.Seven, Heart); 
-            NormalCard( CardValue.Eight, Heart); 
-            NormalCard( CardValue.Nine, Heart); ]
+        [   NormalCard( CardValue.Three, Suit.Heart);
+            NormalCard( CardValue.Four, Suit.Diamond);
+            NormalCard( CardValue.Five, Suit.Heart); 
+            NormalCard( CardValue.Six, Suit.Heart); 
+            NormalCard( CardValue.Seven, Suit.Heart); 
+            NormalCard( CardValue.Eight, Suit.Heart); 
+            NormalCard( CardValue.Nine, Suit.Heart); ]
 
     let x = lianshun cards
     Assert.Equal(7,  x)
@@ -131,13 +131,13 @@ let ``测试7连顺-3/4/5/6/7/8/9`` () =
 let ``测试7连顺-9/10/J/Q/K/A/2`` () =
 
     let cards : PlayingCard list = 
-        [   NormalCard( CardValue.Nine, Heart);
-            NormalCard( CardValue.Ten, Diamond);
-            NormalCard( CardValue.Jack, Heart); 
-            NormalCard( CardValue.Queen, Heart); 
-            NormalCard( CardValue.King, Heart); 
-            NormalCard( CardValue.Ace, Heart); 
-            NormalCard( CardValue.Two, Heart); ]
+        [   NormalCard( CardValue.Nine, Suit.Heart);
+            NormalCard( CardValue.Ten, Suit.Diamond);
+            NormalCard( CardValue.Jack, Suit.Heart); 
+            NormalCard( CardValue.Queen, Suit.Heart); 
+            NormalCard( CardValue.King, Suit.Heart); 
+            NormalCard( CardValue.Ace, Suit.Heart); 
+            NormalCard( CardValue.Two, Suit.Heart); ]
 
     let x = lianshun cards
     Assert.Equal(7,  x)
@@ -146,13 +146,13 @@ let ``测试7连顺-9/10/J/Q/K/A/2`` () =
 let ``测试7连顺-10/J/Q/K/A/2/3`` () =
 
     let cards : PlayingCard list = 
-        [   NormalCard( CardValue.Ten, Diamond);
-            NormalCard( CardValue.Jack, Heart); 
-            NormalCard( CardValue.Queen, Heart); 
-            NormalCard( CardValue.King, Heart); 
-            NormalCard( CardValue.Ace, Heart); 
-            NormalCard( CardValue.Two, Heart); 
-            NormalCard( CardValue.Three, Heart); ]
+        [   NormalCard( CardValue.Ten, Suit.Diamond);
+            NormalCard( CardValue.Jack, Suit.Heart); 
+            NormalCard( CardValue.Queen, Suit.Heart); 
+            NormalCard( CardValue.King, Suit.Heart); 
+            NormalCard( CardValue.Ace, Suit.Heart); 
+            NormalCard( CardValue.Two, Suit.Heart); 
+            NormalCard( CardValue.Three, Suit.Heart); ]
 
     let x = lianshun cards
     Assert.Equal(0,  x)

@@ -18,18 +18,41 @@ module Card =
         | Two  = 15
 
     type JokerType = 
-        | Black = 20 
-        | Red  =  21
+        |Black = 20 
+        |Red  =  21
 
-    type Suit = | Spade | Club | Diamond | Heart
+    type Suit = 
+        |Spade   = 1
+        |Club    = 2
+        |Diamond = 3
+        |Heart   = 4
 
     type PlayingCard =  
-        | Joker of JokerType
-        | NormalCard of CardValue * Suit
+        |Joker of JokerType
+        |NormalCard of CardValue * Suit
+
+
+    let getWeight (considerSuit:bool) (card: PlayingCard) = 
+        let suitValue suit = 
+            if considerSuit then int suit else 0
+        match card with
+        |NormalCard(v, suit) -> int v <<< 2 + suitValue suit
+        |Joker(j) -> int j <<< 2 
+
+    let compare (considerSuit:bool) (card1: PlayingCard) (card2: PlayingCard) =
+        let c1 = getWeight considerSuit card1
+        let c2 = getWeight considerSuit card2
+        c1 - c2
+
+    let sort (cards: PlayingCard list) = 
+        cards 
+        |> List.sortBy (getWeight true)
+
 
     let (|DanZhang| _ |) (cards: PlayingCard list) =
         match cards with
-        | [danzhang] -> Some(cards)
+        | [NormalCard(card, suit)] -> Some(NormalCard(card,suit))
+        | [Joker(j)] -> Some(Joker(j))
         | _ -> None
 
 
@@ -47,7 +70,8 @@ module Card =
             when a = b && b = c
                 -> Some(cards)
         | _ -> None
-        
+
+       
 
     let internal checkDanLianShun (values: CardValue list)= 
         let x = values |> List.map int |> List.sort 
@@ -75,8 +99,8 @@ module Card =
         let sortedCards = 
             cards 
             |> List.sortBy (fun c -> match c with 
-               | NormalCard(v, suit) -> int v
-               | Joker(j) -> int j )
+               |NormalCard(v, suit) -> int v
+               |Joker(j) -> int j )
 
         match sortedCards with
         | NormalCard(v, _) :: tail -> _cardsContinuous tail (int v)
