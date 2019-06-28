@@ -23,7 +23,7 @@ type Msg =
     | AddUser of Player
     | AddUserSucceed of Player
     | AddUserFail of Player
-    | Shuffle of PlayingCard list * PlayingCard list * PlayingCard list
+    | Deal of PlayingCard list * PlayingCard list * PlayingCard list
     | StartPlayingCard of PlayingCard list
     | PlayCard of int * PlayingCard list
     | PlayCardSucceed of int * PlayingCard list
@@ -69,7 +69,7 @@ let init () =
         [ AddUser({ name="player1"; cards =[] }) |> Cmd.ofMsg ;
           AddUser({ name="player2"; cards =[] }) |> Cmd.ofMsg ;
           AddUser({ name="player3"; cards =[] }) |> Cmd.ofMsg ;
-          Shuffle(cards1, cards2, cards3) |> Cmd.ofMsg ; 
+          Deal(cards1, cards2, cards3) |> Cmd.ofMsg ; 
           StartPlayingCard([NormalCard(CardValue.King, Suit.Spade)]) |> Cmd.ofMsg 
         ]
 
@@ -81,7 +81,7 @@ let update msg state =
             AddUserSucceed player |> Cmd.ofMsg
         else 
             state, AddUserFail player |> Cmd.ofMsg
-    | Shuffle (cards1, cards2, cards3) ->
+    | Deal (cards1, cards2, cards3) ->
         let players= 
             List.zip state.players [cards1; cards2; cards3]
             |> List.map (fun z -> 

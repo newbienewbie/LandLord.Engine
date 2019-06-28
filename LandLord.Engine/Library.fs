@@ -1,11 +1,25 @@
 ﻿namespace Itminus.LandLord.Engine
 
+open System
+
 module Facade=
 
     open Card
     open SanDaiN
     open Bomb
-    
+
+    let createFullCards () =
+        let suits: Suit seq  = unbox( Enum.GetValues(typeof<Suit>) )
+        let values: CardValue seq = unbox(Enum.GetValues(typeof<CardValue>))
+        let mutable cards = []
+        for suit in suits do
+            for value in values do
+                let card = NormalCard(value, suit)
+                cards <- cards @[card]
+        cards <- cards @ [Joker(JokerType.Black)]
+        cards <- cards @ [Joker(JokerType.Red)]
+        cards
+
 
     let canPlay prevCards cards =
 

@@ -5,7 +5,44 @@ open Xunit
 open System.Collections.Generic
 open Itminus.LandLord.Engine.Card
 open Itminus.LandLord.Engine.Facade
-     
+
+[<Fact>]
+let ``测试fullCards() 唯一性`` () =
+    let cards = createFullCards()
+
+    // no duplicate
+    let cards'=
+        cards
+        |> List.distinct
+    Assert.Equal(54, List.length cards')
+
+    let set = Set.ofList cards
+    let set' = Set.ofList cards'
+    Set.isSubset set set' |> Assert.True
+    Set.isSubset set' set |> Assert.True
+
+[<Fact>]
+let ``测试fullCards() 完备性`` () =
+    let cards = createFullCards()
+
+    let length = List.length cards
+    // 52 + 2
+    Assert.Equal(54,length)
+
+    List.contains (Joker(JokerType.Black)) cards
+    |> Assert.True
+
+    List.contains (Joker(JokerType.Red)) cards
+    |> Assert.True
+
+    let suits: Suit seq  = unbox( Enum.GetValues(typeof<Suit>) )
+    let values: CardValue seq = unbox(Enum.GetValues(typeof<CardValue>))
+    for suit in suits do
+        for value in values do
+            let card = NormalCard(value, suit)
+            List.contains (NormalCard(CardValue.Ace, Suit.Club)) cards
+            |> Assert.True
+
 
 [<Fact>]
 let ``测试CanPlay() 333 _ 543`` () =
