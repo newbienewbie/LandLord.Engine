@@ -11,14 +11,56 @@ module Facade=
     let createFullCards () =
         let suits: Suit seq  = unbox( Enum.GetValues(typeof<Suit>) )
         let values: CardValue seq = unbox(Enum.GetValues(typeof<CardValue>))
-        let mutable cards = []
-        for suit in suits do
-            for value in values do
-                let card = NormalCard(value, suit)
-                cards <- cards @[card]
+
+        let mutable cards =
+            suits
+            |> Seq.collect (fun suit -> 
+                values
+                |> Seq.map (fun value -> NormalCard(value, suit))
+                |> Seq.toList
+            )
+            |> Seq.toList
         cards <- cards @ [Joker(JokerType.Black)]
         cards <- cards @ [Joker(JokerType.Red)]
         cards
+
+    let shuffle (cards: PlayingCard list) = 
+
+        let rand=new System.Random()
+        let length = List.length cards
+
+        let random min = 
+            rand.Next(min, length)
+
+        let swap i j (a: PlayingCard[] )  = 
+            let tmp = a.[i]
+            a.[i] <- a.[j]
+            a.[j] <- tmp
+            ()
+
+        let array = cards |> Array.ofList
+
+        // random
+        array
+        |> Array.iteri (fun i it -> 
+            let r = random i
+            swap i r array 
+        )
+
+        array |> List.ofArray
+
+
+    let deal (cards: PlayingCard list) = 
+        let reserved = cards |> List.take 3
+        let dealing = cards |> List.skip 3 |> List.mapi (fun i it -> (i % 3 , it))
+
+        let _cardsOfPlayerN nth =
+            dealing 
+            |> List.where (fun (i, it) -> i = nth ) 
+            |> List.map (fun (i, it) -> it)
+
+        let dealing = (_cardsOfPlayerN 0, _cardsOfPlayerN 1, _cardsOfPlayerN 2)
+        reserved, dealing
 
 
     let canPlay prevCards cards =

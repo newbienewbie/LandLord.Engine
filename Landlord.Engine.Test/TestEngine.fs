@@ -43,6 +43,79 @@ let ``测试fullCards() 完备性`` () =
             List.contains (NormalCard(CardValue.Ace, Suit.Club)) cards
             |> Assert.True
 
+[<Fact>]
+let ``测试shuffle()`` () =
+    let cards = createFullCards() 
+    let shuffled = cards |> shuffle
+
+    shuffled |> List.length |> (=) 54 |> Assert.True
+
+    let s1 = cards |> Set.ofList
+    let s2 = shuffled |> Set.ofList 
+    Set.isSubset s1 s2 |> Assert.True
+    Set.isSubset s2 s1 |> Assert.True
+
+
+[<Fact>]
+let ``测试deal() 唯一性`` () =
+    let cards = createFullCards() |> shuffle
+    let (reserved, (cards1, cards2, cards3)) = deal cards
+    Assert.Equal(3, reserved |> List.length)
+    Assert.Equal(17, cards1 |> List.length)
+    Assert.Equal(17, cards2 |> List.length)
+    Assert.Equal(17, cards3 |> List.length)
+    
+    let reservedSet = Set.ofList reserved
+    let cards1Set = Set.ofList cards1
+    let cards2Set = Set.ofList cards2
+    let cards3Set = Set.ofList cards3
+
+    Set.intersect reservedSet cards1Set 
+    |> Set.count 
+    |> (=) 0 
+    |> Assert.True
+
+    Set.intersect reservedSet cards2Set 
+    |> Set.count 
+    |> (=) 0 
+    |> Assert.True
+
+    Set.intersect reservedSet cards3Set 
+    |> Set.count 
+    |> (=) 0 
+    |> Assert.True
+
+    Set.intersect cards1Set cards2Set
+    |> Set.count 
+    |> (=) 0 
+    |> Assert.True
+
+    Set.intersect cards1Set cards3Set
+    |> Set.count 
+    |> (=) 0 
+    |> Assert.True
+
+    Set.intersect cards2Set cards3Set
+    |> Set.count 
+    |> (=) 0 
+    |> Assert.True
+
+
+[<Fact>]
+let ``测试deal() 完备性`` () =
+    let cards = createFullCards() |> shuffle
+    let (reserved, (cards1, cards2, cards3)) = deal cards
+    let cardsSet = Set.ofList cards
+    let sets = seq {
+        yield Set.ofList reserved
+        yield Set.ofList cards1
+        yield Set.ofList cards2
+        yield Set.ofList cards3
+    }
+    let fullcardsSet = Set.unionMany sets
+    fullcardsSet |> Set.isSubset cardsSet |> Assert.True
+    cardsSet|> Set.isSubset fullcardsSet|> Assert.True
+
 
 [<Fact>]
 let ``测试CanPlay() 333 _ 543`` () =
