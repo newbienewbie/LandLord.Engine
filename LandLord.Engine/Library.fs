@@ -108,8 +108,7 @@ module Facade=
         | (ShunZi 3 12 cards1, ShunZi 3 12 cards2) when seqGt cards2 cards1 -> true
         | (ShunZi 3 13 cards1, ShunZi 3 13 cards2) when seqGt cards2 cards1 -> true
 //      | (SanDai1 cards1, SanDai1 cards2) when seqGt cards2 cards1 -> true
-        | (Bomb b1, Bomb b2) 
-            -> if seqGt b2 b1 then true else false
+        | (Bomb b1, Bomb b2) -> seqGt b2 b1
         // the prev mustn't be a bomb because it would be matched by the above (bomb1,bomb2) pattern
         | (_, Bomb b1) -> true           
         | _ -> false
