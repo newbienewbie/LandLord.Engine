@@ -13,6 +13,7 @@
     <Compile Include="Test3DaiN.fs" />
     <Compile Include="TestBomb.fs" />
     <Compile Include="TestEngine.fs" />
+    <Compile Include="TestGameRoom.fs" />
   </ItemGroup>
 
   <ItemGroup>

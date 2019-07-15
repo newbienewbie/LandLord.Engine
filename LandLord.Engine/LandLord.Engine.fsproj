@@ -9,6 +9,7 @@
     <Compile Include="SanDaiN.fs" />
     <Compile Include="Bomb.fs" />
     <Compile Include="Helpers.fs" />
+    <Compile Include="GameRoom.fs" />
   </ItemGroup>
 
   <ItemGroup />
