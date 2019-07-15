@@ -116,6 +116,55 @@ let ``测试deal() 完备性`` () =
     fullcardsSet |> Set.isSubset cardsSet |> Assert.True
     cardsSet|> Set.isSubset fullcardsSet|> Assert.True
 
+[<Fact>]
+let ``测试CanStartPlaying() 3`` () =
+    let cards= [NormalCard(CardValue.Three,Suit.Spade); ]
+    canStartPlaying cards |> Assert.True
+
+[<Fact>]
+let ``测试CanStartPlaying() 33`` () =
+    let cards= [
+        NormalCard(CardValue.Three,Suit.Spade); 
+        NormalCard(CardValue.Three,Suit.Diamond); 
+    ]
+    canStartPlaying cards |> Assert.True
+
+[<Fact>]
+let ``测试CanStartPlaying() 333`` () =
+    let cards= 
+        [ NormalCard(CardValue.Three,Suit.Club); 
+          NormalCard(CardValue.Three,Suit.Spade); 
+          NormalCard(CardValue.Three,Suit.Diamond)] 
+    canStartPlaying cards |> Assert.True
+
+[<Fact>]
+let ``测试CanStartPlaying() 333+1`` () =
+    let cards= [ 
+        NormalCard(CardValue.Three,Suit.Club); 
+        NormalCard(CardValue.Three,Suit.Spade); 
+        NormalCard(CardValue.Three,Suit.Diamond);
+        NormalCard(CardValue.Ace,Suit.Diamond);
+    ] 
+    canStartPlaying cards |> Assert.True
+
+[<Fact>]
+let ``测试CanStartPlaying() 3333`` () =
+    let cards= [ 
+        NormalCard(CardValue.Three,Suit.Club); 
+        NormalCard(CardValue.Three,Suit.Spade); 
+        NormalCard(CardValue.Three,Suit.Diamond);
+        NormalCard(CardValue.Three,Suit.Heart);
+    ] 
+    canStartPlaying cards |> Assert.True
+
+[<Fact>]
+let ``测试CanStartPlaying() 345`` () =
+    let cards= 
+        [ NormalCard(CardValue.Five,Suit.Club); 
+          NormalCard(CardValue.Three,Suit.Spade); 
+          NormalCard(CardValue.Four,Suit.Diamond)] 
+    canStartPlaying cards |> Assert.False
+
 
 [<Fact>]
 let ``测试CanPlay() 333 _ 543`` () =

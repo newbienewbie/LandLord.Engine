@@ -1,10 +1,12 @@
 ﻿namespace Itminus.LandLord.Engine
 
 open System
+open System.Collections.Generic
+
+open Card
+open System.Linq
 
 module Facade=
-
-    open Card
     open SanDaiN
     open Bomb
 
@@ -49,7 +51,6 @@ module Facade=
 
         array |> List.ofArray
 
-
     let deal (cards: PlayingCard list) = 
         let reserved = cards |> List.take 3
         let dealing = cards |> List.skip 3 |> List.mapi (fun i it -> (i % 3 , it))
@@ -61,6 +62,46 @@ module Facade=
 
         let dealing = (_cardsOfPlayerN 0, _cardsOfPlayerN 1, _cardsOfPlayerN 2)
         reserved, dealing
+
+
+    let canStartPlaying list =
+        match list with
+        | Single cards -> true
+        | Double cards -> true
+        | Trible cards -> true
+        | LianShun5 cards -> true
+        | LianShun6 cards -> true
+        | LianShun7 cards -> true
+        | LianShun8 cards -> true
+        | LianShun9 cards -> true
+        | LianShun10 cards -> true
+        | LianShun11 cards -> true
+        | LianShun12 cards -> true
+        | ShunZi 2 3 cards -> true
+        | ShunZi 2 4 cards -> true
+        | ShunZi 2 5 cards -> true
+        | ShunZi 2 6 cards -> true
+        | ShunZi 2 7 cards -> true
+        | ShunZi 2 8 cards -> true
+        | ShunZi 2 9 cards -> true
+        | ShunZi 2 10 cards -> true
+        | ShunZi 2 11 cards -> true
+        | ShunZi 2 12 cards -> true
+        | ShunZi 2 13 cards -> true
+        | ShunZi 3 3 cards -> true
+        | ShunZi 3 4 cards -> true
+        | ShunZi 3 5 cards -> true
+        | ShunZi 3 6 cards -> true
+        | ShunZi 3 7 cards -> true
+        | ShunZi 3 8 cards -> true
+        | ShunZi 3 9 cards -> true
+        | ShunZi 3 10 cards -> true
+        | ShunZi 3 11 cards -> true
+        | ShunZi 3 12 cards -> true
+        | ShunZi 3 13 cards -> true
+        | SanDai1 cards -> true
+        | Bomb cards -> true
+        | _ -> false
 
 
     let canPlay prevCards cards =
@@ -113,3 +154,5 @@ module Facade=
         | (_, Bomb b1) -> true           
         | _ -> false
             
+
+
