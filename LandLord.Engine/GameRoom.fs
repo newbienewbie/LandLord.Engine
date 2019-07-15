@@ -38,17 +38,6 @@ type GameRoomMetaData() =
         _cards.Add(new List<PlayingCard>())
         _cards.Add(new List<PlayingCard>())
 
-    member this.Id with set (v: Guid) = _id <- v
-    member this.Cards with set (v: IList<IList<PlayingCard>>) = _cards <- v
-    member this.Players with set (v: IList<Player>) =  _players <- v
-    member this.ReservedCards with internal set(v: IList<PlayingCard>) = _reservedCards <- v
-
-    member this.CurrentTurn with set (v: int) =  _currentTurn <- v
-    member this.LandLordIndex with set (v: int) = _landLordIndex <- v
-
-    member this.PrevCards with set (v: IList<PlayingCard>) = _prevCards <- v
-    member this.PrevIndex with set (v: int) = _prevIndex <- v
-
     interface IGameRoomMetaData with
         member this.Id with get (): Guid = _id
         member this.Cards with get (): IList<IList<PlayingCard>> = _cards
@@ -58,6 +47,31 @@ type GameRoomMetaData() =
         member this.PrevIndex with get (): int = _prevIndex
         member this.Players with get() = _players
         member this.ReservedCards with get() = _reservedCards
+
+    member this.Id 
+        with get() = (this:>IGameRoomMetaData).Id
+        and set (v: Guid) = _id <- v
+    member this.Cards 
+        with get() = (this:>IGameRoomMetaData).Cards
+        and set (v: IList<IList<PlayingCard>>) = _cards <- v
+    member this.Players 
+        with get() = (this:>IGameRoomMetaData).Players
+        and set (v: IList<Player>) =  _players <- v
+    member this.ReservedCards 
+        with get() = (this:>IGameRoomMetaData).ReservedCards
+        and internal set(v: IList<PlayingCard>) = _reservedCards <- v
+    member this.CurrentTurn 
+        with get() = (this:>IGameRoomMetaData).CurrentTurn
+        and set (v: int) =  _currentTurn <- v
+    member this.LandLordIndex 
+        with get() = (this:>IGameRoomMetaData).LandLordIndex
+        and set (v: int) = _landLordIndex <- v
+    member this.PrevCards 
+        with get() = (this:>IGameRoomMetaData).PrevCards
+        and set (v: IList<PlayingCard>) = _prevCards <- v
+    member this.PrevIndex 
+        with get() = (this:>IGameRoomMetaData).PrevIndex
+        and set (v: int) = _prevIndex <- v
 
 type GameRoom(id) = 
     inherit GameRoomMetaData() 
@@ -74,9 +88,9 @@ type GameRoom(id) =
         let convertCardList (cards: PlayingCard list) : IList<PlayingCard> =
             let result = new List<PlayingCard>(cards)
             result :> IList<_>
-        (room:>IGameRoomMetaData).Cards.[0] <- convertCardList cards1
-        (room:>IGameRoomMetaData).Cards.[1] <- convertCardList cards2
-        (room:>IGameRoomMetaData).Cards.[2] <- convertCardList cards3
+        room.Cards.[0] <- convertCardList cards1
+        room.Cards.[1] <- convertCardList cards2
+        room.Cards.[2] <- convertCardList cards3
         room.ReservedCards <- (reserved |> convertCardList)
         room
 
@@ -86,6 +100,7 @@ type GameRoom(id) =
         room.CurrentTurn <- data.CurrentTurn
         room.Cards <- data.Cards
         room.Players <- data.Players
+        room.ReservedCards <- data.ReservedCards
         room.PrevCards <- data.PrevCards
         room.PrevIndex <- data.PrevIndex
         room 
@@ -97,16 +112,15 @@ type GameRoom(id) =
 type GameRoom with 
 
     member this.AddUser(player: Player) = 
-        let count = (this:> IGameRoomMetaData).Players.Count
+        let count = this.Players.Count
         if count < 3 then
-            (this:>IGameRoomMetaData).Players.Add(player)
+            this.Players.Add(player)
             true
         else 
             false
 
     member this.AppendCards(cards: IList<PlayingCard>) = 
-        let self = this:>IGameRoomMetaData
-        let originalCards = self.Cards.[self.LandLordIndex]
+        let originalCards = this.Cards.[this.LandLordIndex]
         for c in cards do
             originalCards.Add(c)
 
@@ -115,13 +129,13 @@ type GameRoom with
 
     member private this.playCards(nth: int , cards: IList<PlayingCard>) : bool = 
         if nth < 3 && nth >= 0 then 
-            let originalCards = (this:>IGameRoomMetaData).Cards.[nth]
+            let originalCards = this.Cards.[nth]
             let remaining = originalCards.Except(cards).ToList()
             
-            (this:>IGameRoomMetaData).Cards.[nth] <- remaining
+            this.Cards.[nth] <- remaining
             this.PrevIndex <- nth
             this.PrevCards <- cards
-            this.CurrentTurn <- (this:>IGameRoomMetaData).CurrentTurn + 1
+            this.CurrentTurn <- this.CurrentTurn + 1
             true
         else 
             failwith "the nth must be an int between [0,2]"
@@ -135,7 +149,7 @@ type GameRoom with
 
     // nth player plays cards
     member this.PlayCards (nth: int, cards:IList<PlayingCard>) : bool= 
-        let prevCards = (this:>IGameRoomMetaData).PrevCards |> List.ofSeq
+        let prevCards = this.PrevCards |> List.ofSeq
         if List.ofSeq cards |> Facade.canPlay prevCards then
             this.playCards(nth, cards)
         else
@@ -143,10 +157,10 @@ type GameRoom with
 
     // nth player passes by
     member this.Pass(nth: int, cards:IList<PlayingCard>) : bool= 
-        this.CurrentTurn <- (this:>IGameRoomMetaData).CurrentTurn + 1
+        this.CurrentTurn <- this.CurrentTurn + 1
         true
 
     member this.HasWin (nth: int) : bool = 
-        let cards = (this:>IGameRoomMetaData).Cards.[nth]
+        let cards = this.Cards.[nth]
         cards.Count = 0
 

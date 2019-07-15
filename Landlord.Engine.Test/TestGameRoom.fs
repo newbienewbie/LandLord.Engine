@@ -13,14 +13,12 @@ open System.Linq
 [<Fact>]
 let ``测试GameRoom::Prepare() Cards 各个分组的长度`` () =
     let gameRoom = GameRoom.Prepare() 
-
-    let gameRoom' = gameRoom :> IGameRoomMetaData
     // every player has 17 cards
-    for p in gameRoom'.Cards do
+    for p in gameRoom.Cards do
         Assert.Equal(17, p.Count)
 
     // and reserve 3 cards for landlord
-    let count2 = (gameRoom:>IGameRoomMetaData).ReservedCards.Count
+    let count2 = gameRoom.ReservedCards.Count
     Assert.Equal(3,count2)
 
 let private getActualCardsSet (includingReserved:bool) (gameRoom: IGameRoomMetaData) =
@@ -42,9 +40,8 @@ let ``测试GameRoom::Prepare() Cards的完备性和唯一性`` () =
 
     let fullCardsSet = Facade.createFullCards() |> Set.ofList
 
-    let originGameRoom = GameRoom.Prepare()
+    let gameRoom = GameRoom.Prepare()
 
-    let gameRoom = originGameRoom :> IGameRoomMetaData
     Assert.Equal(17, gameRoom.Cards.[0].Count)
     Assert.Equal(17, gameRoom.Cards.[1].Count)
     Assert.Equal(17, gameRoom.Cards.[2].Count)
@@ -73,7 +70,7 @@ let ``test ::AddPlayer()`` () =
     let players = createTestPlayers()
     for p in players do
         room.AddUser p |> Assert.True
-    Assert.Equal(3, (room:>IGameRoomMetaData).Players.Count)
+    Assert.Equal(3, room.Players.Count)
 
 let private createRoomAndAddUserAndSetLandLord landlordIndex = 
     let room = GameRoom.Prepare()
@@ -82,7 +79,7 @@ let private createRoomAndAddUserAndSetLandLord landlordIndex =
         room.AddUser p |> Assert.True
     let landlordIndex = 2
     room.LandLordIndex <- landlordIndex
-    room.AppendCards (room:>IGameRoomMetaData).ReservedCards
+    room.AppendCards room.ReservedCards
     room 
 
 [<Fact>]
@@ -90,17 +87,17 @@ let ``test GameRoom::AppendCards`` () =
     let landlordIndex = 2
     let room = createRoomAndAddUserAndSetLandLord landlordIndex
     // landlord index
-    Assert.Equal(landlordIndex,(room :> IGameRoomMetaData).LandLordIndex)
+    Assert.Equal(landlordIndex, room.LandLordIndex)
     // reserved cards count
-    Assert.Equal(3, (room:>IGameRoomMetaData).ReservedCards.Count)
+    Assert.Equal(3, room.ReservedCards.Count)
     // cards count
     for index in [0..2] do
         if index <> landlordIndex then 
-            Assert.Equal(17, (room:>IGameRoomMetaData).Cards.[index].Count)
+            Assert.Equal(17, room.Cards.[index].Count)
         else 
-            Assert.Equal(20, (room:>IGameRoomMetaData).Cards.[landlordIndex].Count)
+            Assert.Equal(20, room.Cards.[landlordIndex].Count)
     // players count
-    Assert.Equal(3, (room:>IGameRoomMetaData).Players.Count)
+    Assert.Equal(3, room.Players.Count)
 
     let actualCardsSet = getActualCardsSet false room
     Assert.Equal(54, actualCardsSet.Count)
@@ -113,8 +110,8 @@ let ``test GameRoom::AppendCards`` () =
 let ``test GameRoom::StartPlayingCards()`` () =
     let landlordIndex = 2
     let room = createRoomAndAddUserAndSetLandLord landlordIndex
-    let cards = (room:>IGameRoomMetaData).Cards
-    let currentTurn = (room:>IGameRoomMetaData).CurrentTurn
+    let cards = room.Cards
+    let currentTurn = room.CurrentTurn
     let playingCards = cards.[currentTurn].Take(1).ToList()
     room.StartPlayingCards(playingCards) |> Assert.True
     let empty = cards.[currentTurn].Intersect(playingCards)
