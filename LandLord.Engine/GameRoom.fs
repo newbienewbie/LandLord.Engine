@@ -73,15 +73,17 @@ type GameRoomMetaData() =
         with get() = (this:>IGameRoomMetaData).PrevIndex
         and set (v: int) = _prevIndex <- v
 
-type GameRoom(id) = 
+type GameRoom() = 
     inherit GameRoomMetaData() 
 
     static member Create(id: Guid) = 
-     GameRoom(id)
+        let room = GameRoom()
+        room.Id <- id
+        room
 
     // Create, Shuffle, Deal , and leave 3 cards for the LandLord
     static member Prepare()  = 
-        let room = Guid() |> GameRoom.Create 
+        let room = Guid.NewGuid() |> GameRoom.Create 
         let cards = Facade.createFullCards() |>  Facade.shuffle 
         let (reserved, (cards1, cards2, cards3)) = Facade.deal cards
         // change PlayingCard list to IList<PlayingCard>
@@ -95,7 +97,7 @@ type GameRoom(id) =
         room
 
     static member FromMetaData(data : IGameRoomMetaData) : GameRoom =
-        let room = GameRoom(data.Id)
+        let room = GameRoom.Create(data.Id)
         room.LandLordIndex <- data.LandLordIndex 
         room.CurrentTurn <- data.CurrentTurn
         room.Cards <- data.Cards
