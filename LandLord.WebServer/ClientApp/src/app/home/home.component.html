@@ -1,0 +1,14 @@
+
+<div>
+  房间
+  <div *ngFor="let room of rooms">
+    <div><a href="/room/{{room.id}}">房间号{{room.id}}</a></div>
+    <ul *ngFor="let player of room.players">
+      <li *ngIf="!!player">{{player.name}}</li>
+      <li *ngIf="!player"> 缺 </li>
+    </ul>
+  </div>
+  <div>
+    <button onclick="createRoom()">新开一个房间</button>
+  </div>
+</div>
