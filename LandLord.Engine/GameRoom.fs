@@ -6,8 +6,8 @@ open Card
 open System.Linq
 
 type Player()= 
-    member val Name:string = "" 
-        with get,set
+    member val ConnectionId:string = String.Empty with get, set
+    member val Name:string = "" with get,set
 
 /// a POCO that describes the meta data of GameRoom
 type IGameRoomMetaData = 
