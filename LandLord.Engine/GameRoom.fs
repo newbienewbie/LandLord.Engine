@@ -5,11 +5,20 @@ open System.Collections.Generic
 open Card
 open System.Linq
 
+
 type Player()= 
     member val ConnectionId:string = String.Empty with get, set
     member val Name:string = "" with get,set
 
+/// used by GameRoom::FindPlayer()
+[<AllowNullLiteral>]
+type PlayerFindings(index: int, player: Player) = 
+    member val Index = index with get,set
+    member val Player = player with get,set
+
 /// a POCO that describes the meta data of GameRoom
+
+[<AllowNullLiteral>]
 type IGameRoomMetaData = 
     abstract member Id :Guid with get
     abstract member Players: IList<Player> with get
@@ -107,9 +116,10 @@ type GameRoom() =
         room.PrevIndex <- data.PrevIndex
         room 
 
-     member this.ExportMetaData() = 
-         let origin = this :> IGameRoomMetaData
-         origin   
+    member this.ExportMetaData() = 
+        let origin = this :> IGameRoomMetaData
+        origin   
+
 
 type GameRoom with 
 
@@ -166,3 +176,59 @@ type GameRoom with
         let cards = this.Cards.[nth]
         cards.Count = 0
 
+
+type GameRoom with
+    /// finds a player by connection id, 
+    /// returns null if not found
+    member this.FindPlayer(connectionId: string ): PlayerFindings = 
+        let kvs = 
+            this.Players
+            |> Seq.mapi (fun k v -> k, v)
+            |> Seq.filter (fun (i, c) -> c.ConnectionId = connectionId)
+
+        if Seq.isEmpty kvs then 
+            null
+        else 
+            let i, p = Seq.head kvs
+            PlayerFindings(i, p)
+
+    static member private ShadowNthCardsList(fromCardsList: IList<IList<PlayingCard>>, nth: int) = 
+        if nth < 0 || nth > 2 then 
+            let msg = sprintf "invalid argument of nth: %A" nth
+            raise (ArgumentException(msg))
+
+        let cardsList = List<IList<PlayingCard>>()
+        cardsList.Add(List<PlayingCard>())
+        cardsList.Add(List<PlayingCard>())
+        cardsList.Add(List<PlayingCard>())
+
+        let fromCards= fromCardsList.[nth]
+        let toCards = cardsList.[nth]
+        for c in fromCards do 
+            toCards.Add(c)
+        cardsList :> IList<IList<PlayingCard>>
+
+    member private this.ShadowCopy() = 
+        let room = GameRoom.Create(this.Id)
+        room.LandLordIndex <- this.LandLordIndex 
+        room.CurrentTurn <- this.CurrentTurn
+        room.PrevCards <- this.PrevCards
+        room.PrevIndex <- this.PrevIndex
+        room.Cards <- this.Cards                
+        room.Players <- this.Players             
+        room.ReservedCards <- this.ReservedCards 
+        room 
+
+    /// shadow other cards for some player
+    member this.ShadowCards(nth : int): IGameRoomMetaData = 
+        if nth > 2 || nth < 0 then 
+            let msg = sprintf "invalid nth: %A" nth 
+            raise (ArgumentException(msg))
+        else
+            let metadata = this.ShadowCopy()
+            let newCardsList = GameRoom.ShadowNthCardsList(this.Cards, nth)
+            metadata.Cards <- newCardsList 
+            // we don't change the list of players / reserverdCards
+            //    because they won't be changed: this interface has no setter
+            metadata :> IGameRoomMetaData
+            

@@ -11,7 +11,7 @@ open System.Linq
 
 
 [<Fact>]
-let ``测试GameRoom::Prepare() Cards 各个分组的长度`` () =
+let ``测试GameRoom Prepare() Cards 各个分组的长度`` () =
     let gameRoom = GameRoom.Prepare() 
     // every player has 17 cards
     for p in gameRoom.Cards do
@@ -36,7 +36,7 @@ let private getActualCardsSet (includingReserved:bool) (gameRoom: IGameRoomMetaD
         set
 
 [<Fact>]
-let ``测试GameRoom::Prepare() Cards的完备性和唯一性`` () =
+let ``测试 Prepare() Cards的完备性和唯一性`` () =
 
     let fullCardsSet = Facade.createFullCards() |> Set.ofList
 
@@ -55,22 +55,73 @@ let ``测试GameRoom::Prepare() Cards的完备性和唯一性`` () =
 
 
 let private createTestPlayers() = 
-    let createTestPlayer name = 
+    let createTestPlayer name connId = 
         let p =  Player()
         p.Name <- name
+        p.ConnectionId <- connId
         p
-    let p1 = createTestPlayer "player1"
-    let p2 = createTestPlayer "player2"
-    let p3 = createTestPlayer "player3"
+    let p1 = createTestPlayer "player1" "conn1"
+    let p2 = createTestPlayer "player2" "conn2"
+    let p3 = createTestPlayer "player3" "conn3"
     [p1; p2; p3]
 
 [<Fact>]
-let ``test ::AddPlayer()`` () =
+let ``test AddPlayer()`` () =
     let room = GameRoom.Prepare()
     let players = createTestPlayers()
     for p in players do
         room.AddUser p |> Assert.True
     Assert.Equal(3, room.Players.Count)
+
+[<Fact>]
+let ``test FindPlayer(connId)`` () =
+    let room = GameRoom.Prepare()
+    let players = createTestPlayers()
+    for p in players do
+        room.AddUser p |> Assert.True
+    Assert.Equal(3, room.Players.Count)
+
+    // test: find an existing player 
+    for i in [0..2] do
+        let p = players.[i];
+        let findings = room.FindPlayer(p.ConnectionId)
+        Assert.NotNull findings
+        findings.Player = p |> Assert.True
+        findings.Index = i |> Assert.True
+
+    // test: find an non-existing player
+    let connId = Guid.NewGuid().ToString();
+    let findings = room.FindPlayer(connId)
+    Assert.Null findings
+
+
+let private TestShadowCards(rawCards:IList<IList<PlayingCard>>, shadowedCards: IList<IList<PlayingCard>>, nth) =  
+    for i in [0..2] do
+        if i <> nth then 
+            Assert.Equal(0, shadowedCards.[i].Count)
+        else 
+            let rawCards' = rawCards.[i] 
+            let shadowedCards' = shadowedCards.[i]
+            Assert.Equal(rawCards'.Count, shadowedCards'.Count )
+            Seq.zip rawCards' shadowedCards'
+            |> Seq.iter (fun z ->
+                let (rc, sc) = z
+                Assert.Equal(rc, sc)
+            )
+    
+[<Fact>]
+let ``test ShadowCards(connId)`` () =
+    let room = GameRoom.Prepare()
+    let players = createTestPlayers()
+    for p in players do
+        room.AddUser p |> Assert.True
+    Assert.Equal(3, room.Players.Count)
+
+    for p in room.Players do
+        let findings = room.FindPlayer(p.ConnectionId);
+        Assert.NotNull findings
+        let shadowedRoom = room.ShadowCards(findings.Index);
+        TestShadowCards(room.Cards, shadowedRoom.Cards , findings.Index)
 
 let private createRoomAndAddUserAndSetLandLord landlordIndex = 
     let room = GameRoom.Prepare()
@@ -83,7 +134,7 @@ let private createRoomAndAddUserAndSetLandLord landlordIndex =
     room 
 
 [<Fact>]
-let ``test GameRoom::AppendCards`` () =
+let ``test AppendCards`` () =
     let landlordIndex = 2
     let room = createRoomAndAddUserAndSetLandLord landlordIndex
     // landlord index
@@ -107,7 +158,7 @@ let ``test GameRoom::AppendCards`` () =
 
 
 [<Fact>]
-let ``test GameRoom::StartPlayingCards()`` () =
+let ``test StartPlayingCards()`` () =
     let landlordIndex = 2
     let room = createRoomAndAddUserAndSetLandLord landlordIndex
     let cards = room.Cards
