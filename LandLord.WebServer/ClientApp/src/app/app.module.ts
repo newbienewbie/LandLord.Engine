@@ -11,6 +11,7 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { RoomDetailComponent } from './room-detail/room-detail.component';
 import { SignalrService } from './services/signalr.service';
 import { RoomStateWatcherService } from './services/state-watcher.service';
+import { CardConverterService } from './services/card-converter.service';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,7 @@ import { RoomStateWatcherService } from './services/state-watcher.service';
       { path: 'room/:id', component: RoomDetailComponent }
     ])
   ],
-  providers: [SignalrService, RoomStateWatcherService],
+  providers: [SignalrService, RoomStateWatcherService, CardConverterService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

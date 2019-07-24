@@ -4,6 +4,7 @@ import { GameRoomDetail } from '../models/room-detail';
 import { HttpClient } from '@angular/common/http';
 import { SignalrService } from '../services/signalr.service';
 import { RoomStateWatcherService } from '../services/state-watcher.service';
+import { CardConverterService } from '../services/card-converter.service';
 
 @Component({
   selector: 'app-room-detail',
@@ -16,12 +17,15 @@ export class RoomDetailComponent implements OnInit {
   room: GameRoomDetail = new GameRoomDetail();
   index: number;
 
+  selectedCards : Boolean[];
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private httpClient: HttpClient,
     private signalRService: SignalrService,
     private stateWatcher: RoomStateWatcherService,
+    protected cardConverter: CardConverterService,
   ) {
     this.route.params.subscribe(o => {
       this.id = o["id"];
@@ -38,6 +42,10 @@ export class RoomDetailComponent implements OnInit {
 
   ngOnInit() {
 
+  }
+
+  playCards(cards){
+    console.log("try to play ",cards);
   }
 
 }

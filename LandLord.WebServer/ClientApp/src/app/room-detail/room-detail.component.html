@@ -7,15 +7,16 @@
     <li>{{ !!player.name ? player.name : "None" }}</li>
   </ul>
 
-  <form>
     <ul *ngFor="let cards of room.cards">
       <li>
-        <ul *ngFor="let c of cards">
-          <li> <input type="checkbox" name="selectedCards" > card {{ c.toString() }} </li>
-        </ul>
+        <form>
+          <ul *ngFor="let c of cards">
+            <li> <input type="checkbox" name="selectedCards" (click)="selectCard(c)" > card {{ this.cardConverter.cardToString(c) }} </li>
+          </ul>
+          <button (click)="playCards()"> Play </button>
+        </form>
       </li>
     </ul>
-  </form>
 
   <button>
 
