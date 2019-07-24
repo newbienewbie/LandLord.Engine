@@ -12,6 +12,7 @@ namespace LandLord.WebServer.Services
 {
     public interface IGameHubClient
     {
+        Task ReceiveState(IGameRoomMetaData room);
         Task AddingToRoomSucceeded(Guid roomId);
         Task RemoveFromRoomSucceeded(Guid roomId);
         Task PlayCards(int index, IList<PlayingCard> cards);
@@ -41,8 +42,9 @@ namespace LandLord.WebServer.Services
                     Name = Context.UserIdentifier,
                 });
                 roomRepo.Save(room);
+                await Clients.Group(roomIdStr).AddingToRoomSucceeded(roomId);
+                await Clients.Group(roomIdStr).ReceiveState(room);
             }
-            await Clients.Group(roomIdStr).AddingToRoomSucceeded(roomId);
         }
 
         public async Task RemoveFromRoom(Guid roomId)
@@ -56,8 +58,9 @@ namespace LandLord.WebServer.Services
                 var room = roomRepo.Load(roomId);
                 // todo: remove player
                 roomRepo.Save(room);
+                await Clients.Group(roomName).RemoveFromRoomSucceeded(roomId);
+                await Clients.Group(roomName).ReceiveState(room);
             }
-            await Clients.Group(roomName).RemoveFromRoomSucceeded(roomId);
         }
 
         public async Task StartPlayingCards(Guid roomId, List<PlayingCard> cards)
@@ -80,14 +83,12 @@ namespace LandLord.WebServer.Services
             {
                 var roomRepo = scope.ServiceProvider.GetRequiredService<GameRoomRepository>();
                 var room = roomRepo.Load(roomId);
-                var kv= room.Players.Select((p, i) => new { Player = p, Index = i })
-                    .Where(pair => pair.Player.ConnectionId == connectionId)
-                    .Single();
-                if(kv == null) {
+                var findings = room.FindPlayer(connectionId);
+                if(findings == null) {
                     // false
                 } else {
-                    var index = kv.Index;
-                    var player = kv.Player;
+                    var index = findings.Index;
+                    var player = findings.Player;
                     var succeeded = play(room,index);
                     if (!succeeded) {
                         // process false
@@ -95,6 +96,11 @@ namespace LandLord.WebServer.Services
                     else {
                         await Clients.Group(roomName).PlayCards(index, cards);
                         roomRepo.Save(room);
+
+                        foreach (var p in room.Players) {
+                            var shadowed = room.ShadowCards(findings.Index);
+                            await Clients.Client(p.ConnectionId).ReceiveState(shadowed);
+                        }
                     }
                 }
             }
