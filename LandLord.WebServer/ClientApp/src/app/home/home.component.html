@@ -1,14 +1,13 @@
 
 <div>
-  房间
+  GameRoom
   <div *ngFor="let room of rooms">
-    <div><a href="/room/{{room.id}}">房间号{{room.id}}</a></div>
+    <div><a href="/room/{{room.id}}">Room Number: {{room.id}}</a></div>
     <ul *ngFor="let player of room.players">
-      <li *ngIf="!!player">{{player.name}}</li>
-      <li *ngIf="!player"> 缺 </li>
+      <li>{{ !!player.name ? player.name : "None" }}</li>
     </ul>
   </div>
   <div>
-    <button onclick="createRoom()">新开一个房间</button>
+    <button (click)="createRoom()">New Room</button>
   </div>
 </div>

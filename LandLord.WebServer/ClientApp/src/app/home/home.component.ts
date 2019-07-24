@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { Room } from '../models/room';
 import { Player } from '../models/Player';
 import { HttpClient } from '@angular/common/http';
+import { SignalrService } from '../services/signalr.service';
+import { RoomStateWatcherService } from '../services/state-watcher.service';
+
 
 @Component({
   selector: 'app-home',
@@ -11,8 +14,12 @@ export class HomeComponent {
 
   rooms: Room[]
 
-  constructor(private httpClient:HttpClient){
-
+  constructor(private httpClient: HttpClient, private signalRService: SignalrService, private stateWatcher: RoomStateWatcherService) {
+    this.httpClient.get("/api/GameRoom", {})
+      .subscribe((r: Room[]) => {
+        this.rooms = r;
+        console.log(1,this.rooms);
+      });
   }
 
   ngOnInit(){
@@ -33,11 +40,13 @@ export class HomeComponent {
     this.rooms = [ room ];
   }
 
+  // create a room and get prepared
   createRoom()
   {
     this.httpClient.put("/api/GameRoom", {})
       .subscribe((r: Room) => {
         this.rooms.push(r);
+        return this.signalRService.AddToRoom(r.id);
       });
   }
 

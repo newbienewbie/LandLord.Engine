@@ -1,3 +1,23 @@
-<p>
-  room {{this.id}}
-</p>
+
+<div>
+  <p>
+    GameRoom {{this.id}}
+  </p>
+  <ul *ngFor="let player of room.players">
+    <li>{{ !!player.name ? player.name : "None" }}</li>
+  </ul>
+
+  <form>
+    <ul *ngFor="let cards of room.cards">
+      <li>
+        <ul *ngFor="let c of cards">
+          <li> <input type="checkbox" name="selectedCards" > card {{ c.toString() }} </li>
+        </ul>
+      </li>
+    </ul>
+  </form>
+
+  <button>
+
+  </button>
+</div>

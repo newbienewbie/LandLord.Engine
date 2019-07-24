@@ -1,4 +1,5 @@
 import { Room } from "./room";
+import { Player } from "./Player";
 
 class PlayingCard{
 
@@ -6,10 +7,10 @@ class PlayingCard{
 
 export class GameRoomDetail extends Room
 {
-    LandLordIndex: number;
-    CurrentTurn: number;
-    PrevIndex: number;
-    PrevCards: PlayingCard[];
-    Cards: PlayingCard[];
-    ReservedCards: PlayingCard[];
+    landLordIndex: number;
+    currentTurn: number;
+    prevIndex: number;
+    prevCards: PlayingCard[];
+    cards: PlayingCard[];
+    reservedCards: PlayingCard[];
 }
