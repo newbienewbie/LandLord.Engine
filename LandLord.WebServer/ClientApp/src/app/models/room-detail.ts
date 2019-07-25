@@ -1,7 +1,13 @@
 import { Room } from "./room";
 import { Player } from "./Player";
+import { PlayerCardShape } from "../services/card-converter.service";
 
-class PlayingCard{
+
+interface PlayerCard{
+
+}
+
+interface PlayingCard{
 
 }
 
@@ -11,6 +17,12 @@ export class GameRoomDetail extends Room
     currentTurn: number;
     prevIndex: number;
     prevCards: PlayingCard[];
-    cards: PlayingCard[];
+    cards: PlayerCardShape[][];
     reservedCards: PlayingCard[];
+}
+
+export class GameState
+{
+  gameRoom: GameRoomDetail;
+  turnIndex: number;
 }

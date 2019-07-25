@@ -25,7 +25,11 @@ interface  PlayingCardShape
   fields: Int32Array,
 }
 
-
+export interface PlayerCardShape 
+{
+  case: string,
+  fields: Array<PlayingCardShape>,
+}
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +38,7 @@ export class CardConverterService {
 
   constructor() { }
 
-  cardToString(cardShape: PlayingCardShape){
+  playingCardToString(cardShape: PlayingCardShape){
     switch(cardShape.case){
         case "Joker" :
           let j = cardShape.fields[0];
@@ -43,6 +47,17 @@ export class CardConverterService {
           let v = cardShape.fields[0];
           let s = cardShape.fields[1];
           return Suit[s] + CardValue[v];
+    }
+  }
+
+  playerCardToString(card: PlayerCardShape)
+  {
+    switch(card.case){
+        case "PlayingCard" :
+          let j = card.fields[0];
+          return this.playingCardToString(j);
+        case "Shadow":
+          return "Shadow";
     }
   }
 

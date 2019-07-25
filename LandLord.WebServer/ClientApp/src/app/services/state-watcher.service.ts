@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Room } from '../models/room';
-import { GameRoomDetail } from '../models/room-detail';
+import { GameRoomDetail, GameState } from '../models/room-detail';
 
 @Injectable({
   providedIn: 'root'
@@ -9,9 +9,9 @@ export class RoomStateWatcherService {
 
   constructor() { }
 
-  onChangeState: (room: GameRoomDetail) => any = null;
+  onChangeState: (room: GameState) => any = null;
 
-  chanageState(state: GameRoomDetail)
+  chanageState(state: GameState)
   {
     if (this.onChangeState != null) {
       this.onChangeState(state);

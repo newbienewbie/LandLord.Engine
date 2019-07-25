@@ -8,6 +8,7 @@ import { RoomStateWatcherService } from './state-watcher.service';
 export class SignalrService {
 
   private connection: signalR.HubConnection
+  private thenable: Promise<void>;
 
   constructor(private stateWatcher: RoomStateWatcherService ) {
     this.connection= new signalR.HubConnectionBuilder()
@@ -22,6 +23,9 @@ export class SignalrService {
       console.log("ReceiveState", state);
       this.stateWatcher.chanageState(state);
     });
+    this.connection.on("ReceiveError", (error) => {
+      console.log("ReceiveError", error);
+    });
     this.connection.on("AddingToRoomSucceeded", roomId => {
       console.log("AddingToRoomSucceeded", roomId);
     });
@@ -34,24 +38,38 @@ export class SignalrService {
   }
 
   public start() {
-    this.connection
-      .start()
+    this.thenable = this.connection
+      .start();
+    this.thenable
       .then(() => console.log('Connection started'))
       .catch(err => console.log('Error while starting connection: ' + err))
   }
 
-  public AddToRoom(roomId:string)
+  public PullLatestState(roomId: string)
   {
-    this.connection.invoke("AddToRoom", roomId);
+    this.thenable.then(() =>
+      this.connection.invoke("PushLatestStateToCurrentPlayer", roomId)
+    );
+  }
+
+  public JoinRoom(roomId:string)
+  {
+    this.thenable.then(() => {
+      this.connection.invoke("AddToRoom", roomId);
+    });
   }
 
   public StartPlayingCards(roomId:string, cards)
   {
-    this.connection.invoke("AddToRoom", roomId, cards);
+    this.thenable.then(() => {
+      this.connection.invoke("StartPlayingCards", roomId, cards);
+    }) 
   }
 
   public PlayCards(roomId:string, cards)
   {
-    this.connection.invoke("AddToRoom", roomId, cards);
+    this.thenable.then(() => {
+      this.connection.invoke("PlayCards", roomId, cards);
+    }) 
   }
 }

@@ -3,22 +3,20 @@
   <p>
     GameRoom {{this.id}}
   </p>
-  <ul *ngFor="let player of room.players">
-    <li>{{ !!player.name ? player.name : "None" }}</li>
-  </ul>
 
-    <ul *ngFor="let cards of room.cards">
+  <div *ngIf="this.state.gameRoom">
+    <ul *ngFor="let player of this.state.gameRoom.players">
+      <li>{{ !!player.name ? player.name : "None" }}</li>
+    </ul>
+    <ul *ngFor="let cards of this.state.gameRoom.cards; index as nth">
       <li>
         <form>
-          <ul *ngFor="let c of cards">
-            <li> <input type="checkbox" name="selectedCards" (click)="selectCard(c)" > card {{ this.cardConverter.cardToString(c) }} </li>
+          <ul *ngFor="let c of cards; index as i">
+            <li> <input type="checkbox" name="selectedCards" (click)="selectCard({card:c,index:i})" checked="{{ this.selections[i] && this.state.turnIndex === nth }}"  > card {{ this.cardConverter.playerCardToString(c) }} </li>
           </ul>
           <button (click)="playCards()"> Play </button>
         </form>
       </li>
     </ul>
-
-  <button>
-
-  </button>
+  </div>
 </div>

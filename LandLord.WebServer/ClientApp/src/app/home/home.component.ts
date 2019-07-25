@@ -46,7 +46,7 @@ export class HomeComponent {
     this.httpClient.put("/api/GameRoom", {})
       .subscribe((r: Room) => {
         this.rooms.push(r);
-        return this.signalRService.AddToRoom(r.id);
+        return this.signalRService.JoinRoom(r.id);
       });
   }
 
