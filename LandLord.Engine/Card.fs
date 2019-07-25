@@ -28,16 +28,19 @@ module Card =
         |Heart   = 4
 
     type PlayingCard =  
-        |Joker of JokerType
-        |NormalCard of CardValue * Suit
+        | Joker of JokerType
+        | NormalCard of CardValue * Suit
 
+    type PlayerCard = 
+        | Shadowed
+        | PlayingCard of PlayingCard
 
     let getWeight (considerSuit:bool) (card: PlayingCard) = 
         let suitValue suit = 
             if considerSuit then int suit else 0
         match card with
-        |NormalCard(v, suit) -> int v <<< 2 + suitValue suit
-        |Joker(j) -> int j <<< 2 
+        | NormalCard(v, suit) -> int v <<< 2 + suitValue suit
+        | Joker(j) -> int j <<< 2 
 
     let compare (considerSuit:bool) (card1: PlayingCard) (card2: PlayingCard) =
         let c1 = getWeight considerSuit card1
@@ -103,9 +106,11 @@ module Card =
 
             let sortedCards = 
                 cards 
-                |> List.sortBy (fun c -> match c with 
-                   |NormalCard(v, suit) -> int v
-                   |Joker(j) -> int j )
+                |> List.sortBy (fun c -> 
+                    match c with 
+                    | NormalCard(v, suit) -> int v
+                    | Joker(j) -> int j 
+                )
 
             match sortedCards with
             | NormalCard(v, _) :: tail -> _cardsContinuous tail (int v)

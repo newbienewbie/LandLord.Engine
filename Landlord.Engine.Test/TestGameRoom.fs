@@ -8,6 +8,10 @@ open Itminus.LandLord.Engine
 open System.Linq
 
 
+let private convertPlayerCardToPlayingCard c =
+    match c with
+    | Shadowed -> failwith "unknown shadowed card is not supported"
+    | PlayingCard card -> card
 
 
 [<Fact>]
@@ -22,9 +26,10 @@ let ``测试GameRoom Prepare() Cards 各个分组的长度`` () =
     Assert.Equal(3,count2)
 
 let private getActualCardsSet (includingReserved:bool) (gameRoom: IGameRoomMetaData) =
-    let cards1' = gameRoom.Cards.[0] |> Set.ofSeq
-    let cards2' = gameRoom.Cards.[1] |> Set.ofSeq 
-    let cards3' = gameRoom.Cards.[2] |> Set.ofSeq
+
+    let cards1' = gameRoom.Cards.[0] |> Seq.map convertPlayerCardToPlayingCard |> Set.ofSeq
+    let cards2' = gameRoom.Cards.[1] |> Seq.map convertPlayerCardToPlayingCard |> Set.ofSeq 
+    let cards3' = gameRoom.Cards.[2] |> Seq.map convertPlayerCardToPlayingCard |> Set.ofSeq
     let reserved' = gameRoom.ReservedCards |> Set.ofSeq 
     let set= 
         cards1' 
@@ -84,7 +89,7 @@ let ``test FindPlayer(connId)`` () =
     // test: find an existing player 
     for i in [0..2] do
         let p = players.[i];
-        let findings = room.FindPlayer(p.ConnectionId)
+        let findings = room.FindPlayer(p.Name)
         Assert.NotNull findings
         findings.Player = p |> Assert.True
         findings.Index = i |> Assert.True
@@ -95,13 +100,17 @@ let ``test FindPlayer(connId)`` () =
     Assert.Null findings
 
 
-let private TestShadowCards(rawCards:IList<IList<PlayingCard>>, shadowedCards: IList<IList<PlayingCard>>, nth) =  
+let private TestShadowCards(rawCards:IList<IList<PlayerCard>>, shadowedCards: IList<IList<PlayerCard>>, nth) =  
     for i in [0..2] do
+        let rawCards' = rawCards.[i] 
+        let shadowedCards' = shadowedCards.[i]
         if i <> nth then 
-            Assert.Equal(0, shadowedCards.[i].Count)
+            // should have exactly the same length
+            Assert.Equal(rawCards'.Count, shadowedCards'.Count)
+            // each one should be Shadowed
+            shadowedCards' 
+            |> Seq.iter (fun c -> Assert.Equal(c, Shadowed) )
         else 
-            let rawCards' = rawCards.[i] 
-            let shadowedCards' = shadowedCards.[i]
             Assert.Equal(rawCards'.Count, shadowedCards'.Count )
             Seq.zip rawCards' shadowedCards'
             |> Seq.iter (fun z ->
@@ -118,7 +127,7 @@ let ``test ShadowCards(connId)`` () =
     Assert.Equal(3, room.Players.Count)
 
     for p in room.Players do
-        let findings = room.FindPlayer(p.ConnectionId);
+        let findings = room.FindPlayer(p.Name);
         Assert.NotNull findings
         let shadowedRoom = room.ShadowCards(findings.Index);
         TestShadowCards(room.Cards, shadowedRoom.Cards , findings.Index)
@@ -163,8 +172,8 @@ let ``test StartPlayingCards()`` () =
     let room = createRoomAndAddUserAndSetLandLord landlordIndex
     let cards = room.Cards
     let currentTurn = room.CurrentTurn
-    let playingCards = cards.[currentTurn].Take(1).ToList()
+    let playingCards = cards.[currentTurn].Select(convertPlayerCardToPlayingCard).Take(1).ToList()
     room.StartPlayingCards(playingCards) |> Assert.True
-    let empty = cards.[currentTurn].Intersect(playingCards)
+    let empty = cards.[currentTurn].Select(convertPlayerCardToPlayingCard).Intersect(playingCards)
     Assert.Equal(0, empty.Count())
 
