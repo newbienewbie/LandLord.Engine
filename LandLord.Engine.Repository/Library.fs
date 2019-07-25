@@ -28,8 +28,8 @@ type GameRoomRepository(dbName) =
         let roomCollection = db.GetCollection<GameRoom>(roomCollectionName);
         roomCollection.FindAll()
 
-    member this.FindRoomByConnectionId(connId: string) =
+    member this.FindAvaiableRoomByUserId(userId: string) =
         use db = new LiteDatabase(dbName, mapper)
         let roomCollection = db.GetCollection<GameRoom>(roomCollectionName);
-        roomCollection.FindOne( fun r -> r.Players.Any(fun p -> p.ConnectionId = connId ));
+        roomCollection.FindOne( fun r -> r.Players.Any(fun p -> p.Name = userId && r.HasFinished = false ));
 
