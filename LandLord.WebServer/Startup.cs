@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace LandLord.WebServer
 {
@@ -30,7 +31,9 @@ namespace LandLord.WebServer
                 configuration.RootPath = "ClientApp/dist";
             });
             services.AddScoped<GameRoomRepository>(sp => new GameRoomRepository("GameRooms.db"));
-            services.AddSignalR();
+            services.AddSignalR(o => {
+                o.EnableDetailedErrors = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

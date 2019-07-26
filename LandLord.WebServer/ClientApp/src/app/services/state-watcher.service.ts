@@ -10,6 +10,8 @@ export class RoomStateWatcherService {
   constructor() { }
 
   onChangeState: (room: GameState) => any = null;
+  onPlayCardsSucceeded: (index, cards) => any = null;
+  onPlayCardsFailed: (index, cards) => any = null;
 
   chanageState(state: GameState)
   {
@@ -18,4 +20,17 @@ export class RoomStateWatcherService {
     }
   }
 
+  playCardsSucceeded(index, cards)
+  {
+    if (this.onPlayCardsSucceeded != null) {
+      this.onPlayCardsSucceeded(index,cards);
+    }
+  }
+
+  playCardsFailed(index, cards)
+  {
+    if (this.onPlayCardsFailed!= null) {
+      this.onPlayCardsFailed(index,cards);
+    }
+  }
 }

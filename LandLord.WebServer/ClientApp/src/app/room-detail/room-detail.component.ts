@@ -30,13 +30,26 @@ export class RoomDetailComponent implements OnInit {
   ) {
     this.route.params.subscribe(o => {
       this.id = o["id"];
+      // pull state
       this.signalRService.PullLatestState(this.id);
+      // join room
+      this.signalRService.JoinRoom(this.id);
     });
+
     this.stateWatcher.onChangeState = state => {
       this.state = state;
     }
-  }
+    this.stateWatcher.onPlayCardsSucceeded = (index, cards) => {
+      let length = cards.length;
+      this.selections = new Array( this.selections.length - length );
+    }
+    this.stateWatcher.onPlayCardsFailed= (index, cards) => {
+      alert("cannot play this cards!");
+      //let length = cards.length;
+      //this.selections = new Array( this.selections.length - length );
+    }
 
+  }
 
   ngOnInit() {
     this.selections = new Array(20);
@@ -52,7 +65,10 @@ export class RoomDetailComponent implements OnInit {
 
   selectCard(o) {
     let index = o.index;
-    this.selections[index] = !this.selections[index];
+    let old = this.selections[index];
+    console.log("select: ", index , old);
+    this.selections[index] = ! old;
+    console.log("select: ", index , this.selections[index]);
   }
 
 }

@@ -24,7 +24,8 @@ namespace LandLord.WebServer.Services
         Task ReceiveState(GameStateDto state);
         Task AddingToRoomSucceeded(Guid roomId);
         Task RemoveFromRoomSucceeded(Guid roomId);
-        Task PlayCards(int index, IList<PlayingCard> cards);
+        Task PlayCardsSucceeded(int index, IList<PlayingCard> cards);
+        Task PlayCardsFailed(int index, IList<PlayingCard> cards);
         Task Win(int index);
         Task ReceiveError(string msg);
     }
@@ -38,26 +39,27 @@ namespace LandLord.WebServer.Services
             this._sp = sp;
         }
 
-        public override async Task OnConnectedAsync()
-        {
-            await base.OnConnectedAsync();
-            // find if there's a room
-            var room = FindOneRecentRoom();
-            if (room !=null) {
-                await this.ReJoinRoom(room.Id);
-            }
-        }
+        //public override async Task OnConnectedAsync()
+        //{
+        //    await base.OnConnectedAsync();
+        //    // find if there's a room
+        //    var room = FindOneRecentRoom();
+        //    if (room != null)
+        //    {
+        //        await this.ReJoinRoom(room.Id);
+        //    }
+        //}
 
-        public override async Task OnDisconnectedAsync(Exception exception)
-        {
-            await base.OnDisconnectedAsync(exception);
-            // find if there's a room
-            var room = FindOneRecentRoom();
-            if (room != null)
-            {
-                //?
-            }
-        }
+        //public override async Task OnDisconnectedAsync(Exception exception)
+        //{
+        //    await base.OnDisconnectedAsync(exception);
+        //    // find if there's a room
+        //    var room = FindOneRecentRoom();
+        //    if (room != null)
+        //    {
+        //        //?
+        //    }
+        //}
 
 
         private GameRoom FindOneRecentRoom() {
@@ -131,8 +133,9 @@ namespace LandLord.WebServer.Services
                     throw new Exception("findings must not be null");
                 }
                 await Clients.Group(roomIdStr).AddingToRoomSucceeded(roomId);
+                var shadowed = room.ShadowCards(findings.Index);
                 await Clients.Group(roomIdStr).ReceiveState(new GameStateDto {
-                    GameRoom = room,
+                    GameRoom = shadowed,
                     TurnIndex = findings.Index,
                 });
             }
@@ -182,9 +185,9 @@ namespace LandLord.WebServer.Services
                     var succeeded = play(room,index);
                     if (!succeeded) {
                         // process false
+                        await Clients.Caller.PlayCardsFailed(index,cards);
                     }
                     else {
-                        await Clients.Group(roomName).PlayCards(index, cards);
                         roomRepo.Save(room);
 
                         foreach (var p in room.Players) {
@@ -194,6 +197,7 @@ namespace LandLord.WebServer.Services
                                 TurnIndex = findings.Index,
                             });
                         }
+                        await Clients.Group(roomName).PlayCardsSucceeded(index, cards);
                     }
                 }
             }

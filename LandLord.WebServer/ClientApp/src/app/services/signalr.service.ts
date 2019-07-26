@@ -29,8 +29,14 @@ export class SignalrService {
     this.connection.on("AddingToRoomSucceeded", roomId => {
       console.log("AddingToRoomSucceeded", roomId);
     });
-    this.connection.on("PlayCards", (index, cards) => {
-      console.log("PlayCards", index, cards);
+
+    this.connection.on("PlayCardsSucceeded", (index, cards) => {
+      console.log("PlayCardsSucceeded", index, cards);
+      this.stateWatcher.playCardsSucceeded(index,cards);
+    });
+    this.connection.on("PlayCardsFailed", (index, cards) => {
+      console.log("PlayCardsFailed", index, cards);
+      this.stateWatcher.playCardsFailed(index,cards);
     });
     this.connection.on("Win", (index) => {
       console.log("Win", index);
