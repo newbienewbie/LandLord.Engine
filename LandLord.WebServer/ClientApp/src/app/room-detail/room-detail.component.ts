@@ -71,4 +71,21 @@ export class RoomDetailComponent implements OnInit {
     console.log("select: ", index , this.selections[index]);
   }
 
+  getDeskTurnIndexes() {
+    let me= this.state.turnIndex;
+    let left=  (me + 3 - 1 ) % 3;
+    let right= (me + 3 + 1) % 3;
+    return { left, me, right };
+  }
+
+  playerClass(playerIndex) {
+    let deskTurnIndexes = this.getDeskTurnIndexes();
+    if (playerIndex == deskTurnIndexes.left) { return "left"; }
+    else if (playerIndex == deskTurnIndexes.me) { return "me"; }
+    else if (playerIndex == deskTurnIndexes.right) { return "right"; }
+    else {
+      throw new Error(`unknown player index ${playerIndex}`);
+    }
+  }
+
 }

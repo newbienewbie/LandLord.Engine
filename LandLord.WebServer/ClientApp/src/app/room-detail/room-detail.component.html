@@ -5,24 +5,35 @@
   </p>
 
   <div *ngIf="this.state.gameRoom">
-    <ul *ngFor="let cards of this.state.gameRoom.cards; index as nth">
-      <li *ngIf="this.state.gameRoom; let gameRoom">
-        <div *ngIf="gameRoom.players[nth]">
-          player <span>{{ !!(gameRoom.players[nth].name) ? gameRoom.players[nth].name : "None" }}</span>
-        </div>
-        <form>
-          <ul *ngFor="let c of cards; index as i">
-            <li>
-              <input type="checkbox" name="selectedCards"
-                     (click)="selectCard({card:c,index:i})"
-                     [checked]="nth === this.state.turnIndex  && !!(this.selections[i])"
-              />
-              card {{ this.cardConverter.playerCardToString(c) }}
-            </li>
-          </ul>
-          <button (click)="playCards()" *ngIf="nth == this.state.turnIndex"> Play </button>
-        </form>
-      </li>
-    </ul>
+    <div>
+      底牌
+      <ul *ngFor="let card of this.state.gameRoom.reservedCards">
+        <li>card {{this.cardConverter.playingCardToString(card)}} </li>
+      </ul>
+      <div>
+        <button>抢地主</button>
+      </div>
+    </div>
+    <div>
+      <ul *ngFor="let cards of this.state.gameRoom.cards; index as nth" [class]="this.playerClass(nth)">
+        <li *ngIf="this.state.gameRoom; let gameRoom">
+          <div *ngIf="gameRoom.players[nth]">
+            player <span>{{ !!(gameRoom.players[nth].name) ? gameRoom.players[nth].name : "None" }}</span>
+          </div>
+          <form>
+            <ul *ngFor="let c of cards; index as i">
+              <li >
+                <input type="checkbox" name="selectedCards"
+                       (click)="selectCard({card:c,index:i})"
+                       [checked]="nth === this.state.turnIndex  && !!(this.selections[i])"
+                       [disabled]="nth != this.state.turnIndex" />
+                card {{ this.cardConverter.playerCardToString(c) }}
+              </li>
+            </ul>
+            <button (click)="playCards()" *ngIf="nth == this.state.turnIndex"> Play </button>
+          </form>
+        </li>
+      </ul>
+    </div>
   </div>
 </div>
