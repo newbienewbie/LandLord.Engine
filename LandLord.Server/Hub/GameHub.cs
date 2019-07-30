@@ -1,5 +1,6 @@
 ﻿using Itminus.LandLord.Engine;
 using LandLord.Engine.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -33,6 +34,7 @@ namespace LandLord.WebServer.Services
         Task ReceiveError(string msg);
     }
 
+    [Authorize]
     public class GameHub : Hub<IGameHubClient>
     {
         private readonly IServiceProvider _sp;

@@ -32,10 +32,10 @@ import { CardConverterService } from './services/card-converter.service';
     FormsModule,
     ApiAuthorizationModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: '', component: HomeComponent, pathMatch: 'full',canActivate: [AuthorizeGuard]  },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
-      { path: 'room/:id', component: RoomDetailComponent }
+      { path: 'room/:id', component: RoomDetailComponent,canActivate: [AuthorizeGuard]  }
     ])
   ],
   providers: [

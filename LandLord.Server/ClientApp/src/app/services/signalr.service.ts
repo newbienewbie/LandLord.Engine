@@ -10,9 +10,11 @@ export class SignalrService {
   private connection: signalR.HubConnection
   private thenable: Promise<void>;
 
-  constructor(private stateWatcher: RoomStateWatcherService ) {
-    this.connection= new signalR.HubConnectionBuilder()
-      .withUrl('/gamehub')
+  constructor(private stateWatcher: RoomStateWatcherService) {
+    this.connection = new signalR.HubConnectionBuilder()
+      .withUrl('/gamehub', {
+
+      })
       .build();
     this.setup();
     this.start();
