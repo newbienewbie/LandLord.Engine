@@ -3,6 +3,7 @@
   display:grid;
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: 300px 100px; 
+  grid-row-gap: 1.5em;
 }
 
 ul li {
@@ -10,7 +11,7 @@ ul li {
 }
 
 .me {
-  grid-row-start: -1;
+  grid-row-start: 2;
   grid-row-end: -1;
   grid-column-start: 1;
   grid-column-end: -1;
@@ -45,7 +46,7 @@ ul li {
   grid-row-end: 1;
   grid-column-start:1;
   grid-column-end: 3;
-  background-color:aqua;
+  background-color:azure;
   overflow: hidden scroll ;
 }
 
@@ -54,6 +55,6 @@ ul li {
   grid-row-end: 1;
   grid-column-start:-3;
   grid-column-end: -1;
-  background-color:orange;
+  background-color: azure;
   overflow: hidden scroll ;
 }

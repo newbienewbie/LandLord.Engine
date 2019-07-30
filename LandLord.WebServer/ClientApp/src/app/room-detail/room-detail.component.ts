@@ -55,12 +55,23 @@ export class RoomDetailComponent implements OnInit {
     this.selections = new Array(20);
   }
 
+  beLandLord() {
+    let landLordIndex = this.state.gameRoom.landLordIndex 
+    if (landLordIndex < 0) {
+      this.signalRService.BeLandLord(this.id);
+    } else {
+      throw new Error(`cannot be a landlord because there's already one whose index=${landLordIndex}`);
+    }
+  }
+
   playCards(){
     console.log("now trying to playcards. Current state is ", this.state);
     let cards = this.state.gameRoom.cards[this.state.turnIndex].map(c => c.fields[0]);
     let selectedCards= this.selections.map((s,i) => s? cards[i] : null ).filter(c => !!c);
     console.log("try to play ", selectedCards);
-    this.signalRService.StartPlayingCards(this.state.gameRoom.id, selectedCards);
+    if (this.state.gameRoom.currentTurn == this.state.turnIndex) {
+      this.signalRService.PlayCards(this.state.gameRoom.id, selectedCards);
+    }
   }
 
   selectCard(o) {

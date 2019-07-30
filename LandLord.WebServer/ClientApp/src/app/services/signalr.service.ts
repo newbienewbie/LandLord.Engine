@@ -30,6 +30,15 @@ export class SignalrService {
       console.log("AddingToRoomSucceeded", roomId);
     });
 
+
+    this.connection.on("BeLandLordSucceded", index=> {
+      console.log("AddingToRoomSucceeded", index);
+    });
+
+    this.connection.on("BeLandLordFailed",() => {
+      console.log("AddingToRoomFailed");
+    });
+
     this.connection.on("PlayCardsSucceeded", (index, cards) => {
       console.log("PlayCardsSucceeded", index, cards);
       this.stateWatcher.playCardsSucceeded(index,cards);
@@ -65,11 +74,10 @@ export class SignalrService {
     });
   }
 
-  public StartPlayingCards(roomId:string, cards)
-  {
+  public BeLandLord(roomId: string) {
     this.thenable.then(() => {
-      this.connection.invoke("StartPlayingCards", roomId, cards);
-    }) 
+      this.connection.invoke("BeLandLord",roomId);
+    })
   }
 
   public PlayCards(roomId:string, cards)

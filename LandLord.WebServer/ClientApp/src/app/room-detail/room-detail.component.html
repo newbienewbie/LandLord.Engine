@@ -6,24 +6,25 @@
 
   <div *ngIf="this.state.gameRoom">
     <div class="container">
-      <div class="reserved-cards">
-        底
-        <ul>
-          <li *ngFor="let card of this.state.gameRoom.reservedCards">
-            <div [class]="this.cardConverter.playingCardStyle(card)" >
-              {{this.cardConverter.playingCardToString(card)}}
-            </div>
-          </li>
-        </ul>
-        <div>
-          <button>抢</button>
-        </div>
-      </div>
       <ul class="player-desk">
+        <li class="reserved-cards" *ngIf="this.state.gameRoom.landLordIndex < 0" >
+          <ul>
+            <li *ngFor="let card of this.state.gameRoom.reservedCards">
+              <div [class]="this.cardConverter.playingCardStyle(card)" >
+                {{this.cardConverter.playingCardToString(card)}}
+              </div>
+            </li>
+          </ul>
+          <span>底</span>
+          <div>
+            <button (click)="this.beLandLord()" >抢</button>
+          </div>
+        </li>
         <li *ngFor="let cards of this.state.gameRoom.cards; index as nth" [class]="this.playerClass(nth)"  >
           <div *ngIf="this.state.gameRoom; let gameRoom">
             <div *ngIf="gameRoom.players[nth]">
               player <span>{{ !!(gameRoom.players[nth].name) ? gameRoom.players[nth].name : "None" }}</span>
+              <span *ngIf="gameRoom.landLordIndex === nth"> LandLord </span>
             </div>
             <form>
               <ul class="cards">

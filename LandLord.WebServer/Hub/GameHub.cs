@@ -21,6 +21,9 @@ namespace LandLord.WebServer.Services
 
     public interface IGameHubClient
     {
+        Task BeLandLordSucceded(int index);
+        Task BeLandLordFailed();
+
         Task ReceiveState(GameStateDto state);
         Task AddingToRoomSucceeded(Guid roomId);
         Task RemoveFromRoomSucceeded(Guid roomId);
@@ -156,19 +159,44 @@ namespace LandLord.WebServer.Services
             }
         }
 
-        public async Task StartPlayingCards(Guid roomId, List<PlayingCard> cards)
+        public async Task BeLandLord(Guid roomId)
         {
-            Func<GameRoom, int, bool> play = (room, index) => room.StartPlayingCards(cards);
-            await PlayCardsCore(roomId,cards,play);
+            var roomName = roomId.ToString();
+            var userId= Context.UserIdentifier;
+            using (var scope = this._sp.CreateScope())
+            {
+                var roomRepo = scope.ServiceProvider.GetRequiredService<GameRoomRepository>();
+                var room = roomRepo.Load(roomId);
+
+                if (room.LandLordIndex < 0) {
+                    var findings = room.FindPlayer(userId);
+                    if (findings != null)
+                    {
+                        room.LandLordIndex = findings.Index;
+                        room.AppendCards(room.ReservedCards);
+                        roomRepo.Save(room);
+
+                        await Clients.Group(roomName).BeLandLordSucceded(findings.Index);
+                        var shadowed = room.ShadowCards(findings.Index);
+                        await Clients.Group(roomName).ReceiveState(new GameStateDto
+                        {
+                            GameRoom = shadowed,
+                            TurnIndex = findings.Index,
+                        });
+                        return;
+                    }
+                }
+                await Clients.Caller.BeLandLordFailed();   
+            }
+           
         }
 
         public async Task PlayCards(Guid roomId, List<PlayingCard> cards)
         {
-            Func<GameRoom, int, bool> play = (room, index) => room.PlayCards(index,cards);
-            await PlayCardsCore(roomId,cards,play);
+            await PlayCardsCore(roomId,cards);
         }
 
-        private async Task PlayCardsCore(Guid roomId, List<PlayingCard> cards, Func<GameRoom,int,bool> play)
+        private async Task PlayCardsCore(Guid roomId, List<PlayingCard> cards)
         {
             var roomName = roomId.ToString();
             var userId= Context.UserIdentifier;
@@ -182,7 +210,13 @@ namespace LandLord.WebServer.Services
                 } else {
                     var index = findings.Index;
                     var player = findings.Player;
-                    var succeeded = play(room,index);
+                    var succeeded = false;
+                    // only when current user is the landlord and none of his cards has not been player
+                    if (room.LandLordIndex >=0 && index == room.LandLordIndex && room.Cards[index].Count == 20) {
+                        succeeded = room.StartPlayingCards(cards);
+                    } else {
+                        succeeded = room.PlayCards(index, cards);
+                    }
                     if (!succeeded) {
                         // process false
                         await Clients.Caller.PlayCardsFailed(index,cards);
