@@ -1,0 +1,57 @@
+
+<div>
+  <p>
+    GameRoom {{this.id}}
+  </p>
+
+  <div *ngIf="this.state.gameRoom">
+    <div class="container">
+      <ul class="player-desk">
+        <li class="reserved-cards" *ngIf="this.state.gameRoom.landLordIndex < 0" >
+          <ul>
+            <li *ngFor="let card of this.state.gameRoom.reservedCards">
+              <div [class]="this.cardConverter.playingCardStyle(card)" >
+                {{this.cardConverter.playingCardToString(card)}}
+              </div>
+            </li>
+          </ul>
+          <span>底</span>
+          <div>
+            <button (click)="this.beLandLord()" >抢</button>
+          </div>
+        </li>
+        <li *ngIf="this.state.gameRoom.landLordIndex >= 0 " >
+          <ul class="prev-cards">
+            <li *ngFor="let c of this.state.gameRoom.prevCards">
+              <div class="{{this.cardConverter.playingCardStyle(c)}}">
+                {{ this.cardConverter.playingCardToString(c)}}
+              </div>
+            </li>
+          </ul>
+        </li>
+        <li *ngFor="let cards of this.state.gameRoom.cards; index as nth" [class]="this.playerClass(nth)"  >
+          <div *ngIf="this.state.gameRoom; let gameRoom">
+            <div *ngIf="gameRoom.players[nth]">
+              player <span>{{ !!(gameRoom.players[nth].name) ? gameRoom.players[nth].name : "None" }}</span>
+              <span *ngIf="gameRoom.landLordIndex === nth"> LandLord </span>
+            </div>
+            <form>
+              <ul class="cards">
+                <li *ngFor="let c of cards; index as i">
+                  <div class="{{this.cardConverter.playerCardStyle(c)}}">
+                    <input type="checkbox" name="selectedCards"
+                           (click)="selectCard({card:c,index:i})"
+                           [checked]="nth === this.state.turnIndex  && !!(this.selections[i])"
+                           [disabled]="nth != this.state.turnIndex" />
+                    {{ this.cardConverter.playerCardToString(c)}}
+                  </div>
+                </li>
+              </ul>
+              <button (click)="playCards()" *ngIf="nth == this.state.turnIndex" [disabled]="this.state.gameRoom.currentTurn != this.state.turnIndex" > Play </button>
+            </form>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
