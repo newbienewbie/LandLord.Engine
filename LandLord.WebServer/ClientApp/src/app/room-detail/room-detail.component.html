@@ -20,6 +20,15 @@
             <button (click)="this.beLandLord()" >抢</button>
           </div>
         </li>
+        <li *ngIf="this.state.gameRoom.landLordIndex >= 0 " >
+          <ul class="prev-cards">
+            <li *ngFor="let c of this.state.gameRoom.prevCards">
+              <div class="{{this.cardConverter.playingCardStyle(c)}}">
+                {{ this.cardConverter.playingCardToString(c)}}
+              </div>
+            </li>
+          </ul>
+        </li>
         <li *ngFor="let cards of this.state.gameRoom.cards; index as nth" [class]="this.playerClass(nth)"  >
           <div *ngIf="this.state.gameRoom; let gameRoom">
             <div *ngIf="gameRoom.players[nth]">
@@ -38,7 +47,7 @@
                   </div>
                 </li>
               </ul>
-              <button (click)="playCards()" *ngIf="nth == this.state.turnIndex"> Play </button>
+              <button (click)="playCards()" *ngIf="nth == this.state.turnIndex" [disabled]="this.state.gameRoom.currentTurn != this.state.turnIndex" > Play </button>
             </form>
           </div>
         </li>
