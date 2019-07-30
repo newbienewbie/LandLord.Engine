@@ -158,14 +158,19 @@ type GameRoom with
             this.Cards.[nth] <- remaining
             this.PrevIndex <- nth
             this.PrevCards <- cards
-            this.CurrentTurn <- this.CurrentTurn + 1
+            this.CurrentTurn <- (this.CurrentTurn + 1) % 3
             true
         else 
             failwith "the nth must be an int between [0,2]"
 
+
+    /// the LandLord will be the first one who plays cards
     member this.StartPlayingCards (cards: IList<PlayingCard>) : bool= 
-        let turn = 0 
-        if List.ofSeq cards |> Facade.canStartPlaying then
+        let turn =  this.LandLordIndex
+        // check whether the game has started
+        if this.Cards.[turn].Count <> 20 then
+            false
+        else if List.ofSeq cards |> Facade.canStartPlaying then
             this.playCards(turn, cards ) 
         else
             false

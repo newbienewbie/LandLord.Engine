@@ -144,7 +144,6 @@ let private createRoomAndAddUserAndSetLandLord landlordIndex =
     let players = createTestPlayers()
     for p in players do
         room.AddUser p |> Assert.True
-    let landlordIndex = 2
     room.LandLordIndex <- landlordIndex
     room.AppendCards room.ReservedCards
     room 
@@ -175,12 +174,11 @@ let ``test AppendCards`` () =
 
 [<Fact>]
 let ``test StartPlayingCards()`` () =
-    let landlordIndex = 2
-    let room = createRoomAndAddUserAndSetLandLord landlordIndex
-    let cards = room.Cards
-    let currentTurn = room.CurrentTurn
-    let playingCards = cards.[currentTurn].Select(convertPlayerCardToPlayingCard).Take(1).ToList()
-    room.StartPlayingCards(playingCards) |> Assert.True
-    let empty = cards.[currentTurn].Select(convertPlayerCardToPlayingCard).Intersect(playingCards)
-    Assert.Equal(0, empty.Count())
+    for landlordIndex in [0..2] do
+        let room = createRoomAndAddUserAndSetLandLord landlordIndex
+        let cards = room.Cards
+        let playingCards = cards.[landlordIndex].Select(convertPlayerCardToPlayingCard).Take(1).ToList()
+        room.StartPlayingCards(playingCards) |> Assert.True
+        let empty = cards.[landlordIndex].Select(convertPlayerCardToPlayingCard).Intersect(playingCards)
+        Assert.Equal(0, empty.Count())
 
