@@ -7,17 +7,9 @@ enum CardValue {
   Ace = 14, Two  = 15,
 }
 
-enum JokerType  {
-  Black = 20,
-  Red  =  21,
-}
+enum JokerType  { Black = 20, Red  =  21, }
 
-enum Suit {
-  Spade   = 1,
-  Club    = 2,
-  Diamond = 3,
-  Heart   = 4,
-}
+enum Suit { Spade = 0, Club = 1, Diamond = 2, Heart = 3, }
 
 interface  PlayingCardShape 
 {
@@ -70,7 +62,7 @@ export class CardConverterService {
   private joker(j:string) {
     switch (j.toLowerCase()) {
       case "red": return "🃏";
-      case "black": return ":black_joker:";
+      case "black": return "🐼";
     }
   }
 

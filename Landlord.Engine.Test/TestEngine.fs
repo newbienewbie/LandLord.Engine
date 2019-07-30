@@ -6,6 +6,22 @@ open System.Collections.Generic
 open Itminus.LandLord.Engine.Card
 open Itminus.LandLord.Engine.Facade
 
+
+[<Fact>]
+let ``测试getWeight()`` () =
+    let aceClub = NormalCard(CardValue.Ace, Suit.Club) |> getWeight true
+    let aceClub' = NormalCard(CardValue.Ace, Suit.Club) |> getWeight true
+    let twoDiamond = NormalCard(CardValue.Two, Suit.Diamond) |> getWeight true
+    let jack = NormalCard(CardValue.Jack, Suit.Diamond) |> getWeight true
+    let three = NormalCard(CardValue.Three, Suit.Diamond) |> getWeight true
+
+    ((<) aceClub twoDiamond) |> Assert.True
+    ((=) aceClub aceClub') |> Assert.True
+    ((>) aceClub three) |> Assert.True
+    ((>) aceClub jack) |> Assert.True
+    ((>) twoDiamond three) |> Assert.True
+    ((<) three jack) |> Assert.True
+
 [<Fact>]
 let ``测试fullCards() 唯一性`` () =
     let cards = createFullCards()

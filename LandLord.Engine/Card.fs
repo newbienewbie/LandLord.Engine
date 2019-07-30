@@ -18,14 +18,14 @@ module Card =
         | Two  = 15
 
     type JokerType = 
-        |Black = 20 
-        |Red  =  21
+        | Black = 20 
+        | Red  =  21
 
     type Suit = 
-        |Spade   = 1
-        |Club    = 2
-        |Diamond = 3
-        |Heart   = 4
+        | Spade   = 0 
+        | Club    = 1 
+        | Diamond = 2 
+        | Heart   = 3
 
     type PlayingCard =  
         | Joker of JokerType
@@ -39,8 +39,10 @@ module Card =
         let suitValue suit = 
             if considerSuit then int suit else 0
         match card with
-        | NormalCard(v, suit) -> int v <<< 2 + suitValue suit
-        | Joker(j) -> int j <<< 2 
+        | NormalCard(v, suit) -> 
+            let left = (int v) <<< 2
+            left + suitValue suit
+        | Joker(j) -> (int j) <<< 2 
 
     let compare (considerSuit:bool) (card1: PlayingCard) (card2: PlayingCard) =
         let c1 = getWeight considerSuit card1
