@@ -112,7 +112,14 @@ let private TestShadowCards(rawCards:IList<IList<PlayerCard>>, shadowedCards: IL
             |> Seq.iter (fun c -> Assert.Equal(c, Shadowed) )
         else 
             Assert.Equal(rawCards'.Count, shadowedCards'.Count )
-            Seq.zip rawCards' shadowedCards'
+            let sortedRawCards' = 
+                rawCards'.AsEnumerable() 
+                |> Seq.sortBy(fun x -> 
+                    match x with 
+                    | PlayingCard c -> Card.getWeight true c 
+                    | Shadowed -> failwith "unsupported card type"
+                )
+            Seq.zip sortedRawCards' shadowedCards'
             |> Seq.iter (fun z ->
                 let (rc, sc) = z
                 Assert.Equal(rc, sc)

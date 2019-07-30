@@ -215,7 +215,14 @@ type GameRoom with
 
 
         // copy nth player's cards
-        let fromCards= fromCardsList.[nth]
+        let fromCards= 
+            // sort by weight
+            fromCardsList.[nth].AsEnumerable()
+            |> Seq.sortBy (fun x -> 
+                match x with
+                | PlayingCard c -> getWeight true c
+                | Shadowed -> failwith "unsupported card type"
+            )
         let toCards = cardsList.[nth]
         for c in fromCards do 
             toCards.Add(c)
