@@ -5,13 +5,15 @@ import { JwtInterceptor } from './interceptors/jwt-interceptor.service';
 import { ErrorInterceptor } from './interceptors/error-interceptor';
 import { LoginMenuComponent } from './components/login-menu/login-menu.component';
 import { AuthGuard } from './guards/auth-guard';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
     LoginMenuComponent,
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    HttpClientModule,
   ],
   exports:[
     LoginMenuComponent,
