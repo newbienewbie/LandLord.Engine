@@ -1,7 +1,7 @@
 
 <div>
   <p>
-    GameRoom {{this.id}}
+    GameRoom/{{this.id}}
   </p>
 
   <div *ngIf="this.state.gameRoom">
@@ -32,8 +32,8 @@
         <li *ngFor="let cards of this.state.gameRoom.cards; index as nth" [class]="this.playerClass(nth)"  >
           <div *ngIf="this.state.gameRoom; let gameRoom">
             <div *ngIf="gameRoom.players[nth]">
+              <span [ngClass]="gameRoom.landLordIndex === nth ? 'landlord-badge' : 'peasant-badge' "></span>
               <span>{{ !!(gameRoom.players[nth].name) ? gameRoom.players[nth].name : "None" }}</span>
-              <span *ngIf="gameRoom.landLordIndex === nth"> LandLord </span>
             </div>
             <form>
               <ul class="cards">
