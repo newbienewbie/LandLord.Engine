@@ -71,19 +71,44 @@ let private createTestPlayers() =
     [p1; p2; p3]
 
 [<Fact>]
-let ``test AddPlayer()`` () =
+let ``test AddPlayer() normal use`` () =
     let room = GameRoom.Prepare()
     let players = createTestPlayers()
-    for p in players do
-        room.AddUser p |> Assert.True
+    for i in [0..2] do
+        let p = players.[i]
+        room.AddUser(i, p) |> Assert.True
+    Assert.Equal(3, room.Players.Count)
+
+[<Fact>]
+let ``test AddPlayer() cannot add player with an index that has already had a player`` () =
+    let room = GameRoom.Prepare()
+    let players = createTestPlayers()
+    for i in [0..2] do
+        let p = players.[i]
+        room.AddUser(i, p) |> Assert.True
+    for i in [0..2] do
+        let p = players.[i]
+        room.AddUser(i, p) |> Assert.False
+    Assert.Equal(3, room.Players.Count)
+
+[<Fact>]
+let ``test AddPlayer() cannot add more then 3 players`` () =
+    let room = GameRoom.Prepare()
+    let players = createTestPlayers()
+    for i in [0..2] do
+        let p = players.[i]
+        room.AddUser(i, p) |> Assert.True
+
+    room.AddUser(4, players.[0]) |> Assert.False
     Assert.Equal(3, room.Players.Count)
 
 [<Fact>]
 let ``test FindPlayer(connId)`` () =
     let room = GameRoom.Prepare()
     let players = createTestPlayers()
-    for p in players do
-        room.AddUser p |> Assert.True
+    for i in [0..2] do
+        let p = players.[i]
+        room.AddUser(i, p) |> Assert.True
     Assert.Equal(3, room.Players.Count)
 
     // test: find an existing player 
@@ -129,8 +154,10 @@ let private TestShadowCards(rawCards:IList<IList<PlayerCard>>, shadowedCards: IL
 let ``test ShadowCards(connId)`` () =
     let room = GameRoom.Prepare()
     let players = createTestPlayers()
-    for p in players do
-        room.AddUser p |> Assert.True
+
+    for i in [0..2] do
+        let p = players.[i];
+        room.AddUser(i, p) |> Assert.True
     Assert.Equal(3, room.Players.Count)
 
     for p in room.Players do
@@ -142,8 +169,10 @@ let ``test ShadowCards(connId)`` () =
 let private createRoomAndAddUserAndSetLandLord landlordIndex = 
     let room = GameRoom.Prepare()
     let players = createTestPlayers()
-    for p in players do
-        room.AddUser p |> Assert.True
+
+    for i in [0..2] do
+        let p = players.[i];
+        room.AddUser(i, p) |> Assert.True
     room.LandLordIndex <- landlordIndex
     room.AppendCards room.ReservedCards
     room 

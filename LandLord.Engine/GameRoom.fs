@@ -9,8 +9,16 @@ open System.Linq
 type Player()= 
     member val ConnectionId:string = String.Empty with get, set
     member val Name:string = String.Empty with get,set
+    member val StillActive = false with get,set
+    member this.IsEmpty 
+        with get() = 
+            this.ConnectionId = String.Empty && this.Name = String.Empty && this.StillActive = false
+
     // An empty instance
-    static member Empty = Player()
+    static member Empty = 
+        let p = Player()
+        p.StillActive <- false
+        p
 
 /// used by GameRoom::FindPlayer()
 [<AllowNullLiteral>]
@@ -98,6 +106,10 @@ type GameRoom() =
         room.Cards.Add(new List<PlayerCard>())
         room.Cards.Add(new List<PlayerCard>())
         room.Cards.Add(new List<PlayerCard>())
+        // intilize the _players with 3 empty player
+        room.Players.Add(Player.Empty)
+        room.Players.Add(Player.Empty)
+        room.Players.Add(Player.Empty)
         room
 
     // Create, Shuffle, Deal , and leave 3 cards for the LandLord
@@ -133,13 +145,24 @@ type GameRoom() =
 
 type GameRoom with 
 
-    member this.AddUser(player: Player) = 
-        let count = this.Players.Count
-        if count < 3 then
-            this.Players.Add(player)
+    member this.AddUser(nth: int, player: Player) = 
+        if nth >=0 && nth < 3 && this.Players.[nth].IsEmpty then
+            this.Players.[nth] <- player
             true
         else 
             false
+
+    member this.AddUser(player: Player) = 
+        let nth = 
+            this.Players
+                .Select(fun p i -> (p, i))
+                .Where(fun t ->
+                    let p = (fst t)
+                    p.IsEmpty
+                )
+                .Select(fun (p,i) -> i)
+                .FirstOrDefault()
+        this.AddUser(nth, player)
 
     member this.AppendCards(cards: IList<PlayingCard>) = 
         let originalCards = this.Cards.[this.LandLordIndex]
