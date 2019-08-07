@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import * as signalR from '@aspnet/signalr';
 import { RoomStateWatcherService } from './state-watcher.service';
+import { AuthService } from '../auth/services/auth-service.service';
+import { of } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +13,25 @@ export class SignalrService {
   private connection: signalR.HubConnection
   private thenable: Promise<void>;
 
-  constructor(private stateWatcher: RoomStateWatcherService) {
+  constructor(private stateWatcher: RoomStateWatcherService, private authService: AuthService) {
     this.connection = new signalR.HubConnectionBuilder()
       .withUrl('/gamehub', {
-
+        accessTokenFactory: () => {
+          let isAuthenticated = this.authService.isAuthenticated()
+          if (isAuthenticated) {
+            return this.authService.currentUser
+              .pipe(
+                map(o => o.token),
+                take(1),
+              )
+              .toPromise<string>();
+          }
+          else{
+            console.log("not logged, connect signalR:");
+            location.href="/identity/account/login";
+            return of("").toPromise();
+          }
+        }
       })
       .build();
     this.setup();

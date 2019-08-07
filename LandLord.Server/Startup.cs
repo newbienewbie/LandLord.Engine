@@ -13,6 +13,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using LandLord.Engine.Repository;
 using LandLord.WebServer.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+using System;
+using System.Threading.Tasks;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace LandLord.Server
 {
@@ -35,13 +41,34 @@ namespace LandLord.Server
             services.AddDefaultIdentity<ApplicationUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
-
-            services.AddAuthentication()
-                .AddIdentityServerJwt();
             services.AddMvc(options => options.EnableEndpointRouting = false)
                 .AddNewtonsoftJson();
+
+            services.AddAuthentication()
+                .AddJwtBearer( GameHubConstants.GameHubAuthenticationScheme, options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = Configuration["GameHubJwtAuthentication:Issuer"],
+                        ValidAudience = Configuration["GameHubJwtAuthentication:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["GameHubJwtAuthentication:Key"]))
+                    };
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = (ctx) => {
+                            var isWebSocket = ctx.HttpContext.WebSockets.IsWebSocketRequest;
+                            if (isWebSocket && ctx.Request.Query.ContainsKey("access_token"))
+                            {
+                                ctx.Token = ctx.Request.Query["access_token"];
+                            }
+                            return Task.CompletedTask;
+                        },
+                    };
+                });
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -75,7 +102,6 @@ namespace LandLord.Server
             app.UseSpaStaticFiles();
 
             app.UseAuthentication();
-            app.UseIdentityServer();
 
             app.UseSignalR(opts => {
                 opts.MapHub<GameHub>("/gamehub");
