@@ -159,7 +159,7 @@ type GameRoom with
                 .Select(fun p i -> (p, i))
                 .Where(fun t ->
                     let p = (fst t)
-                    p.IsEmpty
+                    p.IsEmpty || p.Id = player.Id  // could replace self
                 )
                 .Select(fun (p,i) -> i)
                 .FirstOrDefault()
