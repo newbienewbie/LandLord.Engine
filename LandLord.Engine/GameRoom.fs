@@ -8,11 +8,12 @@ open System.Linq
 
 type Player()= 
     member val ConnectionId:string = String.Empty with get, set
+    member val Id:string = String.Empty with get,set
     member val Name:string = String.Empty with get,set
     member val StillActive = false with get,set
     member this.IsEmpty 
         with get() = 
-            this.ConnectionId = String.Empty && this.Name = String.Empty && this.StillActive = false
+            this.ConnectionId = String.Empty && this.Id = String.Empty && this.Name = String.Empty && this.StillActive = false
 
     // An empty instance
     static member Empty = 
@@ -223,7 +224,7 @@ type GameRoom with
         let kvs = 
             this.Players
             |> Seq.mapi (fun k v -> k, v)
-            |> Seq.filter (fun (i, c) -> c.Name = userId)
+            |> Seq.filter (fun (i, c) -> c.Id = userId)
 
         if Seq.isEmpty kvs then 
             null

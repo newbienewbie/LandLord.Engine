@@ -62,6 +62,7 @@ let ``测试 Prepare() Cards的完备性和唯一性`` () =
 let private createTestPlayers() = 
     let createTestPlayer name connId = 
         let p =  Player()
+        p.Id <- name
         p.Name <- name
         p.ConnectionId <- connId
         p
@@ -103,7 +104,7 @@ let ``test AddPlayer() cannot add more then 3 players`` () =
     Assert.Equal(3, room.Players.Count)
 
 [<Fact>]
-let ``test FindPlayer(connId)`` () =
+let ``test FindPlayer(userId)`` () =
     let room = GameRoom.Prepare()
     let players = createTestPlayers()
     for i in [0..2] do
@@ -114,7 +115,7 @@ let ``test FindPlayer(connId)`` () =
     // test: find an existing player 
     for i in [0..2] do
         let p = players.[i];
-        let findings = room.FindPlayer(p.Name)
+        let findings = room.FindPlayer(p.Id)
         Assert.NotNull findings
         findings.Player = p |> Assert.True
         findings.Index = i |> Assert.True

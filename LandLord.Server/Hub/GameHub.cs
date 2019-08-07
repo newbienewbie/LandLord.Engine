@@ -130,7 +130,8 @@ namespace LandLord.WebServer.Services
                 var room = roomRepo.Load(roomId);
                 room.AddUser(new Player {
                     ConnectionId =Context.ConnectionId,
-                    Name = Context.UserIdentifier,
+                    Id= Context.UserIdentifier,
+                    Name= Context.User.Identity.Name,
                 });
                 roomRepo.Save(room);
                 var findings = room.FindPlayer(Context.UserIdentifier);
