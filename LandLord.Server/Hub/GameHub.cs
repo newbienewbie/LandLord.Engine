@@ -17,7 +17,14 @@ namespace LandLord.WebServer.Services
     // the game state returned to client 
     public class GameStateDto
     {
+        /// <summary>
+        /// current game room state for this particualr client
+        /// </summary>
         public IGameRoomMetaData GameRoom { get; internal set; }
+
+        /// <summary>
+        /// current player's turn index
+        /// </summary>
         public int TurnIndex { get; internal set; }
     }
 
@@ -79,23 +86,38 @@ namespace LandLord.WebServer.Services
         }
         public async Task ReJoinRoom(Guid roomId)
         {
-            var roomName = roomId.ToString();
-            var newConnectionId = Context.ConnectionId;
             using (var scope = this._sp.CreateScope())
             {
                 var roomRepo = scope.ServiceProvider.GetRequiredService<GameRoomRepository>();
                 var room = roomRepo.Load(roomId);
-
-                var findings = room.FindPlayer(Context.UserIdentifier);
-                if (findings != null) {
-                    var oldConnectionId = findings.Player.ConnectionId;
-                    await Groups.RemoveFromGroupAsync(oldConnectionId, roomName);
-                    await Groups.AddToGroupAsync(newConnectionId,roomName);
-                    room.Players[findings.Index].ConnectionId = newConnectionId;
-                }
+                var findings = await this.ReJoinRoomCore(room);
                 roomRepo.Save(room);
                 // notify client
-                await Clients.Group(roomName).ReceiveState(new GameStateDto { GameRoom= room, TurnIndex = findings.Index});
+                var roomName = roomId.ToString();
+                await Clients.Group(roomName).ReceiveState(new GameStateDto {
+                    GameRoom = room,
+                    TurnIndex = findings.Index
+                });
+            }
+        }
+
+        private async Task<PlayerFindings> ReJoinRoomCore(GameRoom room)
+        {
+            var newConnectionId = Context.ConnectionId;
+            var roomName = room.Id.ToString();
+            var findings = room.FindPlayer(Context.UserIdentifier);
+            if (findings != null)
+            {
+                var oldConnectionId = findings.Player.ConnectionId;
+                await Groups.RemoveFromGroupAsync(oldConnectionId, roomName);
+                await Groups.AddToGroupAsync(newConnectionId, roomName);
+                room.Players[findings.Index].ConnectionId = newConnectionId;
+                return findings;
+            }
+            else {
+                await Groups.AddToGroupAsync(newConnectionId, roomName);
+                findings = room.FindPlayer(Context.UserIdentifier);
+                return findings;
             }
         }
 
@@ -133,8 +155,8 @@ namespace LandLord.WebServer.Services
                     Id= Context.UserIdentifier,
                     Name= Context.User.Identity.Name,
                 });
+                var findings = await this.ReJoinRoomCore(room);
                 roomRepo.Save(room);
-                var findings = room.FindPlayer(Context.UserIdentifier);
                 if (findings == null)
                 {
                     throw new Exception("findings must not be null");
