@@ -14,7 +14,7 @@ module Facade=
         let suits: Suit seq  = unbox( Enum.GetValues(typeof<Suit>) )
         let values: CardValue seq = unbox(Enum.GetValues(typeof<CardValue>))
 
-        let mutable cards =
+        let cards =
             suits
             |> Seq.collect (fun suit -> 
                 values
@@ -22,9 +22,7 @@ module Facade=
                 |> Seq.toList
             )
             |> Seq.toList
-        cards <- cards @ [Joker(JokerType.Black)]
-        cards <- cards @ [Joker(JokerType.Red)]
-        cards
+        Joker(JokerType.Red)::Joker(JokerType.Black)::cards
 
     let shuffle (cards: PlayingCard list) = 
 
