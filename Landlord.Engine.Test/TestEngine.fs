@@ -490,3 +490,52 @@ let ``测试CanPlay() KKK _ 222`` () =
           NormalCard(CardValue.Two,Suit.Heart); ]
 
     canPlay prevCards currentCards |> Assert.True
+
+
+[<Fact>]
+let ``测试CanPlay() 3335 _ 5554`` () =
+
+    let prevCards= 
+         [ NormalCard(CardValue.Three, Suit.Spade);
+          NormalCard(CardValue.Three, Suit.Diamond); 
+          NormalCard(CardValue.Three, Suit.Club); 
+          NormalCard(CardValue.Five, Suit.Spade); ]
+    let currentCards= 
+        [ NormalCard(CardValue.Five, Suit.Club); 
+          NormalCard(CardValue.Five, Suit.Diamond); 
+          NormalCard(CardValue.Five, Suit.Heart); 
+          NormalCard(CardValue.Four,Suit.Heart); ]
+
+    canPlay prevCards currentCards |> Assert.True
+
+[<Fact>]
+let ``测试CanPlay() AAA3 _ 5554`` () =
+
+    let prevCards= 
+         [ NormalCard(CardValue.Three, Suit.Spade);
+          NormalCard(CardValue.Ace, Suit.Diamond); 
+          NormalCard(CardValue.Ace, Suit.Club); 
+          NormalCard(CardValue.Ace, Suit.Heart); ]
+    let currentCards= 
+        [ NormalCard(CardValue.Five, Suit.Club); 
+          NormalCard(CardValue.Five, Suit.Diamond); 
+          NormalCard(CardValue.Five, Suit.Heart); 
+          NormalCard(CardValue.Four,Suit.Heart); ]
+
+    canPlay prevCards currentCards |> Assert.False
+
+[<Fact>]
+let ``测试CanPlay() AAA3 _ KKK2`` () =
+
+    let prevCards= 
+         [ NormalCard(CardValue.Three, Suit.Spade);
+          NormalCard(CardValue.Ace, Suit.Diamond); 
+          NormalCard(CardValue.Ace, Suit.Club); 
+          NormalCard(CardValue.Ace, Suit.Heart); ]
+    let currentCards= 
+        [ NormalCard(CardValue.King, Suit.Club); 
+          NormalCard(CardValue.King, Suit.Diamond); 
+          NormalCard(CardValue.King, Suit.Heart); 
+          NormalCard(CardValue.Two,Suit.Heart); ]
+
+    canPlay prevCards currentCards |> Assert.False

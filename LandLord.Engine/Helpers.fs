@@ -115,6 +115,27 @@ module Facade=
             let card2 = cards2 |> List.head
             gt card1 card2
 
+        /// assume cards1 and cards2 are both the | SanDai1 | pattern
+        let SanDai1GreaterThan (cards1: PlayingCard list) (cards2: PlayingCard list)=
+            let dominatingCard (cards: PlayingCard list) = 
+                let g =
+                    cards
+                    |> List.groupBy (fun i -> getWeight false i)
+                    |> List.map (fun g -> snd g)
+                    |> List.sortBy (fun i -> List.length i )
+                match g with
+                | [[c1]; [c2;c3;c4]] 
+                    when (getWeight false c2) = (getWeight false c3) 
+                        && (getWeight false c3) = (getWeight false c4) 
+                    -> c4
+                | _ -> 
+                    let msg = sprintf "unsupported cards %A" cards
+                    failwith msg
+            let c1 = dominatingCard cards1
+            let c2 = dominatingCard cards2
+            gt c1 c2
+
+
         let pattern = (prevCards |> sort , cards |> sort) 
         match pattern with
         | (Single card1, Single card2) when gt card2 card1 -> true
@@ -148,7 +169,8 @@ module Facade=
         | (ShunZi 3 11 cards1, ShunZi 3 11 cards2) when seqGt cards2 cards1 -> true
         | (ShunZi 3 12 cards1, ShunZi 3 12 cards2) when seqGt cards2 cards1 -> true
         | (ShunZi 3 13 cards1, ShunZi 3 13 cards2) when seqGt cards2 cards1 -> true
-//      | (SanDai1 cards1, SanDai1 cards2) when seqGt cards2 cards1 -> true
+        // 3+1 
+        | (SanDai1 cards1, SanDai1 cards2) when SanDai1GreaterThan cards2 cards1 -> true
         | (Bomb b1, Bomb b2) -> seqGt b2 b1
         // the prev mustn't be a bomb because it would be matched by the above (bomb1,bomb2) pattern
         | (_, Bomb b1) -> true           
