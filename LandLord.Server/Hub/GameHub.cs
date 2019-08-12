@@ -49,13 +49,12 @@ namespace LandLord.WebServer.Services
 
         private async Task PushStateToGroupAsync(GameRoom room)
         {
-            var tasks = room.Players.Select(p => {
-                var findings = room.FindPlayer(Context.UserIdentifier);
-                var shadowed = room.ShadowCards(findings.Index);
-                return Clients.Client(p.ConnectionId).ReceiveState(new GameStateDto
+            var tasks = room.Players.Select((player, index) => {
+                var shadowed = room.ShadowCards(index);
+                return Clients.Client(player.ConnectionId).ReceiveState(new GameStateDto
                 {
                     GameRoom = shadowed,
-                    TurnIndex = findings.Index,
+                    TurnIndex = index,
                 });
             });
             await Task.WhenAll(tasks);
@@ -133,7 +132,7 @@ namespace LandLord.WebServer.Services
                 {
                     throw new Exception("findings must not be null");
                 }
-                await Clients.Group(roomIdStr).AddingToRoomSucceeded(roomId);
+                //await Clients.Group(roomIdStr).AddingToRoomSucceeded(roomId);
                 await this.PushStateToGroupAsync(room);
             }
         }
