@@ -45,7 +45,7 @@ type GameRoomMetaData() =
 
     let mutable _id:Guid = Guid.NewGuid() 
     let mutable _landLordIndex: int = -1 
-    let mutable _currentTurn: int = 0 
+    let mutable _currentTurn: int = -1 
     let mutable _prevIndex: int = -1 
     let mutable _prevCards: IList<PlayingCard>= (new List<PlayingCard>() :> IList<_>) 
     let mutable _players: IList<Player> = (new List<Player>() :> IList<_>) 
