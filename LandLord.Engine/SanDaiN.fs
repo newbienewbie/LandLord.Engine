@@ -23,6 +23,8 @@ module SanDaiN=
                 -> Some(cards)
         | _ -> None
 
+
+    // not enabled
     let (|FeiJiDai2|_|) (cards: PlayingCard list) = 
 
         let ``check3+3+1+1`` (cards: PlayingCard list) : bool = 
@@ -46,6 +48,7 @@ module SanDaiN=
         | _ -> None
 
 
+    // not enabled
     let (|FeiJiDai3|_|) (cards: PlayingCard list) = 
         let ``check3+3+3+1+1+1`` (cards: PlayingCard list) : bool = 
             match getCardsValues cards with
@@ -69,4 +72,7 @@ module SanDaiN=
         match cards with
         | list when ``check3+3+3+1+1+1`` list -> Some cards 
         | _ -> None
+
+
+
 

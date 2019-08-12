@@ -164,6 +164,12 @@ module Card =
         | LianShun 12 cards -> Some(cards)
         | _ -> None
 
+    // not enabled
+    let (|LianShun13|_|) (cards: PlayingCard list) = 
+        match cards with
+        | LianShun 13 cards -> Some(cards)
+        | _ -> None
+
 
     let (|ShunZi|_|) (dup: int) (len: int) (cards: PlayingCard list) =
 
