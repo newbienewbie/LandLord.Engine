@@ -165,11 +165,15 @@ type GameRoom with
                 .FirstOrDefault()
         this.AddUser(nth, player)
 
-    member this.AppendCards(cards: IList<PlayingCard>) = 
+    member private this.AppendCards(cards: IList<PlayingCard>) = 
         let originalCards = this.Cards.[this.LandLordIndex]
         for c in cards do
             originalCards.Add(PlayingCard c)
 
+    member this.SetLandLord(nth: int) = 
+        this.LandLordIndex  <- nth
+        this.AppendCards(this.ReservedCards)
+        this.CurrentTurn <- nth
 
 type GameRoom with
 

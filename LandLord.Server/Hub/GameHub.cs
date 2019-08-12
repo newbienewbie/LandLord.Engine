@@ -166,8 +166,7 @@ namespace LandLord.WebServer.Services
                     var findings = room.FindPlayer(userId);
                     if (findings != null)
                     {
-                        room.LandLordIndex = findings.Index;
-                        room.AppendCards(room.ReservedCards);
+                        room.SetLandLord(findings.Index);
                         roomRepo.Save(room);
 
                         await this.PushStateToGroupAsync(room);

@@ -174,12 +174,11 @@ let private createRoomAndAddUserAndSetLandLord landlordIndex =
     for i in [0..2] do
         let p = players.[i];
         room.AddUser(i, p) |> Assert.True
-    room.LandLordIndex <- landlordIndex
-    room.AppendCards room.ReservedCards
+    room.SetLandLord(landlordIndex)
     room 
 
 [<Fact>]
-let ``test AppendCards`` () =
+let ``test SetLandLord(nth)`` () =
     let landlordIndex = 2
     let room = createRoomAndAddUserAndSetLandLord landlordIndex
     // landlord index
