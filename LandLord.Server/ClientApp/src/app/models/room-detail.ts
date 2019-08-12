@@ -2,12 +2,11 @@ import { Room } from "./room";
 import { Player } from "./Player";
 import { PlayerCardShape } from "../services/card-converter.service";
 
-
-interface PlayerCard{
+export interface PlayerCard {
 
 }
 
-interface PlayingCard{
+export interface PlayingCard {
 
 }
 

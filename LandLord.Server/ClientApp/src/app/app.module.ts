@@ -11,7 +11,6 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { RoomDetailComponent } from './room-detail/room-detail.component';
 import { SignalrService } from './services/signalr.service';
-import { RoomStateWatcherService } from './services/state-watcher.service';
 import { CardConverterService } from './services/card-converter.service';
 import { AuthModule } from './auth/auth.module';
 import { JwtInterceptor } from './auth/interceptors/jwt-interceptor.service';
@@ -44,7 +43,6 @@ import { LoginMenuComponent } from './auth/components/login-menu/login-menu.comp
     SignalrService, 
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    RoomStateWatcherService, 
     CardConverterService,
   ],
   bootstrap: [AppComponent]

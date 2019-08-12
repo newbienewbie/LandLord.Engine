@@ -3,9 +3,8 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { GameRoomDetail, GameState } from '../models/room-detail';
 import { HttpClient } from '@angular/common/http';
 import { SignalrService } from '../services/signalr.service';
-import { RoomStateWatcherService } from '../services/state-watcher.service';
 import { CardConverterService } from '../services/card-converter.service';
-import { forEach } from '@angular/router/src/utils/collection';
+import { PlayCardsSucceededArg, PlayCardsFailedArg } from '../models/Arguments';
 
 @Component({
   selector: 'app-room-detail',
@@ -25,7 +24,6 @@ export class RoomDetailComponent implements OnInit {
     private router: Router,
     private httpClient: HttpClient,
     private signalRService: SignalrService,
-    private stateWatcher: RoomStateWatcherService,
     protected cardConverter: CardConverterService,
   ) {
     this.route.params.subscribe(o => {
@@ -36,18 +34,29 @@ export class RoomDetailComponent implements OnInit {
       this.signalRService.JoinRoom(this.id);
     });
 
-    this.stateWatcher.onChangeState = state => {
-      this.state = state;
-    }
-    this.stateWatcher.onPlayCardsSucceeded = (index, cards) => {
-      let length = cards.length;
-      this.selections = new Array( this.selections.length - length );
-    }
-    this.stateWatcher.onPlayCardsFailed= (index, cards) => {
-      alert("cannot play this cards!");
-      //let length = cards.length;
-      //this.selections = new Array( this.selections.length - length );
-    }
+    this.signalRService.ReceiveStateObservable.subscribe({
+      next: state => this.state = state,
+    });
+
+    this.signalRService.PlayCardsCallbackObservable.subscribe({
+      next: (args: PlayCardsSucceededArg) => {
+        let length = args.cards.length;
+        this.selections = new Array( this.selections.length - length );
+      },
+      error: (err: PlayCardsFailedArg) => {
+        alert("cannot play this cards!");
+      },
+    });
+
+    this.signalRService.BeLandLordCallbackObservable.subscribe({
+      next: (args) => {
+          console.log("Being LandLord suceeded",args);
+      },
+      error: (err) => {
+          console.log("Being LandLord failed", err);
+      }
+    });
+
 
   }
 

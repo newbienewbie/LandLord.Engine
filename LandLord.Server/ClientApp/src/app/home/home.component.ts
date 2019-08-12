@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Room } from '../models/room';
 import { HttpClient } from '@angular/common/http';
-import { RoomStateWatcherService } from '../services/state-watcher.service';
 import { Player } from '../models/Player';
 import { SignalrService } from '../services/signalr.service';
 
@@ -12,7 +11,7 @@ import { SignalrService } from '../services/signalr.service';
 export class HomeComponent {
   rooms: Room[] =[];
 
-  constructor(private httpClient: HttpClient, private signalRService: SignalrService,private stateWatcher: RoomStateWatcherService) {
+  constructor(private httpClient: HttpClient, private signalRService: SignalrService) {
   }
 
   ngOnInit(){

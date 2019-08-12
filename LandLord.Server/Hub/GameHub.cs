@@ -1,6 +1,8 @@
 ﻿using Itminus.LandLord.Engine;
 using LandLord.Engine.Repository;
 using LandLord.Server;
+using LandLord.Server.Hub;
+using LandLord.Server.Hub.CallbackArguments;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,36 +15,7 @@ using static Itminus.LandLord.Engine.Card;
 namespace LandLord.WebServer.Services
 {
 
-
-    // the game state returned to client 
-    public class GameStateDto
-    {
-        /// <summary>
-        /// current game room state for this particualr client
-        /// </summary>
-        public IGameRoomMetaData GameRoom { get; internal set; }
-
-        /// <summary>
-        /// current player's turn index
-        /// </summary>
-        public int TurnIndex { get; internal set; }
-    }
-
-    public interface IGameHubClient
-    {
-        Task BeLandLordSucceded(int index);
-        Task BeLandLordFailed();
-
-        Task ReceiveState(GameStateDto state);
-        Task AddingToRoomSucceeded(Guid roomId);
-        Task RemoveFromRoomSucceeded(Guid roomId);
-        Task PlayCardsSucceeded(int index, IList<PlayingCard> cards);
-        Task PlayCardsFailed(int index, IList<PlayingCard> cards);
-        Task Win(int index);
-        Task ReceiveError(string msg);
-    }
-
-    [Authorize(AuthenticationSchemes=GameHubConstants.GameHubAuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = GameHubConstants.GameHubAuthenticationScheme)]
     public class GameHub : Hub<IGameHubClient>
     {
         private readonly IServiceProvider _sp;
@@ -74,16 +47,20 @@ namespace LandLord.WebServer.Services
         //    }
         //}
 
-
-        private GameRoom FindOneRecentRoom() {
-            using (var scope = this._sp.CreateScope())
-            {
-                var roomRepo = scope.ServiceProvider.GetRequiredService<GameRoomRepository>();
-                var userId = Context.UserIdentifier;
-                var room = roomRepo.FindAvaiableRoomByUserId(userId);
-                return room;
-            }
+        private async Task PushStateToGroupAsync(GameRoom room)
+        {
+            var tasks = room.Players.Select(p => {
+                var findings = room.FindPlayer(Context.UserIdentifier);
+                var shadowed = room.ShadowCards(findings.Index);
+                return Clients.Client(p.ConnectionId).ReceiveState(new GameStateDto
+                {
+                    GameRoom = shadowed,
+                    TurnIndex = findings.Index,
+                });
+            });
+            await Task.WhenAll(tasks);
         }
+
         public async Task ReJoinRoom(Guid roomId)
         {
             using (var scope = this._sp.CreateScope())
@@ -92,12 +69,7 @@ namespace LandLord.WebServer.Services
                 var room = roomRepo.Load(roomId);
                 var findings = await this.ReJoinRoomCore(room);
                 roomRepo.Save(room);
-                // notify client
-                var roomName = roomId.ToString();
-                await Clients.Group(roomName).ReceiveState(new GameStateDto {
-                    GameRoom = room,
-                    TurnIndex = findings.Index
-                });
+                await this.PushStateToGroupAsync(room);
             }
         }
 
@@ -136,7 +108,7 @@ namespace LandLord.WebServer.Services
                 }
                 else {
                     var roomdata = room.ShadowCards(findings.Index);
-                    await Clients.Caller.ReceiveState(new GameStateDto { GameRoom = roomdata, TurnIndex = findings.Index});
+                    await Clients.Caller.ReceiveState(new GameStateDto { GameRoom = roomdata, TurnIndex = findings.Index });
                 }
             }
         }
@@ -151,9 +123,9 @@ namespace LandLord.WebServer.Services
                 var roomRepo = scope.ServiceProvider.GetRequiredService<GameRoomRepository>();
                 var room = roomRepo.Load(roomId);
                 room.AddUser(new Player {
-                    ConnectionId =Context.ConnectionId,
-                    Id= Context.UserIdentifier,
-                    Name= Context.User.Identity.Name,
+                    ConnectionId = Context.ConnectionId,
+                    Id = Context.UserIdentifier,
+                    Name = Context.User.Identity.Name,
                 });
                 var findings = await this.ReJoinRoomCore(room);
                 roomRepo.Save(room);
@@ -162,11 +134,7 @@ namespace LandLord.WebServer.Services
                     throw new Exception("findings must not be null");
                 }
                 await Clients.Group(roomIdStr).AddingToRoomSucceeded(roomId);
-                var shadowed = room.ShadowCards(findings.Index);
-                await Clients.Group(roomIdStr).ReceiveState(new GameStateDto {
-                    GameRoom = shadowed,
-                    TurnIndex = findings.Index,
-                });
+                await this.PushStateToGroupAsync(room);
             }
         }
 
@@ -181,9 +149,10 @@ namespace LandLord.WebServer.Services
                 // todo: remove player
                 roomRepo.Save(room);
                 await Clients.Group(roomName).RemoveFromRoomSucceeded(roomId);
-                await Clients.Group(roomName).ReceiveState(new GameStateDto { GameRoom= room, TurnIndex = -1});
+                await Clients.Group(roomName).ReceiveState(new GameStateDto { GameRoom = room, TurnIndex = -1 });
             }
         }
+
 
         public async Task BeLandLord(Guid roomId)
         {
@@ -202,17 +171,21 @@ namespace LandLord.WebServer.Services
                         room.AppendCards(room.ReservedCards);
                         roomRepo.Save(room);
 
-                        await Clients.Group(roomName).BeLandLordSucceded(findings.Index);
-                        var shadowed = room.ShadowCards(findings.Index);
-                        await Clients.Group(roomName).ReceiveState(new GameStateDto
-                        {
-                            GameRoom = shadowed,
-                            TurnIndex = findings.Index,
-                        });
+                        await this.PushStateToGroupAsync(room);
+                        var args = new BeLandLordCallbackArgs {
+                            Kind = KindValues.Success,
+                            LandLordIndex = findings.Index,
+                        };
+                        await Clients.Group(roomName).BeLandLordCallback(args);
                         return;
                     }
                 }
-                await Clients.Caller.BeLandLordFailed();   
+                else {
+                    var args = new BeLandLordCallbackArgs() {
+                        Kind = KindValues.Fail,
+                    };
+                    await Clients.Caller.BeLandLordCallback(args);   
+                }
             }
            
         }
@@ -221,47 +194,59 @@ namespace LandLord.WebServer.Services
         {
             await PlayCardsCore(roomId,cards);
         }
-
         private async Task PlayCardsCore(Guid roomId, List<PlayingCard> cards)
         {
             var roomName = roomId.ToString();
-            var userId= Context.UserIdentifier;
+            var userId = Context.UserIdentifier;
             using (var scope = this._sp.CreateScope())
             {
                 var roomRepo = scope.ServiceProvider.GetRequiredService<GameRoomRepository>();
                 var room = roomRepo.Load(roomId);
                 var findings = room.FindPlayer(userId);
-                if(findings == null) {
+                if (findings == null)
+                {
                     // false
-                } else {
+                }
+                else
+                {
                     var index = findings.Index;
                     var player = findings.Player;
                     var succeeded = false;
                     // only when current user is the landlord and none of his cards has not been player
-                    if (room.LandLordIndex >=0 && index == room.LandLordIndex && room.Cards[index].Count == 20) {
+                    if (room.LandLordIndex >= 0 && index == room.LandLordIndex && room.Cards[index].Count == 20)
+                    {
                         succeeded = room.StartPlayingCards(cards);
-                    } else {
+                    }
+                    else
+                    {
                         succeeded = room.PlayCards(index, cards);
                     }
-                    if (!succeeded) {
+                    if (!succeeded)
+                    {
                         // process false
-                        await Clients.Caller.PlayCardsFailed(index,cards);
+                        var args = new PlayCardsCallbackArgs
+                        {
+                            Kind = KindValues.Fail,
+                            Index = index,
+                            Cards = cards,
+                        };
+                        await Clients.Caller.PlayCardsCallback(args);
                     }
-                    else {
+                    else
+                    {
                         roomRepo.Save(room);
+                        await this.PushStateToGroupAsync(room);
 
-                        foreach (var p in room.Players) {
-                            var shadowed = room.ShadowCards(findings.Index);
-                            await Clients.Client(p.ConnectionId).ReceiveState(new GameStateDto {
-                                GameRoom = shadowed,
-                                TurnIndex = findings.Index,
-                            });
-                        }
-                        await Clients.Group(roomName).PlayCardsSucceeded(index, cards);
+                        var args = new PlayCardsCallbackArgs
+                        {
+                            Kind = KindValues.Success,
+                            Index = index,
+                            Cards = cards,
+                        };
+                        await Clients.Group(roomName).PlayCardsCallback(args);
                     }
                 }
             }
         }
-
     }
 }

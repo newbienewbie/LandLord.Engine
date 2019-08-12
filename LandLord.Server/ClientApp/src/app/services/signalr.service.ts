@@ -1,9 +1,13 @@
 import { Injectable } from '@angular/core';
 import * as signalR from '@aspnet/signalr';
-import { RoomStateWatcherService } from './state-watcher.service';
 import { AuthService } from '../auth/services/auth-service.service';
-import { of } from 'rxjs';
+import { of, Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
+import { GameState } from '../models/room-detail';
+import { CallbackArgument, Status, PlayCardsSucceededArg, PlayCardsFailedArg } from '../models/Arguments';
+
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +17,11 @@ export class SignalrService {
   private connection: signalR.HubConnection
   private thenable: Promise<void>;
 
-  constructor(private stateWatcher: RoomStateWatcherService, private authService: AuthService) {
+  public ReceiveStateObservable: Observable<GameState>;
+  public PlayCardsCallbackObservable: Observable<any>;
+  public BeLandLordCallbackObservable: Observable<any>;
+
+  constructor(private authService: AuthService) {
     this.connection = new signalR.HubConnectionBuilder()
       .withUrl('/gamehub', {
         accessTokenFactory: () => {
@@ -35,44 +43,50 @@ export class SignalrService {
       })
       .build();
     this.setup();
+    this.ReceiveStateObservable = this.createStateObserverable("ReceiveState");
+    this.PlayCardsCallbackObservable = this.createObserverable("PlayCardsCallback");
+    this.BeLandLordCallbackObservable = this.createObserverable("BeLandLordCallback");
     this.start();
   }
 
-  public setup(){
-    this.connection.on("ReceiveState", (state) => {
-      console.log("ReceiveState", state);
-      this.stateWatcher.chanageState(state);
+  private createStateObserverable(cbname: string): Observable<any> {
+    return Observable.create(observer=> {
+      this.connection.on(cbname, (cbarg: any) => {
+        observer.next(cbarg);
+      });
     });
+  }
+
+  private createObserverable(cbname: string): Observable<any> {
+    return Observable.create(observer=> {
+      this.connection.on(cbname, (cbarg: CallbackArgument) => {
+        switch (cbarg.kind){
+          case Status.Success:
+            observer.next(cbarg);
+            break;
+          case Status.Fail:
+            observer.error(cbarg);
+            break;
+        }
+      });
+    });
+  }
+
+  private setup(){
     this.connection.on("ReceiveError", (error) => {
       console.log("ReceiveError", error);
     });
+
     this.connection.on("AddingToRoomSucceeded", roomId => {
       console.log("AddingToRoomSucceeded", roomId);
     });
 
-
-    this.connection.on("BeLandLordSucceded", index=> {
-      console.log("AddingToRoomSucceeded", index);
-    });
-
-    this.connection.on("BeLandLordFailed",() => {
-      console.log("AddingToRoomFailed");
-    });
-
-    this.connection.on("PlayCardsSucceeded", (index, cards) => {
-      console.log("PlayCardsSucceeded", index, cards);
-      this.stateWatcher.playCardsSucceeded(index,cards);
-    });
-    this.connection.on("PlayCardsFailed", (index, cards) => {
-      console.log("PlayCardsFailed", index, cards);
-      this.stateWatcher.playCardsFailed(index,cards);
-    });
     this.connection.on("Win", (index) => {
       console.log("Win", index);
     });
   }
 
-  public start() {
+  private start() {
     this.thenable = this.connection
       .start();
     this.thenable
