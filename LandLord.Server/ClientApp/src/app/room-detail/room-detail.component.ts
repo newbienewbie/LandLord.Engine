@@ -57,6 +57,14 @@ export class RoomDetailComponent implements OnInit {
       }
     });
 
+    this.signalRService.PassCardsCallbackObservable.subscribe({
+      next: (args) => {
+          console.log("succeed to pass cards",args);
+      },
+      error: (err) => {
+          console.log("fail to pass cards", err);
+      }
+    });
 
   }
 
@@ -80,6 +88,13 @@ export class RoomDetailComponent implements OnInit {
     console.log("try to play ", selectedCards);
     if (this.state.gameRoom.currentTurn == this.state.turnIndex) {
       this.signalRService.PlayCards(this.state.gameRoom.id, selectedCards);
+    }
+  }
+
+  passCards(){
+    console.log("pass cards. Current state is ", this.state);
+    if (this.state.gameRoom.currentTurn == this.state.turnIndex) {
+      this.signalRService.PassCards(this.state.gameRoom.id);
     }
   }
 

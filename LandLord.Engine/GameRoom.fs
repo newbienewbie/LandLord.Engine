@@ -212,8 +212,8 @@ type GameRoom with
             false
 
     // nth player passes by
-    member this.Pass(nth: int, cards:IList<PlayingCard>) : bool= 
-        this.CurrentTurn <- this.CurrentTurn + 1
+    member this.PassCards() : bool= 
+        this.CurrentTurn <-  (this.CurrentTurn + 1) % 3
         true
 
     member this.HasWin (nth: int) : bool = 

@@ -246,5 +246,32 @@ namespace LandLord.WebServer.Services
                 }
             }
         }
+
+        public async Task PassCards(Guid roomId)
+        {
+            var roomName = roomId.ToString();
+            var userId = Context.UserIdentifier;
+            using (var scope = this._sp.CreateScope())
+            {
+                var roomRepo = scope.ServiceProvider.GetRequiredService<GameRoomRepository>();
+                var room = roomRepo.Load(roomId);
+                var findings = room.FindPlayer(Context.UserIdentifier);
+                if (findings == null) {
+                    var args = new PassCardsCallbackArgs() {
+                        Kind = KindValues.Fail,
+                    };
+                    await this.Clients.Group(roomName).PassCardsCallback(args);
+                } else {
+                    room.PassCards();
+                    roomRepo.Save(room);
+                    await this.PushStateToGroupAsync(room);
+                    var args = new PassCardsCallbackArgs() {
+                        Kind = KindValues.Success,
+                        Index = findings.Index,
+                    };
+                    await this.Clients.Group(roomName).PassCardsCallback(args);
+                }
+            }
+        }
     }
 }

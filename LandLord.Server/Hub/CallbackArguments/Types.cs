@@ -28,4 +28,8 @@ namespace LandLord.Server.Hub.CallbackArguments
         public IList<PlayingCard> Cards { get; set; }
     }
 
+    public class PassCardsCallbackArgs : CallbackArgs
+    {
+        public int Index { get; set; }
+    }
 }

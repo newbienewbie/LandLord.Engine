@@ -35,5 +35,6 @@ namespace LandLord.Server.Hub
 
         Task PlayCardsCallback(PlayCardsCallbackArgs args);
         Task BeLandLordCallback(BeLandLordCallbackArgs args);
+        Task PassCardsCallback(PassCardsCallbackArgs args);
     }
 }

@@ -28,7 +28,7 @@ span.peasant-badge {
   grid-row-end: -1;
   grid-column-start: 1;
   grid-column-end: -1;
-  background-color: lemonchiffon;
+  background-color:azure;
 }
 
   .me ul.cards {
@@ -71,3 +71,8 @@ span.peasant-badge {
   background-color: azure;
   overflow: hidden scroll ;
 }
+
+.isCurrentTurn {
+  background-color: lemonchiffon;
+}
+

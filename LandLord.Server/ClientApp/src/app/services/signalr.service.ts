@@ -20,6 +20,7 @@ export class SignalrService {
   public ReceiveStateObservable: Observable<GameState>;
   public PlayCardsCallbackObservable: Observable<any>;
   public BeLandLordCallbackObservable: Observable<any>;
+  public PassCardsCallbackObservable: Observable<any>;
 
   constructor(private authService: AuthService) {
     this.connection = new signalR.HubConnectionBuilder()
@@ -45,6 +46,7 @@ export class SignalrService {
     this.setup();
     this.ReceiveStateObservable = this.createStateObserverable("ReceiveState");
     this.PlayCardsCallbackObservable = this.createObserverable("PlayCardsCallback");
+    this.PassCardsCallbackObservable = this.createObserverable("PassCardsCallback");
     this.BeLandLordCallbackObservable = this.createObserverable("BeLandLordCallback");
     this.start();
   }
@@ -120,4 +122,12 @@ export class SignalrService {
       this.connection.invoke("PlayCards", roomId, cards);
     }) 
   }
+
+  public PassCards(roomId:string)
+  {
+    this.thenable.then(() => {
+      this.connection.invoke("PassCards", roomId);
+    }) 
+  }
+
 }
