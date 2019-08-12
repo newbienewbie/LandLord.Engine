@@ -205,11 +205,16 @@ type GameRoom with
 
     // nth player plays cards
     member this.PlayCards (nth: int, cards:IList<PlayingCard>) : bool= 
-        let prevCards = this.PrevCards |> List.ofSeq
-        if List.ofSeq cards |> Facade.canPlay prevCards then
-            this.playCards(nth, cards)
+        let prevIndex = this.PrevIndex
+        // pass 
+        if prevIndex = this.CurrentTurn then 
+            true           
         else
-            false
+            let prevCards = this.PrevCards |> List.ofSeq
+            if List.ofSeq cards |> Facade.canPlay prevCards then
+                this.playCards(nth, cards)
+            else
+                false
 
     // nth player passes by
     member this.PassCards() : bool= 
