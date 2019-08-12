@@ -8,7 +8,7 @@ open Itminus.LandLord.Engine.Bomb
      
 
 [<Fact>]
-let ``测试Bomb: 3/3/3/7`` () =
+let ``测试Bomb 3337`` () =
 
     let cards =
         [   NormalCard( CardValue.Three, Suit.Heart);
@@ -23,7 +23,7 @@ let ``测试Bomb: 3/3/3/7`` () =
     Assert.Equal(false , x)
     
 [<Fact>]
-let ``测试Bomb: 2/2/2/2`` () =
+let ``测试Bomb 2222`` () =
 
     let cards =
         [   NormalCard( CardValue.Two, Suit.Heart);
@@ -38,7 +38,7 @@ let ``测试Bomb: 2/2/2/2`` () =
     Assert.Equal(true, x)
 
 [<Fact>]
-let ``测试Bomb: 大鬼/小鬼`` () =
+let ``测试Bomb 大鬼小鬼`` () =
 
     let cards =
         [   Joker(JokerType.Red);
@@ -51,7 +51,7 @@ let ``测试Bomb: 大鬼/小鬼`` () =
     Assert.Equal(true, x)
 
 [<Fact>]
-let ``测试Bomb: 大鬼/大鬼`` () =
+let ``测试Bomb 大鬼大鬼`` () =
 
     let cards =
         [   Joker(JokerType.Red);
@@ -64,7 +64,7 @@ let ``测试Bomb: 大鬼/大鬼`` () =
     Assert.Equal(false, x)
 
 [<Fact>]
-let ``测试Bomb: 小鬼/小鬼`` () =
+let ``测试Bomb 小鬼小鬼`` () =
 
     let cards =
         [   Joker(JokerType.Black);
