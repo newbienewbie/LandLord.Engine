@@ -75,7 +75,7 @@ namespace LandLord.Server
             {
                 configuration.RootPath = "ClientApp/dist";
             });
-            services.AddScoped<GameRoomRepository>(sp => new GameRoomRepository("GameRooms.db"));
+            services.AddScoped(sp => new GameRoomRepository(Configuration["GameRoomDb:Name"]) );
             services.AddSignalR(o => {
                 o.EnableDetailedErrors = true;
             })
