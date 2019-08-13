@@ -1,4 +1,5 @@
 ﻿using Itminus.LandLord.Engine;
+using Microsoft.AspNetCore.TestHost;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,14 +11,23 @@ using Xunit;
 
 namespace LandLord.Server.Tests
 {
-    public class TestGameRoomController : IntegrationTestBase
+    public class TestGameRoomController : IClassFixture<LandLordWebAppFactory>
     {
+        private readonly LandLordWebAppFactory factory;
+        private readonly TestServer _testServer;
+
+        public TestGameRoomController(LandLordWebAppFactory factory)
+        {
+            this.factory = factory;
+            this._testServer = factory.Server;
+        }
+
         [Fact]
         public async Task TestGet()
         {
             try
             {
-                using (var _client = this.TestServer.CreateClient())
+                using (var _client = this._testServer.CreateClient())
                 {
                     var resp = await _client.GetAsync("/api/GameRoom");
                     Assert.Equal(HttpStatusCode.OK, resp.StatusCode);
@@ -35,7 +45,7 @@ namespace LandLord.Server.Tests
         {
             try
             {
-                using (var _client = this.TestServer.CreateClient())
+                using (var _client = this._testServer.CreateClient())
                 {
                     var content = new StringContent(String.Empty);
                     var resp = await _client.PutAsync("/api/GameRoom", content );
@@ -53,7 +63,7 @@ namespace LandLord.Server.Tests
 
             try
             {
-                using (var _client = this.TestServer.CreateClient())
+                using (var _client = this._testServer.CreateClient())
                 {
                     var resp = await _client.GetAsync("/api/GameRoom");
                     Assert.Equal(HttpStatusCode.OK, resp.StatusCode);
