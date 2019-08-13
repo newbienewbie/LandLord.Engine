@@ -251,6 +251,49 @@ let private getPlayableSingletonAsCardsForPlayer (room: GameRoom) (turnIndex: in
     findCards 0
 
 
+[<Fact>]
+let ``test the currentTurn and prevIndex when StartPlayingCards() and PassCards`` () =
+    seq{0..2} 
+    |> Seq.iter (fun landlordIndex ->
+        let room = createRoomAndAddUserAndSetLandLord landlordIndex
+        getFirstCardAsCards room room.LandLordIndex |> room.StartPlayingCards |> Assert.True
+        room.CurrentTurn = getTurn (landlordIndex + 1) |> Assert.True
+        room.PassCards() |> Assert.True
+        room.PrevIndex = landlordIndex |> Assert.True
+        room.CurrentTurn = getTurn (landlordIndex + 2) |> Assert.True
+        room.PassCards() |> Assert.True
+        room.PrevIndex = landlordIndex |> Assert.True
+        room.CurrentTurn = landlordIndex |> Assert.True
+    )
+
+[<Fact>]
+let ``test the currentTurn and prevIndex when PlayCards() and PassCards`` () =
+    seq{0..2} 
+    |> Seq.iter (fun landlordIndex ->
+        let room = createRoomAndAddUserAndSetLandLord landlordIndex
+
+        getFirstCardAsCards room landlordIndex |> room.StartPlayingCards |> Assert.True
+        room.CurrentTurn = getTurn (landlordIndex + 1) |> Assert.True
+
+        let turnIndex = room.CurrentTurn
+        match turnIndex |> getPlayableSingletonAsCardsForPlayer room  with
+        | Some cards -> 
+            room.PlayCards(turnIndex,cards) |> Assert.True
+        | None ->
+            room.PassCards() |> Assert.True
+        room.CurrentTurn = getTurn (turnIndex + 1) |> Assert.True
+
+        let turnIndex = room.CurrentTurn
+        match turnIndex |> getPlayableSingletonAsCardsForPlayer room  with
+        | Some cards -> 
+            room.PlayCards(turnIndex,cards) |> Assert.True
+        | None ->
+            room.PassCards() |> Assert.True
+        room.CurrentTurn = getTurn (turnIndex + 1) |> Assert.True
+        room.CurrentTurn = room.LandLordIndex |> Assert.True
+    )
+
+
 
 [<Fact>]
 let ``test WinnerIndex _ LandLord get Spring`` () =
