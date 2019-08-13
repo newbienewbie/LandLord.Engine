@@ -211,3 +211,114 @@ let ``test StartPlayingCards()`` () =
         let empty = cards.[landlordIndex].Select(convertPlayerCardToPlayingCard).Intersect(playingCards)
         Assert.Equal(0, empty.Count())
 
+
+[<Fact>]
+let ``test WinnerIndex _ LandLord get Spring`` () =
+    seq{0..2} |> Seq.iter(fun landlordIndex -> 
+        let room = createRoomAndAddUserAndSetLandLord landlordIndex
+        let playUntilWin () =
+            let turn nth = nth % 3
+
+            let getFirstCard (turnIndex) = 
+                let card = 
+                    room.Cards.[turnIndex].Select(fun c -> 
+                        match c with 
+                        | PlayingCard c -> c
+                        | _ -> failwith "not supported"
+                    ).First()
+                let cards = new List<PlayingCard>()
+                cards.Add card
+                cards
+
+            let rec _play(nth) = 
+                if room.WinnerIndex = -1 then 
+                    let turnIndex = turn nth
+                    let cards = getFirstCard turnIndex
+                    room.PlayCardsEx( turnIndex , cards) |> Assert.True 
+                    room.PassCards() |> Assert.True  // let others just pass
+                    room.PassCards() |> Assert.True  // let others just pass
+                    _play( turnIndex )
+                else 
+                    ()
+            _play(landlordIndex)
+
+        playUntilWin()
+        Assert.Equal(landlordIndex, room.WinnerIndex )
+        Assert.Equal(0, room.Cards.[room.WinnerIndex].Count )
+        Assert.Equal(true, room.HasWin(room.WinnerIndex))
+    )
+
+[<Fact>]
+let ``test WinnerIndex Test Play Singleton in Turn`` () =
+    let landlordIndex = 2
+    let room = createRoomAndAddUserAndSetLandLord landlordIndex
+
+    let playUntilWin () =
+        let turn turnIndex = turnIndex % 3
+
+        let getNthCard turnIndex cardIndex = 
+            let card = 
+                room.Cards.[turnIndex].Select(fun c -> 
+                    match c with 
+                    | PlayingCard c -> c
+                    | _ -> failwith "not supported"
+                ).Skip(cardIndex).First()
+            let cards = new List<PlayingCard>()
+            cards.Add card
+            cards
+
+        let getPlayableCardsForPlayer turnIndex = 
+            let prevCards = room.PrevCards |> List.ofSeq
+            let getCards = getNthCard turnIndex
+            let rec findCards cardIndex =
+                if cardIndex < room.Cards.[turnIndex].Count then 
+                    let cards = getCards cardIndex
+                    if List.ofSeq cards |> Facade.canPlay prevCards then
+                        Some(cards)
+                    else 
+                        findCards (cardIndex + 1)
+                else
+                    None
+            findCards 0
+
+        let getFirstCard (turnIndex) = 
+            let card = 
+                room.Cards.[turnIndex].Select(fun c -> 
+                    match c with 
+                    | PlayingCard c -> c
+                    | _ -> failwith "not supported"
+                ).First()
+            let cards = new List<PlayingCard>()
+            cards.Add card
+            cards
+
+        let _startPlay() =
+            let cards = getFirstCard room.LandLordIndex
+            room.StartPlayingCards(cards)
+
+        let rec _play(nth) = 
+            if room.WinnerIndex = -1 then 
+                let turnIndex' = turn nth
+                let cardsOption =
+                    if room.PrevIndex = room.CurrentTurn then 
+                        Some(getFirstCard turnIndex')
+                    else 
+                        getPlayableCardsForPlayer turnIndex'
+
+                match cardsOption with
+                | Some cards ->
+                    room.PlayCardsEx( turnIndex' , cards) |> Assert.True 
+                | None ->
+                    room.PassCards() |> Assert.True  // let others just pass
+                _play( turnIndex' + 1 )
+            else 
+                ()
+
+        _startPlay() |> Assert.True    // let landlord play firstly
+        _play(landlordIndex + 1)       // let next player play
+
+    playUntilWin()
+    let winnerIndex = room.WinnerIndex
+    winnerIndex = -1 |> Assert.False
+    Assert.Equal(0, room.Cards.[winnerIndex].Count )
+    Assert.Equal(true, room.HasWin(winnerIndex))

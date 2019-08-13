@@ -40,6 +40,7 @@ type IGameRoomMetaData =
     abstract member Cards: IList<IList<PlayerCard>> with get
     abstract member ReservedCards: IList<PlayingCard>with get
     abstract member HasFinished: bool with get
+    abstract member WinnerIndex:int  with get
 
 type GameRoomMetaData() = 
 
@@ -63,6 +64,12 @@ type GameRoomMetaData() =
         member this.Players with get() = _players
         member this.ReservedCards with get() = _reservedCards
         member this.HasFinished with get() = _finished
+        member this.WinnerIndex 
+            with get() = 
+                match this.HasFinished, seq{0..2} |> Seq.tryFind (fun i -> this.Cards.[i].Count = 0 ) with
+                | false, Some nth -> nth
+                | _ -> -1
+
 
     member this.Id 
         with get() = (this:>IGameRoomMetaData).Id
@@ -91,6 +98,8 @@ type GameRoomMetaData() =
     member this.HasFinished 
         with get() = (this:> IGameRoomMetaData).HasFinished
         and set(v) = _finished <- v
+    member this.WinnerIndex 
+        with get() = (this:> IGameRoomMetaData).WinnerIndex
 
 
 /// don't create GameRoom instance by `new`, use `GameRoom.Create()` instead.
@@ -199,6 +208,7 @@ type GameRoom with
         if this.Cards.[turn].Count <> 20 then
             false
         else if List.ofSeq cards |> Facade.canStartPlaying then
+            this.CurrentTurn <- this.LandLordIndex
             this.playCards(turn, cards ) 
         else
             false
@@ -208,13 +218,22 @@ type GameRoom with
         let prevIndex = this.PrevIndex
         // pass 
         if prevIndex = this.CurrentTurn then 
-            true           
+            this.playCards(nth, cards)
         else
             let prevCards = this.PrevCards |> List.ofSeq
             if List.ofSeq cards |> Facade.canPlay prevCards then
                 this.playCards(nth, cards)
             else
                 false
+
+    // nth player plays cards
+    member this.PlayCardsEx (nth: int, cards:IList<PlayingCard>) : bool= 
+        match (this.HasFinished, this.Players.Count, this.Cards.[this.LandLordIndex].Count) with
+        | (false, 3, 20) -> 
+            this.StartPlayingCards(cards)
+        | (false, 3, count) when count < 20 -> 
+            this.PlayCards(nth, cards)
+        | _ -> false
 
     // nth player passes by
     member this.PassCards() : bool= 
