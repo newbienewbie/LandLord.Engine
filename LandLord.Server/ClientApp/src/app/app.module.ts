@@ -7,8 +7,6 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { RoomDetailComponent } from './room-detail/room-detail.component';
 import { SignalrService } from './services/signalr.service';
 import { CardConverterService } from './services/card-converter.service';
@@ -17,15 +15,15 @@ import { JwtInterceptor } from './auth/interceptors/jwt-interceptor.service';
 import { ErrorInterceptor } from './auth/interceptors/error-interceptor';
 import { AuthGuard } from './auth/guards/auth-guard';
 import { LoginMenuComponent } from './auth/components/login-menu/login-menu.component';
+import { GameHallComponent } from './game-hall/game-hall.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    CounterComponent,
-    FetchDataComponent,
     RoomDetailComponent,
+    GameHallComponent,
   ],
   imports: [
     AuthModule,
@@ -34,9 +32,8 @@ import { LoginMenuComponent } from './auth/components/login-menu/login-menu.comp
     FormsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full',canActivate: [AuthGuard]  },
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthGuard]},
-      { path: 'room/:id', component: RoomDetailComponent, canActivate: [AuthGuard] }
+      { path: 'game-hall', component: GameHallComponent , canActivate: [AuthGuard] },
+      { path: 'room/:id', component: RoomDetailComponent, canActivate: [AuthGuard] },
     ])
   ],
   providers: [

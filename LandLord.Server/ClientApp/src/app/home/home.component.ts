@@ -11,24 +11,9 @@ import { SignalrService } from '../services/signalr.service';
 export class HomeComponent {
   rooms: Room[] =[];
 
-  constructor(private httpClient: HttpClient, private signalRService: SignalrService) {
+  constructor(private httpClient: HttpClient) {
   }
 
   ngOnInit(){
-    this.httpClient.get("/api/GameRoom", {})
-      .subscribe((r: Room[]) => {
-        this.rooms = r;
-        console.log(1,this.rooms);
-      });
-  }
-
-  // create a room and get prepared
-  createRoom()
-  {
-    this.httpClient.put("/api/GameRoom", {})
-      .subscribe((r: Room) => {
-        this.rooms.push(r);
-        return this.signalRService.JoinRoom(r.id);
-      });
   }
 }
