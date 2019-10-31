@@ -1,8 +1,6 @@
 ﻿using Itminus.LandLord.Engine;
-using LandLord.Engine.Repository;
-using LandLord.Server;
-using LandLord.Server.Hub;
-using LandLord.Server.Hub.CallbackArguments;
+using LandLord.Hub;
+using LandLord.Hub.CallbackArguments;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,8 +9,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static Itminus.LandLord.Engine.Card;
+using LandLord.Engine.Repository;
 
-namespace LandLord.WebServer.Services
+namespace LandLord.Hub.Services
 {
 
     [Authorize(AuthenticationSchemes = GameHubConstants.GameHubAuthenticationScheme)]
