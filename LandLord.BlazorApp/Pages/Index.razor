@@ -1,7 +1,59 @@
 ﻿@page "/"
+@using System.Net.Http
+@using System.Net.Http.Headers
+@using Microsoft.AspNetCore.Blazor.Http
+@using Itminus.LandLord.Engine
+@inject HttpClient Http
+@inject LandLord.BlazorApp.Services.SignalRService signalrService
 
-<h1>Hello, world!</h1>
 
-Welcome to your new app.
+<h1>游戏大厅</h1>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+
+@foreach(var room in _rooms){ 
+    <div>
+        <div><a href="/room/@room.Id">Room Number: @room.Id</a></div>
+        @foreach (var player in room.Players) {
+            <ul>
+                <li> @(player== null ? "空缺" : player.Name)</li>
+            </ul>
+        }
+    </div>
+}
+<div>
+    <button @onclick="CreateRoom">New Room</button>
+</div>
+
+@code {
+
+    private const string GameRoomEndPoint = "/api/GameRoom";
+
+    private IList<GameRoomMetaData> _rooms = new List<GameRoomMetaData>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var req = new HttpRequestMessage()
+        {
+            Method = HttpMethod.Get,
+            RequestUri = new Uri(GameRoomEndPoint),
+        };
+
+        //req.Properties[WebAssemblyHttpMessageHandler.FetchArgs] = new
+        //{
+        //    credentials = FetchCredentialsOption.Include
+        //};
+
+        var response = await Http.SendAsync(req);
+        Console.WriteLine("xx"+req.RequestUri);
+    }
+
+
+    public async Task CreateRoom(MouseEventArgs e)
+    {
+        var room= await Http.PutJsonAsync<GameRoomMetaData>(GameRoomEndPoint, new { });
+        this._rooms.Add(room);
+        await this.signalrService.JoinRoomAsync(room.Id);
+    }
+
+
+}

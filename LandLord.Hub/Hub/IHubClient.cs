@@ -1,5 +1,5 @@
 ﻿using Itminus.LandLord.Engine;
-using LandLord.Hub.CallbackArguments;
+using LandLord.Shared.Hub.CallbackArguments;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using static Itminus.LandLord.Engine.Card;
 
-namespace LandLord.Hub
+namespace LandLord.Shared_Hub
 {
 
     // the game state returned to client 

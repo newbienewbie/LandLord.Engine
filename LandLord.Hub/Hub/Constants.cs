@@ -1,5 +1,5 @@
 
-namespace LandLord.Hub{
+namespace LandLord.Shared_Hub{
 
     public static class GameHubConstants {
 

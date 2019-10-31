@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using LandLord.Hub.Services;
+using LandLord.Engine.Repository;
+using LandLord.Shared.Hub.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,7 +27,11 @@ namespace LandLord.Web
         {
             services.AddControllersWithViews();
             services.AddRazorPages();
-            services.AddSignalR();
+            services.AddScoped(sp => new GameRoomRepository(Configuration["GameRoomDb:Name"]) );
+            services.AddSignalR(o => {
+                o.EnableDetailedErrors = true;
+            })
+            .AddNewtonsoftJsonProtocol();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,6 +52,8 @@ namespace LandLord.Web
             app.UseClientSideBlazorFiles<LandLord.BlazorApp.Startup>();
             app.UseRouting();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -55,7 +62,7 @@ namespace LandLord.Web
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapHub<GameHub>("/hubs/chat");
+                endpoints.MapHub<GameHub>("/gamehub");
             });
         }
     }

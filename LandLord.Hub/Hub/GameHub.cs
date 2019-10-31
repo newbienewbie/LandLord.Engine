@@ -1,6 +1,6 @@
 ﻿using Itminus.LandLord.Engine;
-using LandLord.Hub;
-using LandLord.Hub.CallbackArguments;
+using LandLord.Shared_Hub;
+using LandLord.Shared.Hub.CallbackArguments;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 using static Itminus.LandLord.Engine.Card;
 using LandLord.Engine.Repository;
 
-namespace LandLord.Hub.Services
+namespace LandLord.Shared.Hub.Services
 {
 
-    [Authorize(AuthenticationSchemes = GameHubConstants.GameHubAuthenticationScheme)]
+    [Authorize()]
     public class GameHub : Hub<IGameHubClient>
     {
         private readonly IServiceProvider _sp;

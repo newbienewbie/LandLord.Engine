@@ -15,12 +15,16 @@ namespace LandLord.Web.Areas.Identity
         public void Configure(IWebHostBuilder builder)
         {
             builder.ConfigureServices((context, services) => {
-                services.AddDbContext<IdentityDataContext>(options =>
-                    options.UseSqlServer(
-                        context.Configuration.GetConnectionString("IdentityDataContextConnection")));
+                services.AddDbContext<IdentityDataContext>(options => {
+                    var conn = "Server=(localdb)\\mssqllocaldb;Database=LandLord.Web;Trusted_Connection=True;MultipleActiveResultSets=true";
+                    //context.Configuration.GetConnectionString("IdentityDataContextConnection")));
+                    options.UseSqlServer(conn);
+                });
 
-                services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                    .AddEntityFrameworkStores<IdentityDataContext>();
+                services.AddDefaultIdentity<AppUser>(options => {
+                    options.SignIn.RequireConfirmedAccount = false; 
+                })
+                .AddEntityFrameworkStores<IdentityDataContext>();
             });
         }
     }

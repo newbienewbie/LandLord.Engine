@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using static Itminus.LandLord.Engine.Card;
 
-namespace LandLord.Hub.CallbackArguments
+namespace LandLord.Shared.Hub.CallbackArguments
 {
     public static class KindValues
     {
