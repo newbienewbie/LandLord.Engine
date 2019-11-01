@@ -19,7 +19,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using LandLord.Shared_Hub;
+using LandLord.Shared.Hub;
 
 namespace LandLord.Server
 {

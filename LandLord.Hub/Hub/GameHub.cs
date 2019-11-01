@@ -1,5 +1,5 @@
 ﻿using Itminus.LandLord.Engine;
-using LandLord.Shared_Hub;
+using LandLord.Shared.Hub;
 using LandLord.Shared.Hub.CallbackArguments;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
