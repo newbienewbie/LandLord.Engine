@@ -17,6 +17,22 @@ module Card =
         | Ace = 14
         | Two  = 15
 
+    let ConvertCardValueString( cv : CardValue ) =
+        match cv with
+        | CardValue.Ace -> "A"
+        | CardValue.Two -> "2"
+        | CardValue.Three -> "3"
+        | CardValue.Four -> "4"
+        | CardValue.Five -> "5"
+        | CardValue.Six -> "6"
+        | CardValue.Seven -> "7"
+        | CardValue.Eight -> "8"
+        | CardValue.Nine -> "9"
+        | CardValue.Ten -> "10"
+        | CardValue.Jack -> "J"
+        | CardValue.Queen -> "Q"
+        | CardValue.King -> "K"
+
     type JokerType = 
         | Black = 20 
         | Red  =  21
@@ -27,9 +43,26 @@ module Card =
         | Diamond = 2 
         | Heart   = 3
 
+    let ConverSuitToString( suit: Suit) =
+        match suit with
+        | Suit.Spade ->  "♠️"
+        | Suit.Club -> "♣️"
+        | Suit.Diamond -> "♦️"
+        | Suit.Heart -> "️♥️"
+
     type PlayingCard =  
         | Joker of JokerType
         | NormalCard of CardValue * Suit
+
+    type PlayingCard with 
+        member this.ConvertToString() = 
+            match this with
+            | Joker(j) -> 
+                match j with | JokerType.Black -> "🐼" | JokerType.Red -> "🃏"
+            | NormalCard(c,s) ->
+                let s = ConverSuitToString(s)
+                let v = ConvertCardValueString(c)
+                s + v
 
     type PlayerCard = 
         | Shadowed
