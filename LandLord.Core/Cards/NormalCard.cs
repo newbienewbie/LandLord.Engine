@@ -1,4 +1,4 @@
-
+using LandLord.Core.Cards;
 
 namespace LandLord.Core
 {
@@ -11,6 +11,12 @@ namespace LandLord.Core
         {
             int suitValue(CardSuit suit) => considerSuit? (int) suit : 0;
             return ((int) CardValue) << 2 + suitValue(CardSuit);
+        }
+        public override string PrettyString()
+        {
+            var s = CardSuit.PrettyString();
+            var v = CardValue.PrettyString();
+            return $"{s}{v}";
         }
     }
 }

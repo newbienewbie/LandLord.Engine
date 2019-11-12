@@ -1,53 +1,48 @@
-﻿using Blazor.Extensions;
+﻿using Itminus.LandLord.BlazorExtensions.SignalR.Patch;
+using LandLord.Shared;
 using LandLord.Shared.Hub.CallbackArguments;
 using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
 
 namespace LandLord.BlazorApp.Services
 {
     public class SignalRService
     {
-        private HubConnection connection;
+        public HubConnectionEx Connection { get; private set; }
         private ValueTask<object> thenable;
-
-        public IObservable<CallbackArgs> ReceiveStateObservable { get; }
-        public IObservable<CallbackArgs> PlayCardsCallbackObservable { get; }
-        public IObservable<CallbackArgs> PassCardsCallbackObservable { get; }
-        public IObservable<CallbackArgs> BeLandLordCallbackObservable { get; }
 
         public SignalRService(IJSRuntime jsRuntime)
         {
-            this.connection = new HubConnectionBuilder(jsRuntime)
+            this.Connection = new HubConnectionBuilderEx(jsRuntime)
                 .WithUrl("/gamehub")
                 .Build();
-
+            Console.WriteLine("Connection:");
+            Console.WriteLine(Connection);
             this.Setup();
-            this.ReceiveStateObservable = this.CreateStateObserverable("ReceiveState");
-            this.PlayCardsCallbackObservable = this.CreateObserverable("PlayCardsCallback");
-            this.PassCardsCallbackObservable = this.CreateObserverable("PassCardsCallback");
-            this.BeLandLordCallbackObservable = this.CreateObserverable("BeLandLordCallback");
+            //this.PlayCardsCallbackObservable = this.CreateObserverable("PlayCardsCallback");
+            //this.PassCardsCallbackObservable = this.CreateObserverable("PassCardsCallback");
+            //this.BeLandLordCallbackObservable = this.CreateObserverable("BeLandLordCallback");
             this.StartAsync();
         }
 
         private void Setup()
         {
-            this.connection.On<string>("ReceiveError", (error) =>
+            this.Connection.On<string>("ReceiveError", (error) =>
             {
                 Console.WriteLine("ReceiveError" + error);
                 return Task.CompletedTask;
             });
 
-            this.connection.On<Guid>("AddingToRoomSucceeded", roomId =>
+            this.Connection.On<Guid>("AddingToRoomSucceeded", roomId =>
             {
                 Console.WriteLine("AddingToRoomSucceeded" + roomId);
                 return Task.CompletedTask;
             });
 
-            this.connection.On<int>("Win", (index) =>
+            this.Connection.On<int>("Win", (index) =>
             {
                 Console.WriteLine("Win " + index);
                 return Task.CompletedTask;
@@ -56,40 +51,23 @@ namespace LandLord.BlazorApp.Services
 
         private async Task StartAsync()
         {
-            this.thenable = this.connection.StartAsync();
+            this.thenable = this.Connection.StartAsync();
             await this.thenable;
             Console.WriteLine("Connection started");
         }
 
-        private IObservable<CallbackArgs> CreateStateObserverable(string cbname)
+        public void BindObserver(string cbname, IObserver<CallbackArgs> observer)
         {
-            return Observable.Create<CallbackArgs>(observer =>
+            this.Connection.On<CallbackArgs>(cbname, (CallbackArgs cbarg) =>
             {
-                this.connection.On<CallbackArgs>(cbname, (cbarg) =>
+                if (cbarg.Kind == KindValues.Success)
                 {
                     observer.OnNext(cbarg);
-                    return Task.CompletedTask;
-                });
-                return Task.CompletedTask;
-            });
-        }
-
-        private IObservable<CallbackArgs> CreateObserverable(string cbname)
-        {
-            return Observable.Create<CallbackArgs>(observer =>
-            {
-                this.connection.On<CallbackArgs>(cbname, (CallbackArgs cbarg) =>
+                }
+                else if (cbarg.Kind == KindValues.Fail)
                 {
-                    if (cbarg.Kind == KindValues.Success)
-                    {
-                        observer.OnNext(cbarg);
-                    }
-                    else if (cbarg.Kind == KindValues.Fail)
-                    {
-                        observer.OnError(new Exception(cbarg.ToString()));
-                    }
-                    return Task.CompletedTask;
-                });
+                    observer.OnError(new Exception(cbarg.ToString()));
+                }
                 return Task.CompletedTask;
             });
         }
@@ -102,31 +80,31 @@ namespace LandLord.BlazorApp.Services
         public async Task PullLatestStateAsync(Guid roomId)
         {
             await this.thenable;
-            await this.connection.InvokeAsync("PushLatestStateToCurrentPlayer", roomId);
+            await this.Connection.InvokeAsync("PushLatestStateToCurrentPlayer", roomId);
         }
 
         public async Task JoinRoomAsync(Guid roomId)
         {
             await this.thenable;
-            await this.connection.InvokeAsync("AddToRoom", roomId);
+            await this.Connection.InvokeAsync("AddToRoom", roomId);
         }
 
         public async Task BeLandLord(Guid roomId)
         {
             await this.thenable;
-            await this.connection.InvokeAsync("BeLandLord", roomId);
+            await this.Connection.InvokeAsync("BeLandLord", roomId);
         }
 
         public async Task PlayCards(Guid roomId, object cards)
         {
             await this.thenable;
-            await this.connection.InvokeAsync("PlayCards", roomId, cards);
+            await this.Connection.InvokeAsync("PlayCards", roomId, cards);
         }
 
         public async Task PassCards(Guid roomId)
         {
             await this.thenable;
-            await this.connection.InvokeAsync("PassCards", roomId);
+            await this.Connection.InvokeAsync("PassCards", roomId);
         }
         #endregion InvokeServerSideMethod
 

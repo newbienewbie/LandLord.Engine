@@ -1,0 +1,21 @@
+﻿@using  Itminus.LandLord.Engine
+@inject LandLord.BlazorApp.Services.CardConverterService cardConverter
+
+<li>
+    <ul class="prev-cards">
+        @foreach (var c in this.Cards)
+        {
+            <li>
+                <div class="@(this.cardConverter.PlayingCardToStyle(c))">
+                    @(this.cardConverter.PlayingCardToString(c))
+                </div>
+            </li>
+        }
+    </ul>
+</li>
+
+@code{
+
+    [Parameter]
+    public IList<Card.PlayingCard> Cards { get; set; }
+}

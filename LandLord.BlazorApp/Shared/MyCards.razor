@@ -1,0 +1,95 @@
+﻿@using  Itminus.LandLord.Engine
+@inject LandLord.BlazorApp.Services.CardConverterService cardConverter
+
+<li class="me">
+
+    <div class='@(this.IsMyTurn ? "isCurrentTurn" : " ")'>
+        @{ 
+            var player = this.Wrapper.Player;
+        }
+        @if (player != null)
+        {
+            <div>
+                <span class='@this.BadgeCssClass()'></span>
+                <span>
+                    @(string.IsNullOrEmpty(player.Name) ? player.Name : "None" )
+                </span>
+            </div>
+        }
+
+        <form>
+            <ul class="cards">
+                @foreach (var (c, i) in this.Wrapper.Cards.Select((card, idx) => (card, idx)))
+                {
+                    <li>
+                        <div class="@(this.cardConverter.PlayerCardToStyle(c))">
+                            <input type="checkbox" name="selectedCards"
+                                   @onchange="e => this.SelectCard(i, Convert.ToBoolean(e.Value))" 
+                                   checked="@Selections[i]"
+                                   disabled="!@IsMyTurn" />
+                            @(this.cardConverter.PlayerCardToString(c))
+                        </div>
+                    </li>
+                }
+            </ul>
+            <div>
+                <div>
+                    <button @onclick="PlayCards" disabled="@this.IsMyTurn">
+                        Play
+                    </button>
+                </div>
+                <div>
+                    <button @onclick="PassCards" disabled="@this.IsMyTurn">
+                        Pass
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</li>
+
+@code{
+
+    [Parameter]
+    public PlayerAndCardsWrapper Wrapper{ get; set; }
+
+    [Parameter]
+    public bool IsLandLord { get; set; }
+
+    [Parameter]
+    public bool IsMyTurn { get; set; }
+
+    [Parameter]
+    public bool CanOperate { get; set; }
+
+    [Parameter]
+    public EventCallback<IList<Card.PlayerCard>> OnPlayCards { get; set; }
+
+    [Parameter]
+    public EventCallback OnPassCards { get; set; }
+
+    private bool[] Selections { get; set; }
+
+    protected override void OnInitialized()
+    {
+        var cardsLength = this.Wrapper.Cards.Count;
+        this.Selections = new bool[cardsLength].Select(i => false).ToArray();
+    }
+
+    private string BadgeCssClass() => this.IsLandLord ? "landlord-badge" : "peasant-badge";
+
+    private void SelectCard(int i , bool selected)
+    {
+        this.Selections[i] = selected;
+    }
+
+    private void PlayCards()
+    {
+        var cards = this.Wrapper.Cards.Where((c, i) => this.Selections[i]).ToList();
+        this.OnPlayCards.InvokeAsync(cards);
+    }
+    private void PassCards()
+    {
+        this.OnPassCards.InvokeAsync(null);
+    }
+}

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using LandLord.Engine.Repository;
 using LandLord.Shared.Hub.Services;
@@ -30,8 +31,11 @@ namespace LandLord.Web
             services.AddScoped(sp => new GameRoomRepository(Configuration["GameRoomDb:Name"]) );
             services.AddSignalR(o => {
                 o.EnableDetailedErrors = true;
-            })
-            .AddNewtonsoftJsonProtocol();
+            }).AddJsonProtocol(opts => {
+                opts.PayloadSerializerOptions.PropertyNameCaseInsensitive = false;
+                opts.PayloadSerializerOptions.PropertyNamingPolicy = null;
+            });
+            //.AddNewtonsoftJsonProtocol();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,6 +67,10 @@ namespace LandLord.Web
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapHub<GameHub>("/gamehub");
+                endpoints.MapFallback((ctx) => {
+                    ctx.Response.Redirect("/");
+                    return Task.CompletedTask;
+                });
             });
         }
     }

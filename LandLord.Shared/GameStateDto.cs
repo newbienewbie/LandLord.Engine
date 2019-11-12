@@ -12,7 +12,7 @@ namespace LandLord.Shared
         /// <summary>
         /// current game room state for this particualr client
         /// </summary>
-        public IGameRoomMetaData GameRoom { get; set; }
+        public GameRoomMetaData GameRoom { get; set; }
 
         /// <summary>
         /// current player's turn index

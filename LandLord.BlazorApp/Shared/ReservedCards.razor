@@ -1,0 +1,34 @@
+﻿@using  Itminus.LandLord.Engine
+@inject LandLord.BlazorApp.Services.CardConverterService cardConverter
+
+<li class="reserved-cards">
+    <ul>
+        @foreach (var card in Cards)
+        {
+            <li>
+                <div class="@(this.cardConverter.PlayingCardToStyle(card))">
+                    @(this.cardConverter.PlayingCardToString(card))
+                </div>
+            </li>
+        }
+    </ul>
+    <span>底</span>
+    <div>
+        <button @onclick="TryToBeLandLord">抢</button>
+    </div>
+</li>
+
+
+@code{
+    [Parameter]
+    public IList<Card.PlayingCard> Cards { get; set; }
+
+    [Parameter]
+    public EventCallback BeLandLord { get; set; }
+
+    private async Task TryToBeLandLord(MouseEventArgs e)
+    {
+        await this.BeLandLord.InvokeAsync(null);
+    }
+
+}

@@ -1,0 +1,49 @@
+﻿@using  Itminus.LandLord.Engine
+@inject LandLord.BlazorApp.Services.CardConverterService cardConverter
+
+<li class="@(this.CssClass)">
+    <div class='@(this.IsItsTurn? "isCurrentTurn": " ")'>
+        @{ 
+            var player = this.Wrapper.Player;
+        }
+        @if (player != null)
+        {
+            <div>
+                <span class="@this.BadgeCssClass()"></span>
+                <span>
+                    @(string.IsNullOrEmpty(player.Name) ? player.Name : "None")
+                </span>
+            </div>
+        }
+        <form>
+            <ul class="cards">
+                @foreach (var (c, i) in this.Wrapper.Cards.Select((card, idx) => (card, idx)))
+                {
+                    <li>
+                        <div class="@(this.cardConverter.PlayerCardToString(c))">
+                            @(this.cardConverter.PlayerCardToString(c))
+                        </div>
+                    </li>
+                }
+            </ul>
+        </form>
+    </div>
+</li>
+
+@code{
+
+    [Parameter]
+    public PlayerAndCardsWrapper Wrapper{ get; set; }
+
+    [Parameter]
+    public bool IsLandLord { get; set; }
+
+    [Parameter]
+    public bool IsItsTurn { get; set; }  //"this.state.gameRoom.currentTurn == this.state.turnIndex
+
+    [Parameter]
+    public string CssClass { get; set; }
+
+    private string BadgeCssClass() => this.IsLandLord ? "landlord-badge" : "peasant-badge";
+
+}

@@ -1,4 +1,4 @@
-namespace LandLord.Core
+﻿namespace LandLord.Core
 {
 
     public abstract class JokerCard : PlayingCard
@@ -16,14 +16,22 @@ namespace LandLord.Core
         {
            int suitValue(JokerType jt) => considerJokerType? (int) jt : 0 ;
            return ((int) Defines.JokerValue) << 2 + suitValue(JokerType);
-        } 
+        }
     }
     public class BlackJokerCard : JokerCard
     {
         public override JokerType JokerType {get;} = JokerType.Black;
+        public override string PrettyString()
+        {
+            return "🐼";
+        }
     }
     public class RedJokerCard : JokerCard
     {
         public override JokerType JokerType {get;} = JokerType.Red;
+        public override string PrettyString()
+        {
+            return "🃏";
+        }
     }
 }
