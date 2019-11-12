@@ -81,7 +81,9 @@ namespace LandLord.Core.Patterns
 
             if(cards.Count == num)
             {
-
+                if (cardsContinuous(cards)) {
+                    return (true, cards);
+                };
             }
             return (false, null);
         }
