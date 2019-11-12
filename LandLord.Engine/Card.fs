@@ -67,6 +67,10 @@ module Card =
     type PlayerCard = 
         | Shadowed
         | PlayingCard of PlayingCard
+        member this.ConvertToString() = 
+            match this with 
+            | Shadowed -> "㊙️"
+            | PlayingCard(pc) -> pc.ConvertToString() 
 
     let getWeight (considerSuit:bool) (card: PlayingCard) = 
         let suitValue suit = 
