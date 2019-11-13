@@ -20,7 +20,8 @@
     <Compile Include="TestLianShun.fs" />
     <Compile Include="TestBomb.fs" />
     <Compile Include="Test3DaiN.fs" />
-    <!--<Compile Include="TestLianDui.fs" />
+    <Compile Include="TestLianDui.fs" />
+    <!--
     <Compile Include="TestEngine.fs" />
     <Compile Include="TestFeiJi.fs" />
     <Compile Include="TestGameRoom.fs" />-->
