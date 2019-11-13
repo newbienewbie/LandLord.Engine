@@ -59,7 +59,8 @@ namespace LandLord.Core.Patterns
             {
                 bool cardsContinuous(IList<PlayingCard> cards, int prev)
                 {
-                    var first = cards.First();
+                    var first = cards.FirstOrDefault();
+                    if (first == null) return true;
                     if(first is NormalCard nc )
                     {
                         var cv = (int)nc.CardValue;
