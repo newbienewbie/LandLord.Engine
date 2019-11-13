@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="TestPlayerCard.fs" />
     <Compile Include="TestLianShun.fs" />
     <!--<Compile Include="TestLianDui.fs" />
     <Compile Include="TestFeiJi.fs" />
