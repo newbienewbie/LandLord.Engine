@@ -15,7 +15,7 @@
         public override int GetWeight(bool considerJokerType) 
         {
            int suitValue(JokerType jt) => considerJokerType? (int) jt : 0 ;
-           return ((int) Defines.JokerValue) << 2 + suitValue(JokerType);
+           return (((int) Defines.JokerValue) << 2 ) + suitValue(JokerType);
         }
     }
     public class BlackJokerCard : JokerCard
