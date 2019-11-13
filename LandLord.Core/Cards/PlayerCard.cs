@@ -5,7 +5,7 @@ using System.Linq;
 namespace LandLord.Core
 {
 
-    public abstract class PlayerCard : IEquatable<PlayerCard>
+    public abstract class PlayerCard : IEquatable<PlayerCard>, IComparable<PlayerCard>
     {
         public abstract int GetWeight();
         public bool Equals(PlayerCard other)
@@ -48,6 +48,18 @@ namespace LandLord.Core
             !(lhs == rhs);
 
         public abstract string PrettyString();
+        public int CompareTo(object other)
+        {
+            var otherPlayingCard = other as PlayingCard;
+            return this.CompareTo(otherPlayingCard);
+        }
+
+        public int CompareTo(PlayerCard other)
+        {
+            if (other == null)
+                throw new ArgumentNullException();
+            return this.GetWeight() - other.GetWeight();
+        }
     }
 
     public class Shadowed : PlayerCard 
@@ -56,8 +68,23 @@ namespace LandLord.Core
         public override string PrettyString() { return "㊙️"; }
     }
 
-    public abstract class PlayingCard : PlayerCard , IEquatable<PlayingCard>
+    public abstract class PlayingCard : PlayerCard , IEquatable<PlayingCard>,
+         IComparable,
+         IComparable<PlayingCard>
     {
+        public int CompareTo(PlayingCard other)
+        {
+            if (other == null)
+                throw new ArgumentNullException();
+            return this.GetWeight(true) - other.GetWeight(true);
+        }
+
+        public int CompareTo(object other)
+        {
+            var otherPlayingCard = other as PlayingCard;
+            return this.CompareTo(otherPlayingCard);
+        }
+
         public bool Equals(PlayingCard other)
         {
             return this.GetWeight(true) == other.GetWeight(true);
