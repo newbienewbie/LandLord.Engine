@@ -247,7 +247,7 @@ namespace LandLord.Core
                 if(!curr) continue;
                 if(prev && curr)
                 {
-                    if(seqGt(prevCards, cards))
+                    if(seqGt(cards, prevCards))
                         return true;
                 }
             }

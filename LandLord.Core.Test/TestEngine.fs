@@ -434,7 +434,7 @@ module TestFacade =
               NormalCard(CardValue=CardValue.Jack,CardSuit=CardSuit.Heart); ]
 
         Facade.CanPlay( List.toSeq(prevCards).ToList(), List.toSeq(currentCards).ToList() ) 
-        |> Assert.False
+        |> Assert.True
 
     [<Fact>]
     let ``测试CanPlay JJJJ _ 3333`` () =
