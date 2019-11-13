@@ -10,7 +10,7 @@ namespace LandLord.Core
         public override int GetWeight(bool considerSuit) 
         {
             int suitValue(CardSuit suit) => considerSuit? (int) suit : 0;
-            return ((int) CardValue) << 2 + suitValue(CardSuit);
+            return (((int) CardValue) << 2) + suitValue(CardSuit);
         }
         public override string PrettyString()
         {
