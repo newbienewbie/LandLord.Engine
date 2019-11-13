@@ -1,190 +1,178 @@
-﻿module TestFeiJi
+﻿namespace LandLord.Core.Tests
+module TestFeiJi = 
 
-open System
-open Xunit
-open System.Collections.Generic
-open Itminus.LandLord.Engine.Card
+    open System
+    open Xunit
+    open System.Collections.Generic
+    open LandLord.Core
 
-let private lianshun3 (cards: PlayingCard list) = 
-    match cards with
-    | Trible list -> 1
-    | ShunZi 3 3 cards -> 3
-    | ShunZi 3 4 cards -> 4
-    | ShunZi 3 5 cards -> 5
-    | ShunZi 3 6 cards -> 6
-    | ShunZi 3 7 cards -> 7 
-    | ShunZi 3 8 cards -> 8 
-    | ShunZi 3 9 cards -> 9 
-    | ShunZi 3 10 cards -> 10 
-    | ShunZi 3 11 cards -> 11 
-    | ShunZi 3 12 cards -> 12
-    | _ -> 0
+    let private lianshun3 (cards: PlayingCard list) = 
+        TestHelper.lianshun 3 cards
 
+    [<Fact>]
+    let ``测试5连飞机-顺序`` () =
 
-[<Fact>]
-let ``测试5连飞机-顺序`` () =
+        let cards : PlayingCard list = 
+            [   NormalCard( CardValue=CardValue.Three, CardSuit=CardSuit.Heart);
+                NormalCard( CardValue=CardValue.Three, CardSuit=CardSuit.Diamond);
+                NormalCard( CardValue=CardValue.Three, CardSuit=CardSuit.Club);
+                NormalCard( CardValue=CardValue.Four, CardSuit=CardSuit.Heart);
+                NormalCard( CardValue=CardValue.Four, CardSuit=CardSuit.Club);
+                NormalCard( CardValue=CardValue.Four, CardSuit=CardSuit.Diamond);
+                NormalCard( CardValue=CardValue.Five, CardSuit=CardSuit.Heart); 
+                NormalCard( CardValue=CardValue.Five, CardSuit=CardSuit.Club); 
+                NormalCard( CardValue=CardValue.Five, CardSuit=CardSuit.Diamond); 
+                NormalCard( CardValue=CardValue.Six, CardSuit=CardSuit.Heart); 
+                NormalCard( CardValue=CardValue.Six, CardSuit=CardSuit.Club); 
+                NormalCard( CardValue=CardValue.Six, CardSuit=CardSuit.Diamond); 
+                NormalCard( CardValue=CardValue.Seven, CardSuit=CardSuit.Heart); 
+                NormalCard( CardValue=CardValue.Seven, CardSuit=CardSuit.Club); 
+                NormalCard( CardValue=CardValue.Seven, CardSuit=CardSuit.Diamond); ]
 
-    let cards : PlayingCard list = 
-        [   NormalCard( CardValue.Three, Suit.Heart);
-            NormalCard( CardValue.Three, Suit.Diamond);
-            NormalCard( CardValue.Three, Suit.Club);
-            NormalCard( CardValue.Four, Suit.Heart);
-            NormalCard( CardValue.Four, Suit.Club);
-            NormalCard( CardValue.Four, Suit.Diamond);
-            NormalCard( CardValue.Five, Suit.Heart); 
-            NormalCard( CardValue.Five, Suit.Club); 
-            NormalCard( CardValue.Five, Suit.Diamond); 
-            NormalCard( CardValue.Six, Suit.Heart); 
-            NormalCard( CardValue.Six, Suit.Club); 
-            NormalCard( CardValue.Six, Suit.Diamond); 
-            NormalCard( CardValue.Seven, Suit.Heart); 
-            NormalCard( CardValue.Seven, Suit.Club); 
-            NormalCard( CardValue.Seven, Suit.Diamond); ]
-
-    let x = lianshun3 cards
-    Assert.Equal(5,  x)
+        let x = lianshun3 cards
+        Assert.Equal(5,  x)
 
 
-[<Fact>]
-let ``测试5连飞机-乱序`` () =
+    [<Fact>]
+    let ``测试5连飞机-乱序`` () =
 
-    let cards : PlayingCard list = 
-        [   NormalCard( CardValue.Three, Suit.Heart);
-            NormalCard( CardValue.Four, Suit.Diamond);
-            NormalCard( CardValue.Three, Suit.Club);
-            NormalCard( CardValue.Four, Suit.Club);
-            NormalCard( CardValue.Three, Suit.Diamond);
-            NormalCard( CardValue.Four, Suit.Heart);
-            NormalCard( CardValue.Five, Suit.Diamond); 
-            NormalCard( CardValue.Five, Suit.Heart); 
-            NormalCard( CardValue.Five, Suit.Club); 
-            NormalCard( CardValue.Six, Suit.Heart); 
-            NormalCard( CardValue.Six, Suit.Club); 
-            NormalCard( CardValue.Seven, Suit.Heart); 
-            NormalCard( CardValue.Seven, Suit.Club); 
-            NormalCard( CardValue.Six, Suit.Diamond); 
-            NormalCard( CardValue.Seven, Suit.Diamond); ]
+        let cards : PlayingCard list = 
+            [   NormalCard( CardValue=CardValue.Three, CardSuit=CardSuit.Heart);
+                NormalCard( CardValue=CardValue.Four, CardSuit=CardSuit.Diamond);
+                NormalCard( CardValue=CardValue.Three, CardSuit=CardSuit.Club);
+                NormalCard( CardValue=CardValue.Four, CardSuit=CardSuit.Club);
+                NormalCard( CardValue=CardValue.Three, CardSuit=CardSuit.Diamond);
+                NormalCard( CardValue=CardValue.Four, CardSuit=CardSuit.Heart);
+                NormalCard( CardValue=CardValue.Five, CardSuit=CardSuit.Diamond); 
+                NormalCard( CardValue=CardValue.Five, CardSuit=CardSuit.Heart); 
+                NormalCard( CardValue=CardValue.Five, CardSuit=CardSuit.Club); 
+                NormalCard( CardValue=CardValue.Six, CardSuit=CardSuit.Heart); 
+                NormalCard( CardValue=CardValue.Six, CardSuit=CardSuit.Club); 
+                NormalCard( CardValue=CardValue.Seven, CardSuit=CardSuit.Heart); 
+                NormalCard( CardValue=CardValue.Seven, CardSuit=CardSuit.Club); 
+                NormalCard( CardValue=CardValue.Six, CardSuit=CardSuit.Diamond); 
+                NormalCard( CardValue=CardValue.Seven, CardSuit=CardSuit.Diamond); ]
 
-    let x = lianshun3 cards
-    Assert.Equal(5,  x)
+        let x = lianshun3 cards
+        Assert.Equal(5,  x)
 
-[<Fact>]
-let ``测试5连飞机-不含A-2-3-4-5`` () =
-    let cards : PlayingCard list = 
-        [   NormalCard( CardValue.Ace, Suit.Heart);
-            NormalCard( CardValue.Ace, Suit.Diamond);
-            NormalCard( CardValue.Ace, Suit.Club);
-            NormalCard( CardValue.Two, Suit.Diamond); 
-            NormalCard( CardValue.Two, Suit.Club); 
-            NormalCard( CardValue.Two, Suit.Heart); 
-            NormalCard( CardValue.Three, Suit.Heart); 
-            NormalCard( CardValue.Three, Suit.Club); 
-            NormalCard( CardValue.Three, Suit.Diamond); 
-            NormalCard( CardValue.Four, Suit.Diamond);
-            NormalCard( CardValue.Four, Suit.Club);
-            NormalCard( CardValue.Four, Suit.Heart);
-            NormalCard( CardValue.Five, Suit.Diamond); 
-            NormalCard( CardValue.Five, Suit.Club); 
-            NormalCard( CardValue.Five, Suit.Heart); ]
+    [<Fact>]
+    let ``测试5连飞机-不含A-2-3-4-5`` () =
+        let cards : PlayingCard list = 
+            [   NormalCard( CardValue=CardValue.Ace, CardSuit=CardSuit.Heart);
+                NormalCard( CardValue=CardValue.Ace, CardSuit=CardSuit.Diamond);
+                NormalCard( CardValue=CardValue.Ace, CardSuit=CardSuit.Club);
+                NormalCard( CardValue=CardValue.Two, CardSuit=CardSuit.Diamond); 
+                NormalCard( CardValue=CardValue.Two, CardSuit=CardSuit.Club); 
+                NormalCard( CardValue=CardValue.Two, CardSuit=CardSuit.Heart); 
+                NormalCard( CardValue=CardValue.Three, CardSuit=CardSuit.Heart); 
+                NormalCard( CardValue=CardValue.Three, CardSuit=CardSuit.Club); 
+                NormalCard( CardValue=CardValue.Three, CardSuit=CardSuit.Diamond); 
+                NormalCard( CardValue=CardValue.Four, CardSuit=CardSuit.Diamond);
+                NormalCard( CardValue=CardValue.Four, CardSuit=CardSuit.Club);
+                NormalCard( CardValue=CardValue.Four, CardSuit=CardSuit.Heart);
+                NormalCard( CardValue=CardValue.Five, CardSuit=CardSuit.Diamond); 
+                NormalCard( CardValue=CardValue.Five, CardSuit=CardSuit.Club); 
+                NormalCard( CardValue=CardValue.Five, CardSuit=CardSuit.Heart); ]
 
-    let x = lianshun3 cards
-    Assert.Equal(0,  x)
+        let x = lianshun3 cards
+        Assert.Equal(0,  x)
 
-[<Fact>]
-let ``测试6连飞机-3/3/3/4/4/4/5/5/5/6/6/6/7/7/7/8/8/8`` () =
+    [<Fact>]
+    let ``测试6连飞机-3/3/3/4/4/4/5/5/5/6/6/6/7/7/7/8/8/8`` () =
 
-    let cards : PlayingCard list = 
-        [   NormalCard( CardValue.Three, Suit.Heart);
-            NormalCard( CardValue.Three, Suit.Diamond);
-            NormalCard( CardValue.Three, Suit.Club);
-            NormalCard( CardValue.Four, Suit.Diamond);
-            NormalCard( CardValue.Four, Suit.Club);
-            NormalCard( CardValue.Four, Suit.Heart);
-            NormalCard( CardValue.Five, Suit.Heart); 
-            NormalCard( CardValue.Five, Suit.Diamond); 
-            NormalCard( CardValue.Five, Suit.Club); 
-            NormalCard( CardValue.Six, Suit.Heart); 
-            NormalCard( CardValue.Six, Suit.Club); 
-            NormalCard( CardValue.Six, Suit.Diamond); 
-            NormalCard( CardValue.Seven, Suit.Heart); 
-            NormalCard( CardValue.Seven, Suit.Club); 
-            NormalCard( CardValue.Seven, Suit.Diamond); 
-            NormalCard( CardValue.Eight, Suit.Heart); 
-            NormalCard( CardValue.Eight, Suit.Club); 
-            NormalCard( CardValue.Eight, Suit.Diamond); ]
+        let cards : PlayingCard list = 
+            [   NormalCard( CardValue=CardValue.Three, CardSuit=CardSuit.Heart);
+                NormalCard( CardValue=CardValue.Three, CardSuit=CardSuit.Diamond);
+                NormalCard( CardValue=CardValue.Three, CardSuit=CardSuit.Club);
+                NormalCard( CardValue=CardValue.Four, CardSuit=CardSuit.Diamond);
+                NormalCard( CardValue=CardValue.Four, CardSuit=CardSuit.Club);
+                NormalCard( CardValue=CardValue.Four, CardSuit=CardSuit.Heart);
+                NormalCard( CardValue=CardValue.Five, CardSuit=CardSuit.Heart); 
+                NormalCard( CardValue=CardValue.Five, CardSuit=CardSuit.Diamond); 
+                NormalCard( CardValue=CardValue.Five, CardSuit=CardSuit.Club); 
+                NormalCard( CardValue=CardValue.Six, CardSuit=CardSuit.Heart); 
+                NormalCard( CardValue=CardValue.Six, CardSuit=CardSuit.Club); 
+                NormalCard( CardValue=CardValue.Six, CardSuit=CardSuit.Diamond); 
+                NormalCard( CardValue=CardValue.Seven, CardSuit=CardSuit.Heart); 
+                NormalCard( CardValue=CardValue.Seven, CardSuit=CardSuit.Club); 
+                NormalCard( CardValue=CardValue.Seven, CardSuit=CardSuit.Diamond); 
+                NormalCard( CardValue=CardValue.Eight, CardSuit=CardSuit.Heart); 
+                NormalCard( CardValue=CardValue.Eight, CardSuit=CardSuit.Club); 
+                NormalCard( CardValue=CardValue.Eight, CardSuit=CardSuit.Diamond); ]
 
-    let x = lianshun3 cards
-    Assert.Equal(6, x)
+        let x = lianshun3 cards
+        Assert.Equal(6, x)
 
-[<Fact>]
-let ``测试6连飞机-3/3/3/4/4/4/5/6/7/7/8/8`` () =
+    [<Fact>]
+    let ``测试6连飞机-3/3/3/4/4/4/5/6/7/7/8/8`` () =
 
-    let cards : PlayingCard list = 
-        [   NormalCard( CardValue.Three, Suit.Heart);
-            NormalCard( CardValue.Three, Suit.Diamond);
-            NormalCard( CardValue.Three, Suit.Club);
-            NormalCard( CardValue.Four, Suit.Diamond);
-            NormalCard( CardValue.Four, Suit.Club);
-            NormalCard( CardValue.Four, Suit.Heart);
-            NormalCard( CardValue.Five, Suit.Heart); 
-            NormalCard( CardValue.Six, Suit.Diamond); 
-            NormalCard( CardValue.Seven, Suit.Heart); 
-            NormalCard( CardValue.Seven, Suit.Diamond); 
-            NormalCard( CardValue.Eight, Suit.Heart); 
-            NormalCard( CardValue.Eight, Suit.Diamond); ]
+        let cards : PlayingCard list = 
+            [   NormalCard( CardValue=CardValue.Three, CardSuit=CardSuit.Heart);
+                NormalCard( CardValue=CardValue.Three, CardSuit=CardSuit.Diamond);
+                NormalCard( CardValue=CardValue.Three, CardSuit=CardSuit.Club);
+                NormalCard( CardValue=CardValue.Four, CardSuit=CardSuit.Diamond);
+                NormalCard( CardValue=CardValue.Four, CardSuit=CardSuit.Club);
+                NormalCard( CardValue=CardValue.Four, CardSuit=CardSuit.Heart);
+                NormalCard( CardValue=CardValue.Five, CardSuit=CardSuit.Heart); 
+                NormalCard( CardValue=CardValue.Six, CardSuit=CardSuit.Diamond); 
+                NormalCard( CardValue=CardValue.Seven, CardSuit=CardSuit.Heart); 
+                NormalCard( CardValue=CardValue.Seven, CardSuit=CardSuit.Diamond); 
+                NormalCard( CardValue=CardValue.Eight, CardSuit=CardSuit.Heart); 
+                NormalCard( CardValue=CardValue.Eight, CardSuit=CardSuit.Diamond); ]
 
-    let x = lianshun3 cards
-    Assert.Equal(0,  x)
+        let x = lianshun3 cards
+        Assert.Equal(0,  x)
 
-[<Fact>]
-let ``测试6连飞机- 9/9/10/10/J/J/Q/Q/K/K/A/A`` () =
+    [<Fact>]
+    let ``测试6连飞机- 9/9/10/10/J/J/Q/Q/K/K/A/A`` () =
 
-    let cards : PlayingCard list = 
-        [   NormalCard( CardValue.Nine, Suit.Heart); 
-            NormalCard( CardValue.Nine, Suit.Club); 
-            NormalCard( CardValue.Nine, Suit.Diamond); 
-            NormalCard( CardValue.Ten, Suit.Heart); 
-            NormalCard( CardValue.Ten, Suit.Club); 
-            NormalCard( CardValue.Ten, Suit.Diamond  ); 
-            NormalCard( CardValue.Jack, Suit.Heart); 
-            NormalCard( CardValue.Jack, Suit.Club); 
-            NormalCard( CardValue.Jack, Suit.Club); 
-            NormalCard( CardValue.Queen, Suit.Heart); 
-            NormalCard( CardValue.Queen, Suit.Diamond); 
-            NormalCard( CardValue.Queen, Suit.Club); 
-            NormalCard( CardValue.King, Suit.Heart); 
-            NormalCard( CardValue.King, Suit.Diamond); 
-            NormalCard( CardValue.King, Suit.Club); 
-            NormalCard( CardValue.Ace, Suit.Heart);
-            NormalCard( CardValue.Ace, Suit.Diamond);
-            NormalCard( CardValue.Ace, Suit.Heart); ]
+        let cards : PlayingCard list = 
+            [   NormalCard( CardValue=CardValue.Nine, CardSuit=CardSuit.Heart); 
+                NormalCard( CardValue=CardValue.Nine, CardSuit=CardSuit.Club); 
+                NormalCard( CardValue=CardValue.Nine, CardSuit=CardSuit.Diamond); 
+                NormalCard( CardValue=CardValue.Ten, CardSuit=CardSuit.Heart); 
+                NormalCard( CardValue=CardValue.Ten, CardSuit=CardSuit.Club); 
+                NormalCard( CardValue=CardValue.Ten, CardSuit=CardSuit.Diamond  ); 
+                NormalCard( CardValue=CardValue.Jack, CardSuit=CardSuit.Heart); 
+                NormalCard( CardValue=CardValue.Jack, CardSuit=CardSuit.Club); 
+                NormalCard( CardValue=CardValue.Jack, CardSuit=CardSuit.Club); 
+                NormalCard( CardValue=CardValue.Queen, CardSuit=CardSuit.Heart); 
+                NormalCard( CardValue=CardValue.Queen, CardSuit=CardSuit.Diamond); 
+                NormalCard( CardValue=CardValue.Queen, CardSuit=CardSuit.Club); 
+                NormalCard( CardValue=CardValue.King, CardSuit=CardSuit.Heart); 
+                NormalCard( CardValue=CardValue.King, CardSuit=CardSuit.Diamond); 
+                NormalCard( CardValue=CardValue.King, CardSuit=CardSuit.Club); 
+                NormalCard( CardValue=CardValue.Ace, CardSuit=CardSuit.Heart);
+                NormalCard( CardValue=CardValue.Ace, CardSuit=CardSuit.Diamond);
+                NormalCard( CardValue=CardValue.Ace, CardSuit=CardSuit.Heart); ]
 
-    let x = lianshun3 cards
-    Assert.Equal(6, x)
+        let x = lianshun3 cards
+        Assert.Equal(6, x)
 
-[<Fact>]
-let ``测试6连飞机- 10/10/10/J/J/J/Q/Q/Q/K/K/K/A/A/A/2/2/2`` () =
+    [<Fact>]
+    let ``测试6连飞机- 10/10/10/J/J/J/Q/Q/Q/K/K/K/A/A/A/2/2/2`` () =
 
-    let cards : PlayingCard list = 
-        [   NormalCard( CardValue.Ten, Suit.Heart); 
-            NormalCard( CardValue.Ten, Suit.Club); 
-            NormalCard( CardValue.Ten, Suit.Diamond); 
-            NormalCard( CardValue.Jack, Suit.Heart); 
-            NormalCard( CardValue.Jack, Suit.Club); 
-            NormalCard( CardValue.Jack, Suit.Diamond); 
-            NormalCard( CardValue.Queen, Suit.Heart); 
-            NormalCard( CardValue.Queen, Suit.Club); 
-            NormalCard( CardValue.Queen, Suit.Diamond); 
-            NormalCard( CardValue.King, Suit.Heart); 
-            NormalCard( CardValue.King, Suit.Diamond); 
-            NormalCard( CardValue.King, Suit.Club); 
-            NormalCard( CardValue.Ace, Suit.Heart); 
-            NormalCard( CardValue.Ace, Suit.Diamond); 
-            NormalCard( CardValue.Ace, Suit.Club); 
-            NormalCard( CardValue.Two, Suit.Heart); 
-            NormalCard( CardValue.Two, Suit.Club); 
-            NormalCard( CardValue.Two, Suit.Club); ]
+        let cards : PlayingCard list = 
+            [   NormalCard( CardValue=CardValue.Ten, CardSuit=CardSuit.Heart); 
+                NormalCard( CardValue=CardValue.Ten, CardSuit=CardSuit.Club); 
+                NormalCard( CardValue=CardValue.Ten, CardSuit=CardSuit.Diamond); 
+                NormalCard( CardValue=CardValue.Jack, CardSuit=CardSuit.Heart); 
+                NormalCard( CardValue=CardValue.Jack, CardSuit=CardSuit.Club); 
+                NormalCard( CardValue=CardValue.Jack, CardSuit=CardSuit.Diamond); 
+                NormalCard( CardValue=CardValue.Queen, CardSuit=CardSuit.Heart); 
+                NormalCard( CardValue=CardValue.Queen, CardSuit=CardSuit.Club); 
+                NormalCard( CardValue=CardValue.Queen, CardSuit=CardSuit.Diamond); 
+                NormalCard( CardValue=CardValue.King, CardSuit=CardSuit.Heart); 
+                NormalCard( CardValue=CardValue.King, CardSuit=CardSuit.Diamond); 
+                NormalCard( CardValue=CardValue.King, CardSuit=CardSuit.Club); 
+                NormalCard( CardValue=CardValue.Ace, CardSuit=CardSuit.Heart); 
+                NormalCard( CardValue=CardValue.Ace, CardSuit=CardSuit.Diamond); 
+                NormalCard( CardValue=CardValue.Ace, CardSuit=CardSuit.Club); 
+                NormalCard( CardValue=CardValue.Two, CardSuit=CardSuit.Heart); 
+                NormalCard( CardValue=CardValue.Two, CardSuit=CardSuit.Club); 
+                NormalCard( CardValue=CardValue.Two, CardSuit=CardSuit.Club); ]
 
-    let x = lianshun3 cards
-    Assert.Equal(6, x)
+        let x = lianshun3 cards
+        Assert.Equal(6, x)
 
