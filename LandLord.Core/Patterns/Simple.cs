@@ -45,7 +45,7 @@ namespace LandLord.Core.Patterns
             {
                 var first = cards[0].GetWeight(false);
                 var second = cards[1].GetWeight(false);
-                var third = cards[3].GetWeight(false);
+                var third = cards[2].GetWeight(false);
                 if(first == second && first == third) {
                     return (true, cards);
                 }
