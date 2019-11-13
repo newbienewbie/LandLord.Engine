@@ -195,12 +195,12 @@ namespace LandLord.Core
                         throw new Exception("not a '3+1' pattern");
                     var w1 = second[0].GetWeight(false);
                     var w2 = second[1].GetWeight(false);
-                    var w3 = second[3].GetWeight(false);
+                    var w3 = second[2].GetWeight(false);
                     if( !(w1 == w2 && w1 == w3) )
                     {
                         throw new Exception("not a '3+1' pattern");
                     }
-                    return second[3];
+                    return second[2];
                 }
                 var c1 = dominatingCard(cards1);
                 var c2 = dominatingCard(cards2);
@@ -226,7 +226,7 @@ namespace LandLord.Core
                 if(!curr) continue;
                 if(prev && curr)
                 {
-                    if(threeWithOneGt(prevCards, cards))
+                    if(threeWithOneGt(cards, prevCards))
                         return true;
                 }
             }
