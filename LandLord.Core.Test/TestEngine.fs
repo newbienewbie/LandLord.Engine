@@ -314,8 +314,8 @@ module TestFacade =
               NormalCard(CardValue=CardValue.King,CardSuit=CardSuit.Club); 
               NormalCard(CardValue=CardValue.Ace,CardSuit=CardSuit.Club); ]
 
-        Facade.CanPlay( List.toSeq(prevCards).ToList(), List.toSeq(currentCards).ToList() ) 
-        |> Assert.True
+        let r = Facade.CanPlay( List.toSeq(prevCards).ToList(), List.toSeq(currentCards).ToList() ) 
+        Assert.False(r, "the two cards have different lengths")
 
 
     [<Fact>]
