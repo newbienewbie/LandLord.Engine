@@ -14,7 +14,7 @@ namespace LandLord.Core.Patterns
                 var c1 = values[0];
                 var c2 = values[1];
                 var c3 = values[2];
-                var c4 = values[4];
+                var c4 = values[3];
                 if(c1 == c2 && c2 == c3 && c3 != c4)
                     return true;
                 if(c1 != c2 && c2 == c3 && c3 == c4)

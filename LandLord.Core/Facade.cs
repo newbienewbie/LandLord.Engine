@@ -19,18 +19,16 @@ namespace LandLord.Core
         public static (bool, IList<CardValue>) GetCardsValues(IList<PlayingCard> list)
         {
             var values =new List<CardValue>();
-            bool handleFirstNormalCard(NormalCard nc) { values.Add( nc.CardValue); return true; }
-            bool calculateValues(IEnumerable<PlayingCard> cards){
-                if(cards.Count() == 1)
-                {
-                    return cards.First() switch{
-                        NormalCard nc => handleFirstNormalCard(nc) ,
-                        _ => false
-                    };
+            bool calculateValues(IList<PlayingCard> cards){
+                for (int nth = 0; nth < cards.Count; nth ++) {
+                    var card = cards[nth];
+                    if (card is NormalCard { CardValue: var cv }) {
+                        values.Add(cv);
+                    } else {
+                        return false;
+                    }
                 }
-                else{
-                    return calculateValues(cards.Skip(1));
-                }
+                return true;
             }
             return calculateValues(list)?
                 (true, values) :
