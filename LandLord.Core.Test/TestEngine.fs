@@ -195,360 +195,382 @@ module TestFacade =
         Facade.CanStartPlaying( List.toSeq(cards).ToList()) |> Assert.False
 
 
-    //[<Fact>]
-    //let ``测试CanPlay() 333 _ 543`` () =
-
-    //    let prevCards = 
-    //        [ NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Diamond)] 
-
-    //    let currentCards = 
-    //        [ NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Diamond)] 
-
-    //    canPlay prevCards currentCards |> Assert.False
-
-
-    //[<Fact>]
-    //let ``测试CanPlay() 333 _ 555`` () =
-
-    //    let prevCards = 
-    //        [ NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Diamond)] 
-
-    //    let currentCards = 
-    //        [ NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Diamond)] 
-
-    //    canPlay prevCards currentCards |> Assert.True
-
-
-    //[<Fact>]
-    //let ``测试CanPlay() 34567 _ 78910J`` () =
-
-    //    let prevCards = 
-    //        [ NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Six,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Seven,CardSuit=CardSuit.Spade)]
-
-    //    let currentCards = 
-    //        [ NormalCard(CardValue=CardValue.Seven,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Eight,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Ten,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Jack,CardSuit=CardSuit.Club); ]
-
-    //    canPlay prevCards currentCards |> Assert.True
-
-
-    //[<Fact>]
-    //let ``测试CanPlay() 34567 _ JQKA2`` () =
-
-    //    let prevCards = 
-    //        [ NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Six,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Seven,CardSuit=CardSuit.Spade)]
-
-    //    let currentCards = 
-    //         [ NormalCard(CardValue=CardValue.Jack,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Queen,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.King,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Ace,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Two,CardSuit=CardSuit.Club); ]
-
-    //    canPlay prevCards currentCards |> Assert.True
-
-    //[<Fact>]
-    //let ``测试CanPlay() 3456789 _ 910JQKA2`` () =
-
-    //    let prevCards = 
-    //        [ NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Six,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Seven,CardSuit=CardSuit.Spade);
-    //          NormalCard(CardValue=CardValue.Eight,CardSuit=CardSuit.Spade);
-    //          NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Spade)]
-
-    //    let currentCards = 
-    //        [ NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Ten,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Jack,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Queen,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.King,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Ace,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Two,CardSuit=CardSuit.Club); ]
-
-    //    canPlay prevCards currentCards |> Assert.True
-
-    //[<Fact>]
-    //let ``测试CanPlay() 3456789 _ 910JQKA`` () =
-
-    //    let prevCards = 
-    //        [ NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Six,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Seven,CardSuit=CardSuit.Spade);
-    //          NormalCard(CardValue=CardValue.Eight,CardSuit=CardSuit.Spade);
-    //          NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Spade)]
-
-    //    let currentCards = 
-    //        [ NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Ten,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Jack,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Queen,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.King,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Ace,CardSuit=CardSuit.Club); ]
-
-    //    canPlay prevCards currentCards |> Assert.False
-
-
-    //[<Fact>]
-    //let ``测试CanPlay() 3456789 _ 99JQKA2`` () =
-
-    //    let prevCards = 
-    //        [ NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Six,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Seven,CardSuit=CardSuit.Spade);
-    //          NormalCard(CardValue=CardValue.Eight,CardSuit=CardSuit.Spade);
-    //          NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Spade)]
-
-    //    let currentCards = 
-    //        [ NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Diamond); 
-    //          NormalCard(CardValue=CardValue.Jack,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Queen,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.King,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Ace,CardSuit=CardSuit.Club); ]
-
-    //    canPlay prevCards currentCards |> Assert.False
-
-    //[<Fact>]
-    //let ``测试CanPlay() 333444555666 _ 777888999101010`` () =
-
-    //    let prevCards = 
-    //        [ NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Diamond); 
-    //          NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Heart); 
-    //          NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Heart); 
-    //          NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Diamond); 
-    //          NormalCard(CardValue=CardValue.Six,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Six,CardSuit=CardSuit.Diamond); 
-    //          NormalCard(CardValue=CardValue.Six,CardSuit=CardSuit.Heart); ]
-
-    //    let currentCards = 
-    //        [ NormalCard(CardValue=CardValue.Seven,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Seven,CardSuit=CardSuit.Diamond); 
-    //          NormalCard(CardValue=CardValue.Seven,CardSuit=CardSuit.Heart); 
-    //          NormalCard(CardValue=CardValue.Eight,CardSuit=CardSuit.Heart); 
-    //          NormalCard(CardValue=CardValue.Eight,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Eight,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Diamond); 
-    //          NormalCard(CardValue=CardValue.Ten,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Ten,CardSuit=CardSuit.Diamond); 
-    //          NormalCard(CardValue=CardValue.Ten,CardSuit=CardSuit.Heart); ]
-
-    //    canPlay prevCards currentCards |> Assert.True
-
-    //[<Fact>]
-    //let ``测试CanPlay() 3344455 _ 778899`` () =
-
-    //    let prevCards = 
-    //        [ NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Diamond); 
-    //          NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Diamond);]
-
-    //    let currentCards = 
-    //        [ NormalCard(CardValue=CardValue.Seven,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Seven,CardSuit=CardSuit.Diamond); 
-    //          NormalCard(CardValue=CardValue.Eight,CardSuit=CardSuit.Heart); 
-    //          NormalCard(CardValue=CardValue.Eight,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Club); ]
-
-    //    canPlay prevCards currentCards |> Assert.True
-
-    //[<Fact>]
-    //let ``测试CanPlay() 778899 _ 334455`` () =
-
-    //    let prevCards = 
-    //        [ NormalCard(CardValue=CardValue.Seven,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Seven,CardSuit=CardSuit.Diamond); 
-    //          NormalCard(CardValue=CardValue.Eight,CardSuit=CardSuit.Heart); 
-    //          NormalCard(CardValue=CardValue.Eight,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Club); ]
-    //    let currentCards = 
-    //        [ NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Diamond); 
-    //          NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Diamond);]
-
-    //    canPlay prevCards currentCards |> Assert.False
-
-    //[<Fact>]
-    //let ``测试CanPlay 3333 _ JJJJ`` () =
-
-    //    let prevCards = 
-    //        [ NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Diamond); 
-    //          NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Heart); ]
-
-    //    let currentCards = 
-    //         [ NormalCard(CardValue=CardValue.Jack,CardSuit=CardSuit.Spade);
-    //          NormalCard(CardValue=CardValue.Jack,CardSuit=CardSuit.Diamond); 
-    //          NormalCard(CardValue=CardValue.Jack,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Jack,CardSuit=CardSuit.Heart); ]
-
-    //    canPlay prevCards currentCards |> Assert.True
-
-    //[<Fact>]
-    //let ``测试CanPlay JJJJ _ 3333`` () =
-
-    //    let prevCards = 
-    //         [ NormalCard(CardValue=CardValue.Jack,CardSuit=CardSuit.Spade);
-    //          NormalCard(CardValue=CardValue.Jack,CardSuit=CardSuit.Diamond); 
-    //          NormalCard(CardValue=CardValue.Jack,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Jack,CardSuit=CardSuit.Heart); ]
-
-    //    let currentCards = 
-    //        [ NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Diamond); 
-    //          NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Heart); ]
-
-    //    canPlay prevCards currentCards |> Assert.False
-
-    //[<Fact>]
-    //let ``测试CanPlay JJJJ _ 2222`` () =
-
-    //    let prevCards = 
-    //         [ NormalCard(CardValue=CardValue.Jack, CardSuit=CardSuit.Spade);
-    //          NormalCard(CardValue=CardValue.Jack, CardSuit=CardSuit.Diamond); 
-    //          NormalCard(CardValue=CardValue.Jack, CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Jack, CardSuit=CardSuit.Heart); ]
-
-    //    let currentCards = 
-    //        [ NormalCard(CardValue=CardValue.Two, CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Two, CardSuit=CardSuit.Spade); 
-    //          NormalCard(CardValue=CardValue.Two, CardSuit=CardSuit.Diamond); 
-    //          NormalCard(CardValue=CardValue.Two,CardSuit=CardSuit.Heart); ]
-
-    //    canPlay prevCards currentCards |> Assert.True
-
-    //[<Fact>]
-    //let ``测试CanPlay() 222 _ 3333`` () =
-
-    //    let prevCards= 
-    //        [ NormalCard(CardValue=CardValue.Two, CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Two, CardSuit=CardSuit.Diamond); 
-    //          NormalCard(CardValue=CardValue.Two,CardSuit=CardSuit.Heart); ]
-
-    //    let currentCards= 
-    //         [ NormalCard(CardValue=CardValue.Three, CardSuit=CardSuit.Spade);
-    //          NormalCard(CardValue=CardValue.Three, CardSuit=CardSuit.Diamond); 
-    //          NormalCard(CardValue=CardValue.Three, CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Three, CardSuit=CardSuit.Heart); ]
-
-    //    canPlay prevCards currentCards |> Assert.True
-
-    //[<Fact>]
-    //let ``测试CanPlay() 222 _ AAA`` () =
-
-    //    let prevCards= 
-    //        [ NormalCard(CardValue=CardValue.Two, CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Two, CardSuit=CardSuit.Diamond); 
-    //          NormalCard(CardValue=CardValue.Two,CardSuit=CardSuit.Heart); ]
-
-    //    let currentCards= 
-    //         [ NormalCard(CardValue=CardValue.Ace, CardSuit=CardSuit.Spade);
-    //          NormalCard(CardValue=CardValue.Ace, CardSuit=CardSuit.Diamond); 
-    //          NormalCard(CardValue=CardValue.Ace, CardSuit=CardSuit.Heart); ]
-
-    //    canPlay prevCards currentCards |> Assert.False
-
-    //[<Fact>]
-    //let ``测试CanPlay() KKK _ 222`` () =
-
-    //    let prevCards= 
-    //         [ NormalCard(CardValue=CardValue.King, CardSuit=CardSuit.Spade);
-    //          NormalCard(CardValue=CardValue.King, CardSuit=CardSuit.Diamond); 
-    //          NormalCard(CardValue=CardValue.King, CardSuit=CardSuit.Club); ]
-    //    let currentCards= 
-    //        [ NormalCard(CardValue=CardValue.Two, CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Two, CardSuit=CardSuit.Diamond); 
-    //          NormalCard(CardValue=CardValue.Two,CardSuit=CardSuit.Heart); ]
-
-    //    canPlay prevCards currentCards |> Assert.True
-
-
-    //[<Fact>]
-    //let ``测试CanPlay() 3335 _ 5554`` () =
-
-    //    let prevCards= 
-    //         [ NormalCard(CardValue=CardValue.Three, CardSuit=CardSuit.Spade);
-    //          NormalCard(CardValue=CardValue.Three, CardSuit=CardSuit.Diamond); 
-    //          NormalCard(CardValue=CardValue.Three, CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Five, CardSuit=CardSuit.Spade); ]
-    //    let currentCards= 
-    //        [ NormalCard(CardValue=CardValue.Five, CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Five, CardSuit=CardSuit.Diamond); 
-    //          NormalCard(CardValue=CardValue.Five, CardSuit=CardSuit.Heart); 
-    //          NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Heart); ]
-
-    //    canPlay prevCards currentCards |> Assert.True
-
-    //[<Fact>]
-    //let ``测试CanPlay() AAA3 _ 5554`` () =
-
-    //    let prevCards= 
-    //         [ NormalCard(CardValue=CardValue.Three, CardSuit=CardSuit.Spade);
-    //          NormalCard(CardValue=CardValue.Ace, CardSuit=CardSuit.Diamond); 
-    //          NormalCard(CardValue=CardValue.Ace, CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Ace, CardSuit=CardSuit.Heart); ]
-    //    let currentCards= 
-    //        [ NormalCard(CardValue=CardValue.Five, CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Five, CardSuit=CardSuit.Diamond); 
-    //          NormalCard(CardValue=CardValue.Five, CardSuit=CardSuit.Heart); 
-    //          NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Heart); ]
-
-    //    canPlay prevCards currentCards |> Assert.False
-
-    //[<Fact>]
-    //let ``测试CanPlay() AAA3 _ KKK2`` () =
-
-    //    let prevCards= 
-    //         [ NormalCard(CardValue=CardValue.Three, CardSuit=CardSuit.Spade);
-    //          NormalCard(CardValue=CardValue.Ace, CardSuit=CardSuit.Diamond); 
-    //          NormalCard(CardValue=CardValue.Ace, CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.Ace, CardSuit=CardSuit.Heart); ]
-    //    let currentCards= 
-    //        [ NormalCard(CardValue=CardValue.King, CardSuit=CardSuit.Club); 
-    //          NormalCard(CardValue=CardValue.King, CardSuit=CardSuit.Diamond); 
-    //          NormalCard(CardValue=CardValue.King, CardSuit=CardSuit.Heart); 
-    //          NormalCard(CardValue=CardValue.Two,CardSuit=CardSuit.Heart); ]
-
-    //    canPlay prevCards currentCards |> Assert.False
+    [<Fact>]
+    let ``测试CanPlay() 333 _ 543`` () =
+
+        let prevCards :PlayingCard list = 
+            [ NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Diamond)] 
+
+        let currentCards :PlayingCard list = 
+            [ NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Diamond)] 
+
+        Facade.CanPlay( List.toSeq(prevCards).ToList(), List.toSeq(currentCards).ToList() ) 
+        |> Assert.False
+
+
+    [<Fact>]
+    let ``测试CanPlay() 333 _ 555`` () =
+
+        let prevCards :PlayingCard list = 
+            [ NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Diamond)] 
+
+        let currentCards :PlayingCard list = 
+            [ NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Diamond)] 
+
+        Facade.CanPlay( List.toSeq(prevCards).ToList(), List.toSeq(currentCards).ToList() ) 
+        |> Assert.True
+
+
+    [<Fact>]
+    let ``测试CanPlay() 34567 _ 78910J`` () =
+
+        let prevCards :PlayingCard list = 
+            [ NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Six,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Seven,CardSuit=CardSuit.Spade)]
+
+        let currentCards :PlayingCard list = 
+            [ NormalCard(CardValue=CardValue.Seven,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Eight,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Ten,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Jack,CardSuit=CardSuit.Club); ]
+
+        Facade.CanPlay( List.toSeq(prevCards).ToList(), List.toSeq(currentCards).ToList() ) 
+        |> Assert.True
+
+
+    [<Fact>]
+    let ``测试CanPlay() 34567 _ JQKA2`` () =
+
+        let prevCards: PlayingCard list  = 
+            [ NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Six,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Seven,CardSuit=CardSuit.Spade)]
+
+        let currentCards :PlayingCard list = 
+             [ NormalCard(CardValue=CardValue.Jack,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Queen,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.King,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Ace,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Two,CardSuit=CardSuit.Club); ]
+
+        Facade.CanPlay( List.toSeq(prevCards).ToList(), List.toSeq(currentCards).ToList() ) 
+        |> Assert.True
+
+    [<Fact>]
+    let ``测试CanPlay() 3456789 _ 910JQKA2`` () =
+
+        let prevCards  :PlayingCard list = 
+            [ NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Six,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Seven,CardSuit=CardSuit.Spade);
+              NormalCard(CardValue=CardValue.Eight,CardSuit=CardSuit.Spade);
+              NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Spade)]
+
+        let currentCards  :PlayingCard list = 
+            [ NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Ten,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Jack,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Queen,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.King,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Ace,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Two,CardSuit=CardSuit.Club); ]
+
+        Facade.CanPlay( List.toSeq(prevCards).ToList(), List.toSeq(currentCards).ToList() ) 
+        |> Assert.True
+
+    [<Fact>]
+    let ``测试CanPlay() 3456789 _ 910JQKA`` () =
+
+        let prevCards  :PlayingCard list = 
+            [ NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Six,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Seven,CardSuit=CardSuit.Spade);
+              NormalCard(CardValue=CardValue.Eight,CardSuit=CardSuit.Spade);
+              NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Spade)]
+
+        let currentCards  :PlayingCard list = 
+            [ NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Ten,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Jack,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Queen,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.King,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Ace,CardSuit=CardSuit.Club); ]
+
+        Facade.CanPlay( List.toSeq(prevCards).ToList(), List.toSeq(currentCards).ToList() ) 
+        |> Assert.True
+
+
+    [<Fact>]
+    let ``测试CanPlay() 3456789 _ 99JQKA2`` () =
+
+        let prevCards  :PlayingCard list = 
+            [ NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Six,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Seven,CardSuit=CardSuit.Spade);
+              NormalCard(CardValue=CardValue.Eight,CardSuit=CardSuit.Spade);
+              NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Spade)]
+
+        let currentCards  :PlayingCard list = 
+            [ NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Diamond); 
+              NormalCard(CardValue=CardValue.Jack,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Queen,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.King,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Ace,CardSuit=CardSuit.Club); ]
+        Facade.CanPlay( List.toSeq(prevCards).ToList(), List.toSeq(currentCards).ToList() ) 
+        |> Assert.False
+
+
+    [<Fact>]
+    let ``测试CanPlay() 333444555666 _ 777888999101010`` () =
+
+        let prevCards  :PlayingCard list = 
+            [ NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Diamond); 
+              NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Heart); 
+              NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Heart); 
+              NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Diamond); 
+              NormalCard(CardValue=CardValue.Six,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Six,CardSuit=CardSuit.Diamond); 
+              NormalCard(CardValue=CardValue.Six,CardSuit=CardSuit.Heart); ]
+
+        let currentCards  :PlayingCard list = 
+            [ NormalCard(CardValue=CardValue.Seven,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Seven,CardSuit=CardSuit.Diamond); 
+              NormalCard(CardValue=CardValue.Seven,CardSuit=CardSuit.Heart); 
+              NormalCard(CardValue=CardValue.Eight,CardSuit=CardSuit.Heart); 
+              NormalCard(CardValue=CardValue.Eight,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Eight,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Diamond); 
+              NormalCard(CardValue=CardValue.Ten,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Ten,CardSuit=CardSuit.Diamond); 
+              NormalCard(CardValue=CardValue.Ten,CardSuit=CardSuit.Heart); ]
+
+        Facade.CanPlay( List.toSeq(prevCards).ToList(), List.toSeq(currentCards).ToList() ) 
+        |> Assert.True
+
+    [<Fact>]
+    let ``测试CanPlay() 3344455 _ 778899`` () =
+
+        let prevCards  :PlayingCard list = 
+            [ NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Diamond); 
+              NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Diamond);]
+
+        let currentCards  :PlayingCard list = 
+            [ NormalCard(CardValue=CardValue.Seven,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Seven,CardSuit=CardSuit.Diamond); 
+              NormalCard(CardValue=CardValue.Eight,CardSuit=CardSuit.Heart); 
+              NormalCard(CardValue=CardValue.Eight,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Club); ]
+
+        Facade.CanPlay( List.toSeq(prevCards).ToList(), List.toSeq(currentCards).ToList() ) 
+        |> Assert.True
+
+    [<Fact>]
+    let ``测试CanPlay() 778899 _ 334455`` () =
+
+        let prevCards  :PlayingCard list = 
+            [ NormalCard(CardValue=CardValue.Seven,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Seven,CardSuit=CardSuit.Diamond); 
+              NormalCard(CardValue=CardValue.Eight,CardSuit=CardSuit.Heart); 
+              NormalCard(CardValue=CardValue.Eight,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Nine,CardSuit=CardSuit.Club); ]
+        let currentCards  :PlayingCard list = 
+            [ NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Diamond); 
+              NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Five,CardSuit=CardSuit.Diamond);]
+
+        Facade.CanPlay( List.toSeq(prevCards).ToList(), List.toSeq(currentCards).ToList() ) 
+        |> Assert.False
+
+    [<Fact>]
+    let ``测试CanPlay 3333 _ JJJJ`` () =
+
+        let prevCards  :PlayingCard list = 
+            [ NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Diamond); 
+              NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Heart); ]
+
+        let currentCards  :PlayingCard list = 
+             [ NormalCard(CardValue=CardValue.Jack,CardSuit=CardSuit.Spade);
+              NormalCard(CardValue=CardValue.Jack,CardSuit=CardSuit.Diamond); 
+              NormalCard(CardValue=CardValue.Jack,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Jack,CardSuit=CardSuit.Heart); ]
+
+        Facade.CanPlay( List.toSeq(prevCards).ToList(), List.toSeq(currentCards).ToList() ) 
+        |> Assert.False
+
+    [<Fact>]
+    let ``测试CanPlay JJJJ _ 3333`` () =
+
+        let prevCards  :PlayingCard list = 
+             [ NormalCard(CardValue=CardValue.Jack,CardSuit=CardSuit.Spade);
+              NormalCard(CardValue=CardValue.Jack,CardSuit=CardSuit.Diamond); 
+              NormalCard(CardValue=CardValue.Jack,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Jack,CardSuit=CardSuit.Heart); ]
+
+        let currentCards  :PlayingCard list = 
+            [ NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Diamond); 
+              NormalCard(CardValue=CardValue.Three,CardSuit=CardSuit.Heart); ]
+
+        Facade.CanPlay( List.toSeq(prevCards).ToList(), List.toSeq(currentCards).ToList() ) 
+        |> Assert.False
+
+
+    [<Fact>]
+    let ``测试CanPlay JJJJ _ 2222`` () =
+
+        let prevCards  :PlayingCard list = 
+             [ NormalCard(CardValue=CardValue.Jack, CardSuit=CardSuit.Spade);
+              NormalCard(CardValue=CardValue.Jack, CardSuit=CardSuit.Diamond); 
+              NormalCard(CardValue=CardValue.Jack, CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Jack, CardSuit=CardSuit.Heart); ]
+
+        let currentCards  :PlayingCard list = 
+            [ NormalCard(CardValue=CardValue.Two, CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Two, CardSuit=CardSuit.Spade); 
+              NormalCard(CardValue=CardValue.Two, CardSuit=CardSuit.Diamond); 
+              NormalCard(CardValue=CardValue.Two,CardSuit=CardSuit.Heart); ]
+
+        Facade.CanPlay( List.toSeq(prevCards).ToList(), List.toSeq(currentCards).ToList() ) 
+        |> Assert.True
+
+
+    [<Fact>]
+    let ``测试CanPlay() 222 _ 3333`` () =
+
+        let prevCards  :PlayingCard list = 
+            [ NormalCard(CardValue=CardValue.Two, CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Two, CardSuit=CardSuit.Diamond); 
+              NormalCard(CardValue=CardValue.Two,CardSuit=CardSuit.Heart); ]
+
+        let currentCards  :PlayingCard list = 
+             [ NormalCard(CardValue=CardValue.Three, CardSuit=CardSuit.Spade);
+              NormalCard(CardValue=CardValue.Three, CardSuit=CardSuit.Diamond); 
+              NormalCard(CardValue=CardValue.Three, CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Three, CardSuit=CardSuit.Heart); ]
+
+        Facade.CanPlay( List.toSeq(prevCards).ToList(), List.toSeq(currentCards).ToList() ) 
+        |> Assert.True
+
+    [<Fact>]
+    let ``测试CanPlay() 222 _ AAA`` () =
+
+        let prevCards  :PlayingCard list = 
+            [ NormalCard(CardValue=CardValue.Two, CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Two, CardSuit=CardSuit.Diamond); 
+              NormalCard(CardValue=CardValue.Two,CardSuit=CardSuit.Heart); ]
+
+        let currentCards  :PlayingCard list = 
+             [ NormalCard(CardValue=CardValue.Ace, CardSuit=CardSuit.Spade);
+              NormalCard(CardValue=CardValue.Ace, CardSuit=CardSuit.Diamond); 
+              NormalCard(CardValue=CardValue.Ace, CardSuit=CardSuit.Heart); ]
+
+        Facade.CanPlay( List.toSeq(prevCards).ToList(), List.toSeq(currentCards).ToList() ) 
+        |> Assert.False
+
+    [<Fact>]
+    let ``测试CanPlay() KKK _ 222`` () =
+
+        let prevCards  :PlayingCard list = 
+             [ NormalCard(CardValue=CardValue.King, CardSuit=CardSuit.Spade);
+              NormalCard(CardValue=CardValue.King, CardSuit=CardSuit.Diamond); 
+              NormalCard(CardValue=CardValue.King, CardSuit=CardSuit.Club); ]
+        let currentCards  :PlayingCard list = 
+            [ NormalCard(CardValue=CardValue.Two, CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Two, CardSuit=CardSuit.Diamond); 
+              NormalCard(CardValue=CardValue.Two,CardSuit=CardSuit.Heart); ]
+
+        Facade.CanPlay( List.toSeq(prevCards).ToList(), List.toSeq(currentCards).ToList() ) 
+        |> Assert.True
+
+
+    [<Fact>]
+    let ``测试CanPlay() 3335 _ 5554`` () =
+
+        let prevCards  :PlayingCard list = 
+             [ NormalCard(CardValue=CardValue.Three, CardSuit=CardSuit.Spade);
+              NormalCard(CardValue=CardValue.Three, CardSuit=CardSuit.Diamond); 
+              NormalCard(CardValue=CardValue.Three, CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Five, CardSuit=CardSuit.Spade); ]
+        let currentCards  :PlayingCard list = 
+            [ NormalCard(CardValue=CardValue.Five, CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Five, CardSuit=CardSuit.Diamond); 
+              NormalCard(CardValue=CardValue.Five, CardSuit=CardSuit.Heart); 
+              NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Heart); ]
+
+        Facade.CanPlay( List.toSeq(prevCards).ToList(), List.toSeq(currentCards).ToList() ) 
+        |> Assert.True
+
+
+    [<Fact>]
+    let ``测试CanPlay() AAA3 _ 5554`` () =
+
+        let prevCards  :PlayingCard list = 
+             [ NormalCard(CardValue=CardValue.Three, CardSuit=CardSuit.Spade);
+              NormalCard(CardValue=CardValue.Ace, CardSuit=CardSuit.Diamond); 
+              NormalCard(CardValue=CardValue.Ace, CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Ace, CardSuit=CardSuit.Heart); ]
+        let currentCards  :PlayingCard list = 
+            [ NormalCard(CardValue=CardValue.Five, CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Five, CardSuit=CardSuit.Diamond); 
+              NormalCard(CardValue=CardValue.Five, CardSuit=CardSuit.Heart); 
+              NormalCard(CardValue=CardValue.Four,CardSuit=CardSuit.Heart); ]
+
+        Facade.CanPlay( List.toSeq(prevCards).ToList(), List.toSeq(currentCards).ToList() ) 
+        |> Assert.False
+
+    [<Fact>]
+    let ``测试CanPlay() AAA3 _ KKK2`` () =
+
+        let prevCards  :PlayingCard list = 
+             [ NormalCard(CardValue=CardValue.Three, CardSuit=CardSuit.Spade);
+              NormalCard(CardValue=CardValue.Ace, CardSuit=CardSuit.Diamond); 
+              NormalCard(CardValue=CardValue.Ace, CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.Ace, CardSuit=CardSuit.Heart); ]
+        let currentCards  :PlayingCard list = 
+            [ NormalCard(CardValue=CardValue.King, CardSuit=CardSuit.Club); 
+              NormalCard(CardValue=CardValue.King, CardSuit=CardSuit.Diamond); 
+              NormalCard(CardValue=CardValue.King, CardSuit=CardSuit.Heart); 
+              NormalCard(CardValue=CardValue.Two,CardSuit=CardSuit.Heart); ]
+
+        Facade.CanPlay( List.toSeq(prevCards).ToList(), List.toSeq(currentCards).ToList() ) 
+        |> Assert.False
