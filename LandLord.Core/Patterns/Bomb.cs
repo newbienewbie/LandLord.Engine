@@ -12,7 +12,8 @@ namespace LandLord.Core.Patterns
             if(cards.Count == 2)
             {
                 switch((first, second)){
-                    case (JokerCard j1, JokerCard j2):
+                    case (JokerCard j1, JokerCard j2) 
+                        when j1 != j2:
                         return (true, cards);
                     default:
                         return (false,null);
@@ -24,8 +25,8 @@ namespace LandLord.Core.Patterns
                 var forth = cards[3];
                 switch((first, second, third, forth))
                 {
-                    case (NormalCard n1, NormalCard n2, NormalCard n3, NormalCard n4) 
-                        when n1.Equals(n2) && n2.Equals(n3) && n3.Equals(n4): 
+                    case (NormalCard { CardValue: var cv1 }, NormalCard { CardValue: var cv2 }, NormalCard { CardValue: var cv3 }, NormalCard { CardValue: var cv4 })
+                        when cv1 == cv2 && cv2 == cv3 && cv3 == cv4:
                         return (true,cards);
                     default:    
                         return (false,null);

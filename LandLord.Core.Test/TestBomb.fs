@@ -1,78 +1,54 @@
-﻿module TestBomb
+﻿namespace LandLord.Core.Tests
+module TestBomb=
 
-open System
-open Xunit
-open System.Collections.Generic
-open Itminus.LandLord.Engine.Card
-open Itminus.LandLord.Engine.Bomb
-     
+    open System
+    open Xunit
+    open System.Collections.Generic
+    open LandLord.Core
+    open LandLord.Core.Patterns
+    open System.Linq
 
-[<Fact>]
-let ``测试Bomb 3337`` () =
 
-    let cards =
-        [   NormalCard( CardValue.Three, Suit.Heart);
-            NormalCard( CardValue.Three, Suit.Diamond);
-            NormalCard( CardValue.Three, Suit.Club);
-            NormalCard( CardValue.Seven, Suit.Diamond); ] 
+    [<Fact>]
+    let ``测试Bomb 3337`` () =
 
-    let x = match cards with 
-        | Bomb(list) -> true
-        | _ -> false 
+        let cards : PlayingCard list =
+            [   NormalCard( CardValue=CardValue.Three, CardSuit=CardSuit.Heart);
+                NormalCard( CardValue=CardValue.Three, CardSuit=CardSuit.Diamond);
+                NormalCard( CardValue=CardValue.Three, CardSuit=CardSuit.Club);
+                NormalCard( CardValue=CardValue.Seven, CardSuit=CardSuit.Diamond); ] 
 
-    Assert.Equal(false , x)
-    
-[<Fact>]
-let ``测试Bomb 2222`` () =
+        let x, _ = Patterns.Bomb(cards.ToList() :> IList<_>).ToTuple()
+        Assert.Equal(false , x)
 
-    let cards =
-        [   NormalCard( CardValue.Two, Suit.Heart);
-            NormalCard( CardValue.Two, Suit.Diamond);
-            NormalCard( CardValue.Two, Suit.Club);
-            NormalCard( CardValue.Two, Suit.Spade); ] 
+        
+    [<Fact>]
+    let ``测试Bomb 2222`` () =
 
-    let x = match cards with 
-        |Bomb(list) -> true
-        |_ -> false 
+        let cards: PlayingCard list =
+            [   NormalCard( CardValue=CardValue.Two, CardSuit=CardSuit.Heart);
+                NormalCard( CardValue=CardValue.Two, CardSuit=CardSuit.Diamond);
+                NormalCard( CardValue=CardValue.Two, CardSuit=CardSuit.Club);
+                NormalCard( CardValue=CardValue.Two, CardSuit=CardSuit.Spade); ] 
+        let x, _ = Patterns.Bomb(cards.ToList() :> IList<_>).ToTuple()
+        Assert.Equal(true, x)
 
-    Assert.Equal(true, x)
+    [<Fact>]
+    let ``测试Bomb 大鬼小鬼`` () =
 
-[<Fact>]
-let ``测试Bomb 大鬼小鬼`` () =
+        let cards: PlayingCard list = [ BlackJokerCard(); RedJokerCard(); ] 
+        let x, _ = Patterns.Bomb(cards.ToList() :> IList<_>).ToTuple()
+        Assert.Equal(true, x)
 
-    let cards =
-        [   Joker(JokerType.Red);
-            Joker(JokerType.Black) ] 
+    [<Fact>]
+    let ``测试Bomb 大鬼大鬼 同色-红色`` () =
+        let cards: PlayingCard list = [ RedJokerCard(); RedJokerCard(); ] 
+        let x, _ = Patterns.Bomb(cards.ToList() :> IList<_>).ToTuple()
+        Assert.Equal(false, x)
 
-    let x = match cards with 
-        |Bomb(list) -> true
-        |_ -> false 
-
-    Assert.Equal(true, x)
-
-[<Fact>]
-let ``测试Bomb 大鬼大鬼`` () =
-
-    let cards =
-        [   Joker(JokerType.Red);
-            Joker(JokerType.Red) ] 
-
-    let x = match cards with 
-        |Bomb(list) -> true
-        |_ -> false 
-
-    Assert.Equal(false, x)
-
-[<Fact>]
-let ``测试Bomb 小鬼小鬼`` () =
-
-    let cards =
-        [   Joker(JokerType.Black);
-            Joker(JokerType.Black) ] 
-
-    let x = match cards with 
-        |Bomb(list) -> true
-        |_ -> false 
-
-    Assert.Equal(false, x)
+    [<Fact>]
+    let ``测试Bomb 小鬼小鬼 同色-黑色`` () =
+        let cards: PlayingCard list = [ BlackJokerCard(); BlackJokerCard(); ] 
+        let x, _ = Patterns.Bomb(cards.ToList() :> IList<_>).ToTuple()
+        Assert.Equal(false, x)
 
