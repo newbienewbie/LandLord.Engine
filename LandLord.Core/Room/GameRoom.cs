@@ -132,7 +132,7 @@ namespace LandLord.Core.Room
             if(Facade.CanStartPlaying(cards)) 
             {
                 this.CurrentTurn = this.LandLordIndex;
-                this.playCards(turn, cards);
+                return this.playCards(turn, cards);
             } 
 
             return false;
