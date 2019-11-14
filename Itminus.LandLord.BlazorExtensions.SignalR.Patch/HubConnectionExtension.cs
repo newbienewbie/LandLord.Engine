@@ -1,11 +1,7 @@
-using Blazor.Extensions;
 using Microsoft.JSInterop;
 using System;
-using System.Collections.Generic;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Microsoft.JSInterop;
+using Newtonsoft.Json;
 
 namespace Itminus.LandLord.BlazorExtensions.SignalR.Patch
 {
@@ -27,10 +23,12 @@ namespace Itminus.LandLord.BlazorExtensions.SignalR.Patch
 
     public static class HubConnectionExtension
     {
-        private static TResult Deserialize<TResult>(string str) 
+
+        private static TResult Deserialize<TResult>(this HubConnectionEx connection, string str) 
         {
-            //return JsonSerializer.Deserialize<TResult>(str);
-            return FSharp.Json.Json.deserialize<TResult>(str);
+            Console.WriteLine("deserialize json: "+ str);
+            var result = JsonConvert.DeserializeObject<TResult>(str, connection.JsonSerializerSettings );
+            return result;
         }
 
         public static IDisposable On<TResult1>(this HubConnectionEx connection ,string methodName, Func<TResult1, Task> handler)
@@ -97,43 +95,43 @@ namespace Itminus.LandLord.BlazorExtensions.SignalR.Patch
 
                      if (payloads.Length > 0)
                      {
-                         t1 = Deserialize<TResult1>(payloads[0]);
+                         t1 = connection.Deserialize<TResult1>(payloads[0]);
                      }
                      if (payloads.Length > 1)
                      {
-                         t2 = Deserialize<TResult2>(payloads[1]);
+                         t2 = connection.Deserialize<TResult2>(payloads[1]);
                      }
                      if (payloads.Length > 2)
                      {
-                         t3 = Deserialize<TResult3>(payloads[2]);
+                         t3 = connection.Deserialize<TResult3>(payloads[2]);
                      }
                      if (payloads.Length > 3)
                      {
-                         t4 = Deserialize<TResult4>(payloads[3]);
+                         t4 = connection.Deserialize<TResult4>(payloads[3]);
                      }
                      if (payloads.Length > 4)
                      {
-                         t5 = Deserialize<TResult5>(payloads[4]);
+                         t5 = connection.Deserialize<TResult5>(payloads[4]);
                      }
                      if (payloads.Length > 5)
                      {
-                         t6 = Deserialize<TResult6>(payloads[5]);
+                         t6 = connection.Deserialize<TResult6>(payloads[5]);
                      }
                      if (payloads.Length > 6)
                      {
-                         t7 = Deserialize<TResult7>(payloads[6]);
+                         t7 = connection.Deserialize<TResult7>(payloads[6]);
                      }
                      if (payloads.Length > 7)
                      {
-                         t8 = Deserialize<TResult8>(payloads[7]);
+                         t8 = connection.Deserialize<TResult8>(payloads[7]);
                      }
                      if (payloads.Length > 8)
                      {
-                         t9 = Deserialize<TResult9>(payloads[8]);
+                         t9 = connection.Deserialize<TResult9>(payloads[8]);
                      }
                      if (payloads.Length > 9)
                      {
-                         t10 = Deserialize<TResult10>(payloads[9]);
+                         t10 = connection.Deserialize<TResult10>(payloads[9]);
                      }
 
                      return handler(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
