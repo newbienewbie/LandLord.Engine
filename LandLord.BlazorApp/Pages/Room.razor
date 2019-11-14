@@ -1,7 +1,9 @@
 ﻿@page "/room/{id:guid}"
 @using LandLord.BlazorApp.Data
 @using LandLord.Shared.Hub.CallbackArguments
+@using Itminus.LandLord.BlazorExtensions.SignalR.Patch
 @inject LandLord.BlazorApp.Services.SignalRService sigalRService
+
 
 <h1>GameRoom/@Id</h1>
 
@@ -9,31 +11,30 @@
 {
     <div class="container">
         <ul class="player-desk">
-            @if(!this.HasLandLord())
+            @if (!this.HasLandLord())
             {
                 <ReservedCards Cards="@(this.State.GameRoom.ReservedCards)" BeLandLord="@BeLandLord"></ReservedCards>
-            } else { 
+            }
+            else
+            {
                 <PreviousCards Cards="@this.State.GameRoom.PrevCards" />
             }
 
-            @{ 
+            @{
                 var desk = this.GetPlayerDesk();
             }
 
-            <OthersCards Wrapper="@desk.Left" 
-                IsItsTurn="@this.IsItsTurn(desk.Left.TurnIndex)"  
-                IsLandLord="@this.IsTheLandLord(desk.Left.TurnIndex)"
-            >
+            <OthersCards Wrapper="@desk.Left"
+                         IsItsTurn="@this.IsItsTurn(desk.Left.TurnIndex)"
+                         IsLandLord="@this.IsTheLandLord(desk.Left.TurnIndex)">
             </OthersCards>
-            <OthersCards Wrapper="@desk.Right" 
-                IsItsTurn="@this.IsItsTurn(desk.Right.TurnIndex)"  
-                IsLandLord="@this.IsTheLandLord(desk.Right.TurnIndex)"
-             >
+            <OthersCards Wrapper="@desk.Right"
+                         IsItsTurn="@this.IsItsTurn(desk.Right.TurnIndex)"
+                         IsLandLord="@this.IsTheLandLord(desk.Right.TurnIndex)">
             </OthersCards>
-            <MyCards Wrapper="@desk.Me" 
-                 IsMyTurn="@this.IsMyTurn()" 
-                 IsLandLord="@this.IsTheLandLord(desk.Me.TurnIndex)" 
-            >
+            <MyCards Wrapper="@desk.Me"
+                     IsMyTurn="@this.IsMyTurn()"
+                     IsLandLord="@this.IsTheLandLord(desk.Me.TurnIndex)">
             </MyCards>
         </ul>
     </div>
@@ -57,8 +58,8 @@
         {
             if (cbarg.Kind == KindValues.Success)
             {
-                // clear selections
-                Console.WriteLine("Playing Cards Succeeds");
+            // clear selections
+            Console.WriteLine("Playing Cards Succeeds");
             }
             else if (cbarg.Kind == KindValues.Fail)
             {
@@ -85,10 +86,12 @@
 
     private async Task BeLandLord()
     {
-        if (this.HasLandLord()) {
+        if (this.HasLandLord())
+        {
             // show fail message
         }
-        else {
+        else
+        {
             await this.sigalRService.BeLandLord(Id);
         }
     }
