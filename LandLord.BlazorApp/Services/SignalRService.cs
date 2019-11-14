@@ -1,4 +1,4 @@
-﻿using Itminus.LandLord.BlazorExtensions.SignalR.Patch;
+﻿using Blazor.Extensions;
 using LandLord.Shared;
 using LandLord.Shared.Hub.CallbackArguments;
 using Microsoft.JSInterop;
@@ -11,12 +11,12 @@ namespace LandLord.BlazorApp.Services
 {
     public class SignalRService
     {
-        public HubConnectionEx Connection { get; private set; }
+        public HubConnection Connection { get; private set; }
         private ValueTask<object> thenable;
 
         public SignalRService(IJSRuntime jsRuntime)
         {
-            this.Connection = new HubConnectionBuilderEx(jsRuntime)
+            this.Connection = new HubConnectionBuilder(jsRuntime)
                 .WithUrl("/gamehub")
                 .Build();
             Console.WriteLine("Connection:");

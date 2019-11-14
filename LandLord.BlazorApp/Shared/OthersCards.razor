@@ -1,9 +1,8 @@
-﻿@using  Itminus.LandLord.Engine
-@inject LandLord.BlazorApp.Services.CardConverterService cardConverter
+﻿@inject LandLord.BlazorApp.Services.CardConverterService cardConverter
 
 <li class="@(this.CssClass)">
     <div class='@(this.IsItsTurn? "isCurrentTurn": " ")'>
-        @{ 
+        @{
             var player = this.Wrapper.Player;
         }
         @if (player != null)
@@ -33,7 +32,7 @@
 @code{
 
     [Parameter]
-    public PlayerAndCardsWrapper Wrapper{ get; set; }
+    public PlayerAndCardsWrapper Wrapper { get; set; }
 
     [Parameter]
     public bool IsLandLord { get; set; }

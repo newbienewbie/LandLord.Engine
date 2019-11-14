@@ -1,30 +1,31 @@
-﻿using Itminus.LandLord.Engine;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LandLord.BlazorApp.Data;
+using LandLord.Shared;
 
 namespace LandLord.BlazorApp.Services
 {
     public class CardConverterService
     {
 
-        public string PlayingCardToString(Card.PlayingCard cardShape)
+        public string PlayingCardToString(PlayingCard cardShape)
         {
-            return cardShape.ConvertToString();
+            return cardShape.PrettyString();
         }
-        public string PlayingCardToStyle(Card.PlayingCard cardShape)
+        public string PlayingCardToStyle(PlayingCard cardShape)
         {
-            return cardShape.ConvertToString();
+            return cardShape.PrettyString();
         }
 
-        public string PlayerCardToString(Card.PlayerCard cardShape)
+        public string PlayerCardToString(PlayerCard cardShape)
         {
-            return cardShape.ConvertToString();
+            return cardShape.PrettyString();
         }
-        public string PlayerCardToStyle(Card.PlayerCard cardShape)
+        public string PlayerCardToStyle(PlayerCard cardShape)
         {
-            return cardShape.ConvertToString();
+            return cardShape.PrettyString();
         }
 
     }

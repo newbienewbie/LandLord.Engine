@@ -1,13 +1,22 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LandLord.Core
+namespace LandLord.Shared
 {
+    public enum PlayerCardKind
+    { 
+        NormalCard,
+        BlackJokerCard,
+        RedJokerCard,
+        Shadowed,
+    }
 
     public abstract class PlayerCard : IEquatable<PlayerCard>, IComparable<PlayerCard>
     {
         public abstract int GetWeight();
+        public abstract string PrettyString();
         public bool Equals(PlayerCard other)
         {
             if (Object.ReferenceEquals(other, null))
@@ -47,7 +56,6 @@ namespace LandLord.Core
         public static bool operator !=(PlayerCard lhs, PlayerCard rhs) =>
             !(lhs == rhs);
 
-        public abstract string PrettyString();
         public int CompareTo(object other)
         {
             var otherPlayingCard = other as PlayingCard;
@@ -72,6 +80,7 @@ namespace LandLord.Core
          IComparable,
          IComparable<PlayingCard>
     {
+
         public int CompareTo(PlayingCard other)
         {
             if (other == null)
@@ -91,7 +100,7 @@ namespace LandLord.Core
         }
         public override int GetWeight() => this.GetWeight(true);
 
-        public abstract int GetWeight(bool considerSuit) ;
+        public abstract int GetWeight(bool considerSuit);
 
     }
 

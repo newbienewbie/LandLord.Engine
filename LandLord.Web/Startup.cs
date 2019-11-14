@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using JsonSubTypes;
 using LandLord.Engine.Repository;
+using LandLord.Shared;
 using LandLord.Shared.Hub.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,6 +13,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 
 namespace LandLord.Web
 {
@@ -26,15 +29,31 @@ namespace LandLord.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            var playerCardJsonConverter= JsonSubtypesConverterBuilder
+                .Of(typeof(PlayerCard), "Kind") // type property is only defined here
+                .RegisterSubtype(typeof(NormalCard), PlayerCardKind.NormalCard)
+                .RegisterSubtype(typeof(BlackJokerCard), PlayerCardKind.BlackJokerCard)
+                .RegisterSubtype(typeof(RedJokerCard), PlayerCardKind.RedJokerCard)
+                .RegisterSubtype(typeof(Shadowed), PlayerCardKind.Shadowed)
+                .SerializeDiscriminatorProperty() // ask to serialize the type property
+                .Build();
+            services.AddControllersWithViews().AddNewtonsoftJson(opts => {
+                opts.SerializerSettings.Converters.Add(playerCardJsonConverter); 
+            });
             services.AddRazorPages();
             services.AddScoped(sp => new GameRoomRepository(Configuration["GameRoomDb:Name"]) );
             services.AddSignalR(o => {
                 o.EnableDetailedErrors = true;
-            }).AddJsonProtocol(opts => {
-                opts.PayloadSerializerOptions.PropertyNameCaseInsensitive = false;
-                opts.PayloadSerializerOptions.PropertyNamingPolicy = null;
-            });
+            })
+                .AddNewtonsoftJsonProtocol(opts => {
+                    opts.PayloadSerializerSettings.Converters.Add(playerCardJsonConverter);
+                })
+                //.AddJsonProtocol(opts =>
+                //{
+                //    opts.PayloadSerializerOptions.PropertyNameCaseInsensitive = false;
+                //    opts.PayloadSerializerOptions.PropertyNamingPolicy = null;
+                //})
+                ;
             //.AddNewtonsoftJsonProtocol();
         }
 

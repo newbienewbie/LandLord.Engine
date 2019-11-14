@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LandLord.Shared;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -221,10 +222,11 @@ namespace LandLord.Core.Room
             // sort by weight
             var fromCards = 
                 fromCardsList[nth]
-                .OrderBy(c => c switch { 
-                    PlayingCard card => card.GetWeight(), 
-                    Shadowed s=> throw new Exception("shadowed card can not be shadowed again")
-                });
+                .OrderBy(c => c.GetWeight());
+            //.OrderBy(c => c switch { 
+            //    PlayingCard card => card.GetWeight(), 
+            //    Shadowed s=> throw new Exception("shadowed card can not be shadowed again")
+            //});
             var toCards = cardsList[nth];
 
             // copy nth player's cards
@@ -250,7 +252,7 @@ namespace LandLord.Core.Room
             return room;
         }
 
-        public IGameRoomMetaData ShadowCards(int nth)
+        public GameRoomMetaData ShadowCards(int nth)
         {
             if (nth > 2 || nth < 0)
             {

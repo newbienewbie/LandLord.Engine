@@ -1,7 +1,7 @@
 ﻿namespace LandLord.Core.Tests
 
 open System
-open LandLord.Core
+open LandLord.Shared
 open LandLord.Core.Patterns
 open System.Linq
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LandLord.Core.Cards
+namespace LandLord.Shared
 {
     internal static class Extensions
     {

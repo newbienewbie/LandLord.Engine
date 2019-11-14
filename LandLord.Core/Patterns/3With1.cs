@@ -1,3 +1,4 @@
+using LandLord.Shared;
 using System.Collections.Generic;
 
 namespace LandLord.Core.Patterns

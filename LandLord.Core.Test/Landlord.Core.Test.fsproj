@@ -13,6 +13,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LandLord.Core\LandLord.Core.csproj" />
+    <ProjectReference Include="..\LandLord.Shared\LandLord.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,7 +25,7 @@
     <Compile Include="TestLianDui.fs" />
     <Compile Include="TestFeiJi.fs" />
     <Compile Include="TestEngine.fs" />
-    <Compile Include="TestGameRoom.fs"/>
+    <Compile Include="TestGameRoom.fs" />
    </ItemGroup>
 
 

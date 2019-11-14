@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LandLord.Engine\LandLord.Engine.fsproj" />
+    <ProjectReference Include="..\LandLord.Core\LandLord.Core.csproj" />
   </ItemGroup>
 
 </Project>

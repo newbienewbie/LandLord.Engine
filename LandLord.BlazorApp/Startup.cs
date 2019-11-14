@@ -9,6 +9,7 @@ namespace LandLord.BlazorApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<SignalRService>();
+            services.AddSingleton<CardConverterService>();
         }
 
         public void Configure(IComponentsApplicationBuilder app)

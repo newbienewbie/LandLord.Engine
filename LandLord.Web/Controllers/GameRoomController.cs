@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Itminus.LandLord.Engine;
+using LandLord.Core.Room;
 using LandLord.Engine.Repository;
 using LiteDB;
 using Microsoft.AspNetCore.Http;

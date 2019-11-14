@@ -1,10 +1,6 @@
 ﻿@page "/room/{id:guid}"
-@using LandLord.Shared
-@using LandLord.BlazorApp.Shared
-@using Itminus.LandLord.Engine
+@using LandLord.BlazorApp.Data
 @using LandLord.Shared.Hub.CallbackArguments
-@using Itminus.LandLord.BlazorExtensions.SignalR.Patch
-
 @inject LandLord.BlazorApp.Services.SignalRService sigalRService
 
 <h1>GameRoom/@Id</h1>
@@ -53,6 +49,7 @@
         this.sigalRService.Connection.On<GameStateDto>("ReceiveState", (state) =>
         {
             this.State = state;
+            Console.WriteLine($"State Has Changed ~~~~~~ : turnIndex={state.TurnIndex}, RoomId={state.GameRoom?.Id}");
             this.StateHasChanged();
             return Task.CompletedTask;
         });
@@ -121,7 +118,7 @@
 
     private RoomDesk GetPlayerDesk()
     {
-        var room = this.State.GameRoom as IGameRoomMetaData;
+        var room = this.State.GameRoom as GameRoomMetaData;
         return room.GetPlayersAndCardsOnDesk(this.State.TurnIndex);
     }
 

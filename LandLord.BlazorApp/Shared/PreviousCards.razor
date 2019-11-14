@@ -1,5 +1,4 @@
-﻿@using  Itminus.LandLord.Engine
-@inject LandLord.BlazorApp.Services.CardConverterService cardConverter
+﻿@inject LandLord.BlazorApp.Services.CardConverterService cardConverter
 
 <li>
     <ul class="prev-cards">
@@ -17,5 +16,5 @@
 @code{
 
     [Parameter]
-    public IList<Card.PlayingCard> Cards { get; set; }
+    public IList<PlayingCard> Cards { get; set; }
 }

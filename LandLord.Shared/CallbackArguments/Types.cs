@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static Itminus.LandLord.Engine.Card;
 
 namespace LandLord.Shared.Hub.CallbackArguments
 {
@@ -22,11 +21,6 @@ namespace LandLord.Shared.Hub.CallbackArguments
         public int LandLordIndex { get; set; }
     }
 
-    public class PlayCardsCallbackArgs : CallbackArgs
-    {
-        public int Index { get; set; }
-        public IList<PlayingCard> Cards { get; set; }
-    }
 
     public class PassCardsCallbackArgs : CallbackArgs
     {

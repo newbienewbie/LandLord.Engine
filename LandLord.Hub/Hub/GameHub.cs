@@ -1,5 +1,6 @@
-﻿using Itminus.LandLord.Engine;
-using LandLord.Shared.Hub;
+﻿using LandLord.Shared.Hub;
+using LandLord.Core;
+using LandLord.Core.Room;
 using LandLord.Shared.Hub.CallbackArguments;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
@@ -8,8 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static Itminus.LandLord.Engine.Card;
 using LandLord.Engine.Repository;
+using LandLord.Hub;
 
 namespace LandLord.Shared.Hub.Services
 {

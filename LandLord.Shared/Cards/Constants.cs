@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LandLord.Core
+namespace LandLord.Shared
 {
     
     public enum CardValue

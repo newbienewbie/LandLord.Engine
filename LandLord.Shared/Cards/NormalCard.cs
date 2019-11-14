@@ -1,6 +1,6 @@
-using LandLord.Core.Cards;
+using LandLord.Shared;
 
-namespace LandLord.Core
+namespace LandLord.Shared
 {
 
     public class NormalCard : PlayingCard

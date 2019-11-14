@@ -5,8 +5,10 @@ module TestsPlayerCard =
     open System
     open Xunit
     open System.Collections.Generic
-    open LandLord.Core
     open System.Linq
+    open LandLord.Core
+    open LandLord.Shared
+    open LandLord.Core.Room
 
 
     [<Theory>]

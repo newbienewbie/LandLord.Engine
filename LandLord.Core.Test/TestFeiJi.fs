@@ -5,6 +5,8 @@ module TestFeiJi =
     open Xunit
     open System.Collections.Generic
     open LandLord.Core
+    open LandLord.Shared
+    open LandLord.Core.Room
 
     let private lianshun3 (cards: PlayingCard list) = 
         TestHelper.lianshun 3 cards

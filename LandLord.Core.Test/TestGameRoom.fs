@@ -1,6 +1,7 @@
 ﻿namespace LandLord.Core.Tests
 
 
+
 module TestGameRoom =
 
     open System
@@ -8,6 +9,7 @@ module TestGameRoom =
     open System.Collections.Generic
     open System.Linq
     open LandLord.Core
+    open LandLord.Shared
     open LandLord.Core.Room
 
 

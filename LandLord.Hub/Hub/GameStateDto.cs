@@ -1,11 +1,10 @@
-﻿using Itminus.LandLord.Engine;
+﻿using LandLord.Core.Room;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LandLord.Shared
+namespace LandLord.Hub
 {
-
     /// the game state returned to client 
     public class GameStateDto
     {

@@ -5,5 +5,9 @@
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LandLord.Shared\LandLord.Shared.csproj" />
+  </ItemGroup>
+
 
 </Project>

@@ -2,7 +2,8 @@
 
 open LiteDB
 open LiteDB.FSharp
-open Itminus.LandLord.Engine
+open LandLord.Core
+open LandLord.Core.Room
 open System
 open System.Linq;
 

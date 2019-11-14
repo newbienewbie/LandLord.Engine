@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LandLord.Shared;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,28 +35,6 @@ namespace LandLord.Core.Room
             }
         }
 
-        public virtual PlayerTurnIndexes GetPlayerIndexesOnDesk(int meTurnIndex)
-        {
-            var me = meTurnIndex;
-            var left = (me + 3 - 1) % 3;
-            var right = (me + 3 + 1) % 3;
-            return new PlayerTurnIndexes
-            {
-                Me = me,
-                Left = left,
-                Right = right,
-            };
-        }
-        public virtual RoomDesk GetPlayersAndCardsOnDesk(int meTurnIndex)
-        {
-            var indexes = this.GetPlayerIndexesOnDesk(meTurnIndex);
-            return new RoomDesk
-            {
-                Me = PlayerAndCardsWrapper.Create(this, indexes.Me),
-                Left = PlayerAndCardsWrapper.Create(this, indexes.Left),
-                Right = PlayerAndCardsWrapper.Create(this, indexes.Right),
-            };
-        }
 
     }
 }

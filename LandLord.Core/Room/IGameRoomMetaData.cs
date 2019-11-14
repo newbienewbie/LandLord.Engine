@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LandLord.Shared;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -16,8 +17,7 @@ namespace LandLord.Core.Room
         IList<PlayingCard> ReservedCards { get; set; }
         bool HasFinished { get; set; }
         int WinnerIndex { get; }
-        PlayerTurnIndexes GetPlayerIndexesOnDesk(int n);
-        RoomDesk GetPlayersAndCardsOnDesk(int n);
+
     }
 
 

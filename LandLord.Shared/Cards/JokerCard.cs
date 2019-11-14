@@ -1,9 +1,9 @@
-﻿namespace LandLord.Core
+﻿namespace LandLord.Shared
 {
 
     public abstract class JokerCard : PlayingCard
     { 
-        public abstract JokerType JokerType {get;}
+        public virtual JokerType JokerType { get; set; }
 
         /// <summary>
         /// |                  n bits                     | 2 bits|
@@ -17,10 +17,11 @@
            int suitValue(JokerType jt) => considerJokerType? (int) jt : 0 ;
            return (((int) Defines.JokerValue) << 2 ) + suitValue(JokerType);
         }
+
     }
     public class BlackJokerCard : JokerCard
     {
-        public override JokerType JokerType {get;} = JokerType.Black;
+        public override JokerType JokerType { get; set; } = JokerType.Black;
         public override string PrettyString()
         {
             return "🐼";
@@ -28,7 +29,7 @@
     }
     public class RedJokerCard : JokerCard
     {
-        public override JokerType JokerType {get;} = JokerType.Red;
+        public override JokerType JokerType { get; set; } = JokerType.Red;
         public override string PrettyString()
         {
             return "🃏";

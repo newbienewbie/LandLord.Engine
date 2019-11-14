@@ -1,5 +1,4 @@
-﻿@using  Itminus.LandLord.Engine
-@inject LandLord.BlazorApp.Services.CardConverterService cardConverter
+﻿@inject LandLord.BlazorApp.Services.CardConverterService cardConverter
 
 <li class="me">
 
@@ -63,7 +62,7 @@
     public bool CanOperate { get; set; }
 
     [Parameter]
-    public EventCallback<IList<Card.PlayerCard>> OnPlayCards { get; set; }
+    public EventCallback<IList<PlayerCard>> OnPlayCards { get; set; }
 
     [Parameter]
     public EventCallback OnPassCards { get; set; }

@@ -5,7 +5,8 @@ module TestsLianDui=
     open Xunit
     open System.Collections.Generic
     open LandLord.Core
-    open LandLord.Core.Patterns
+    open LandLord.Shared
+    open LandLord.Core.Room
     open System.Linq
     open TestHelper
 
