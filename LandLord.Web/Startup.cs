@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using JsonSubTypes;
-using LandLord.Engine.Repository;
+using LandLord.Core.Repository;
 using LandLord.Shared;
 using LandLord.Shared.Hub.Services;
 using Microsoft.AspNetCore.Builder;
@@ -29,7 +29,7 @@ namespace LandLord.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var playerCardJsonConverter= JsonSubtypesConverterBuilder
+            var playerCardJsonConverter = JsonSubtypesConverterBuilder
                 .Of(typeof(PlayerCard), "Kind") // type property is only defined here
                 .RegisterSubtype(typeof(NormalCard), PlayerCardKind.NormalCard)
                 .RegisterSubtype(typeof(BlackJokerCard), PlayerCardKind.BlackJokerCard)
@@ -37,16 +37,29 @@ namespace LandLord.Web
                 .RegisterSubtype(typeof(Shadowed), PlayerCardKind.Shadowed)
                 .SerializeDiscriminatorProperty() // ask to serialize the type property
                 .Build();
+            var playingCardJsonConverter = JsonSubtypesConverterBuilder
+                .Of(typeof(PlayingCard), "Kind") // type property is only defined here
+                .RegisterSubtype(typeof(NormalCard), PlayerCardKind.NormalCard)
+                .RegisterSubtype(typeof(BlackJokerCard), PlayerCardKind.BlackJokerCard)
+                .RegisterSubtype(typeof(RedJokerCard), PlayerCardKind.RedJokerCard)
+                .SerializeDiscriminatorProperty() // ask to serialize the type property
+                .Build();
             services.AddControllersWithViews().AddNewtonsoftJson(opts => {
-                opts.SerializerSettings.Converters.Add(playerCardJsonConverter); 
+                var converters = opts.SerializerSettings.Converters;
+                converters.Clear();
+                converters.Add(playerCardJsonConverter); 
+                converters.Add(playingCardJsonConverter); 
             });
             services.AddRazorPages();
-            services.AddScoped(sp => new GameRoomRepository(Configuration["GameRoomDb:Name"]) );
+            services.AddScoped(sp => new GameRoomRepository(Configuration["GameRoomDb:Name"], "rooms"));
             services.AddSignalR(o => {
                 o.EnableDetailedErrors = true;
             })
                 .AddNewtonsoftJsonProtocol(opts => {
-                    opts.PayloadSerializerSettings.Converters.Add(playerCardJsonConverter);
+                    var converters = opts.PayloadSerializerSettings.Converters;
+                    converters.Clear();
+                    converters.Add(playerCardJsonConverter); 
+                    converters.Add(playingCardJsonConverter); 
                 })
                 //.AddJsonProtocol(opts =>
                 //{

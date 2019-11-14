@@ -14,7 +14,8 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\LandLord.Engine.Repository\LandLord.Engine.Repository.fsproj" />
+    <ProjectReference Include="..\LandLord.Core.Repository\LandLord.Core.Repository.csproj" />
+    <ProjectReference Include="..\LandLord.Core\LandLord.Core.csproj" />
     <ProjectReference Include="..\LandLord.Shared\LandLord.Shared.csproj" />
   </ItemGroup>
 

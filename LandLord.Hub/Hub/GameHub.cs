@@ -9,8 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using LandLord.Engine.Repository;
 using LandLord.Hub;
+using LandLord.Core.Repository;
 
 namespace LandLord.Shared.Hub.Services
 {

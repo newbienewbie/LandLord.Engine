@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LandLord.Core.Repository;
 using LandLord.Core.Room;
-using LandLord.Engine.Repository;
 using LiteDB;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,16 +23,18 @@ namespace LandLord.Web.Controllers
 
         // GET: api/GameRoom
         [HttpGet]
-        public IEnumerable<IGameRoomMetaData> Get()
+        public IActionResult Get()
         {
-            return this._repo.FindAll();
+            var rooms = this._repo.FindAll();
+            return new JsonResult(rooms) ;
         }
 
         // GET: api/GameRoom/5
         [HttpGet("{id}", Name = "Get")]
-        public GameRoomMetaData Get(Guid id)
+        public IActionResult Get(Guid id)
         {
-            return this._repo.Load(new BsonValue(id));
+            var room = this._repo.Load(new BsonValue(id));
+            return new JsonResult(room);
         }
 
         // POST: api/GameRoom
