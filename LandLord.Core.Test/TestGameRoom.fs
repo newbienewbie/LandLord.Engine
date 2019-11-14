@@ -324,7 +324,7 @@ module TestGameRoom =
                 room.StartPlayingCards(cards)
 
             let rec _play(nth) = 
-                if room.WinnerIndex = -1 then 
+                if not room.HasFinished then 
                     let turnIndex' = getTurn nth
                     let cardsOption =
                         if room.PrevIndex = room.CurrentTurn then 

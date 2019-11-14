@@ -107,6 +107,10 @@ namespace LandLord.Core.Room
                 this.PrevIndex = nth;
                 this.PrevCards = cards;
                 this.CurrentTurn = (this.CurrentTurn + 1) % 3;
+                if (this.Cards[nth].Count == 0)
+                { 
+                    this.HasFinished = true;
+                }
                 return true;
             }
             else
@@ -120,6 +124,12 @@ namespace LandLord.Core.Room
                 return false;
             // check other conditions?
             return true;
+        }
+
+        public bool PlayerHasCards(int nth, IList<PlayingCard> cards)
+        { 
+            var allExists = cards.All(c => this.Cards[nth].Any(card => card == c) ) ;
+            return allExists;
         }
 
         public bool StartPlayingCards(IList<PlayingCard> cards) {
@@ -145,7 +155,7 @@ namespace LandLord.Core.Room
                 return this.playCards(nth, cards);
             else
             {
-                if (Facade.CanPlay(this.PrevCards, cards))
+                if ( PlayerHasCards(nth, cards) && Facade.CanPlay(this.PrevCards, cards))
                     return this.playCards(nth, cards);
                 else
                     return false;
