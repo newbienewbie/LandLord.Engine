@@ -24,9 +24,8 @@
     <Compile Include="TestLianDui.fs" />
     <Compile Include="TestFeiJi.fs" />
     <Compile Include="TestEngine.fs" />
-    <!--
-    <Compile Include="TestGameRoom.fs" />-->
-  </ItemGroup>
+    <Compile Include="TestGameRoom.fs"/>
+   </ItemGroup>
 
 
 

@@ -187,7 +187,7 @@ namespace LandLord.Core.Room
 
             if (count == 0)
                 return null;
-            if (count >= 1)
+            if (count > 1)
                 throw new Exception($"There're too many player that has Id = {userId}");
             else {
                 var (i, p) = kvs.First();
