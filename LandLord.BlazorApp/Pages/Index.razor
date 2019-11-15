@@ -46,6 +46,10 @@
 
         var response = await Http.SendAsync(req);
         Console.WriteLine("xx"+req.RequestUri);
+        var content = await response.Content.ReadAsStringAsync();
+        Console.WriteLine("Get "+content);
+        var metas = this.signalrService.Deserialize<List<GameRoomMetaData>>(content);
+        this._rooms = metas;
     }
 
 

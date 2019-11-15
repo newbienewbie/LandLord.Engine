@@ -50,6 +50,11 @@ namespace LandLord.BlazorApp.Services
             });
         }
 
+        public T Deserialize<T>(string json)
+        {
+            return this.Connection.Deserialize<T>(json);
+        }
+
         private async Task StartAsync()
         {
             this.thenable = this.Connection.StartAsync();
