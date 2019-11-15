@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <PackageReference Include="Blazor.Extensions.SignalR" Version="1.0.0" />
-    <PackageReference Include="FSharp.Json" Version="0.3.7" />
     <PackageReference Include="JsonSubTypes" Version="1.6.0" />
   </ItemGroup>
 
