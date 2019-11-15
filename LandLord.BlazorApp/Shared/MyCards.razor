@@ -18,27 +18,27 @@
 
         <form>
             <ul class="cards">
-                @foreach (var (c, i) in this.Wrapper.Cards.Select((card, idx) => (card, idx)))
+                @foreach (var item in this.Wrapper.Cards.Select((card, idx) => (card, idx)))
                 {
                     <li>
-                        <div class="@(this.cardConverter.PlayerCardToStyle(c))">
+                        <div class="@(this.cardConverter.PlayerCardToStyle(item.card))">
                             <input type="checkbox" name="selectedCards"
-                                   @onchange="e => this.SelectCard(i, Convert.ToBoolean(e.Value))" 
-                                   checked="@Selections[i]"
-                                   disabled="!@IsMyTurn" />
-                            @(this.cardConverter.PlayerCardToString(c))
+                                   @onchange="@(e => { this.SelectCard(item.idx, Convert.ToBoolean(e.Value)); })" 
+                                   checked="@Selections[item.idx]"
+                                   disabled="@(!IsMyTurn)" />
+                            @(item.card.PrettyString())
                         </div>
                     </li>
                 }
             </ul>
             <div>
                 <div>
-                    <button @onclick="PlayCards" disabled="@this.IsMyTurn">
+                    <button @onclick="PlayCards" disabled="@(!this.IsMyTurn)">
                         Play
                     </button>
                 </div>
                 <div>
-                    <button @onclick="PassCards" disabled="@this.IsMyTurn">
+                    <button @onclick="PassCards" disabled="@(!this.IsMyTurn)">
                         Pass
                     </button>
                 </div>
@@ -69,13 +69,18 @@
 
     private bool[] Selections { get; set; }
 
-    protected override void OnInitialized()
+
+    protected override void OnParametersSet()
     {
         var cardsLength = this.Wrapper.Cards.Count;
         this.Selections = new bool[cardsLength].Select(i => false).ToArray();
     }
-
     private string BadgeCssClass() => this.IsLandLord ? "landlord-badge" : "peasant-badge";
+
+    private void OnSelectInputChage(ChangeEventArgs e) 
+    { 
+
+    }
 
     private void SelectCard(int i , bool selected)
     {
