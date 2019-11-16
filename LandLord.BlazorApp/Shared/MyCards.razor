@@ -1,4 +1,5 @@
 ﻿@inject LandLord.BlazorApp.Services.CardConverterService cardConverter
+@inject LandLord.BlazorApp.Services.SignalRService signalRService
 
 <li class="me">
 
@@ -16,7 +17,7 @@
             </div>
         }
 
-        <form>
+        
             <ul class="cards">
                 @foreach (var item in this.Wrapper.Cards.Select((card, idx) => (card, idx)))
                 {
@@ -43,11 +44,13 @@
                     </button>
                 </div>
             </div>
-        </form>
+        
     </div>
 </li>
 
 @code{
+    [CascadingParameter(Name="GameRoomId")]
+    public Guid GameRoomId { get; set; }
 
     [Parameter]
     public PlayerAndCardsWrapper Wrapper{ get; set; }
@@ -61,11 +64,7 @@
     [Parameter]
     public bool CanOperate { get; set; }
 
-    [Parameter]
-    public EventCallback<IList<PlayerCard>> OnPlayCards { get; set; }
 
-    [Parameter]
-    public EventCallback OnPassCards { get; set; }
 
     private bool[] Selections { get; set; }
 
@@ -77,23 +76,19 @@
     }
     private string BadgeCssClass() => this.IsLandLord ? "landlord-badge" : "peasant-badge";
 
-    private void OnSelectInputChage(ChangeEventArgs e) 
-    { 
-
-    }
 
     private void SelectCard(int i , bool selected)
     {
         this.Selections[i] = selected;
     }
 
-    private void PlayCards()
+    private async Task PlayCards()
     {
-        var cards = this.Wrapper.Cards.Where((c, i) => this.Selections[i]).ToList();
-        this.OnPlayCards.InvokeAsync(cards);
+        var cards = this.Wrapper.Cards.Where((c, i) => this.Selections[i]).Select(c => (PlayingCard)c).ToList();
+        await this.signalRService.PlayCards(GameRoomId,cards);
     }
-    private void PassCards()
+    private async Task PassCards()
     {
-        this.OnPassCards.InvokeAsync(null);
+         await this.signalRService.PassCards(GameRoomId);
     }
 }

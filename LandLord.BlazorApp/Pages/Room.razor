@@ -10,6 +10,7 @@
 @if (this.State?.GameRoom != null)
 {
     <div class="container">
+        <CascadingValue Name="GameRoomId" Value="this.Id">
         <ul class="player-desk">
             @if (!this.HasLandLord())
             {
@@ -37,6 +38,7 @@
                      IsLandLord="@this.IsTheLandLord(desk.Me.TurnIndex)">
             </MyCards>
         </ul>
+        </CascadingValue>
     </div>
 }
 
