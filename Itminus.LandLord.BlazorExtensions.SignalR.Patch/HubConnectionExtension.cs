@@ -24,6 +24,12 @@ namespace Itminus.LandLord.BlazorExtensions.SignalR.Patch
     public static class HubConnectionExtension
     {
 
+        public static string Serialize<TObject>(this HubConnectionEx connection, TObject obj)
+        {
+            var result = JsonConvert.SerializeObject(obj, connection.JsonSerializerSettings);
+            return result;
+        }
+
         public static TResult Deserialize<TResult>(this HubConnectionEx connection, string str) 
         {
             Console.WriteLine("deserialize json: "+ str);
