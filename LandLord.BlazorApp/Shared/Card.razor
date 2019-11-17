@@ -1,0 +1,22 @@
+﻿@using LandLord.Shared
+
+<div class="card">
+    @if (CardItem is Shadowed) {
+        <img src="/images/cards/shadowed.jpg" alt="@CardItem.PrettyString()">
+    } else if(CardItem is RedJokerCard rj) { 
+        <img src="/images/cards/001.jpg" alt="@CardItem.PrettyString()">
+    } else if(CardItem is BlackJokerCard bj) { 
+        <img src="/images/cards/002.jpg" alt="@CardItem.PrettyString()">
+    } else if(CardItem is NormalCard nc) { 
+        var suit = (int) nc.CardSuit;
+        var value = (int) nc.CardValue;
+        var name = $"{suit}{value:D2}";
+        <img src="/images/cards/@(name).jpg" alt="@CardItem.PrettyString()">
+    }
+</div>
+
+
+@code { 
+    [Parameter]
+    public PlayerCard CardItem {get;set;}
+}

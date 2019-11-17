@@ -1,7 +1,7 @@
 ﻿@inject LandLord.BlazorApp.Services.CardConverterService cardConverter
 @inject LandLord.BlazorApp.Services.SignalRService signalRService
 
-<li class="me">
+<li class="@CssClass">
 
     <div class='@(this.IsMyTurn ? "isCurrentTurn" : " ")'>
         @{ 
@@ -17,34 +17,34 @@
             </div>
         }
 
-        
+        <div class="row">
             <ul class="cards">
                 @foreach (var item in this.Wrapper.Cards.Select((card, idx) => (card, idx)))
                 {
-                    <li>
+                    <li class="">
                         <div class="@(this.cardConverter.PlayerCardToStyle(item.card))">
                             <input type="checkbox" name="selectedCards"
                                    @onchange="@(e => { this.SelectCard(item.idx, Convert.ToBoolean(e.Value)); })" 
                                    checked="@Selections[item.idx]"
                                    disabled="@(!IsMyTurn)" />
-                            @(item.card.PrettyString())
+                            <Card CardItem="@item.card" />
                         </div>
                     </li>
                 }
             </ul>
-            <div>
-                <div>
-                    <button @onclick="PlayCards" disabled="@(!this.IsMyTurn)">
-                        Play
-                    </button>
-                </div>
-                <div>
-                    <button @onclick="PassCards" disabled="@(!this.IsMyTurn)">
-                        Pass
-                    </button>
-                </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <button @onclick="PlayCards" disabled="@(!this.IsMyTurn)">
+                    Play
+                </button>
             </div>
-        
+            <div class="col">
+                <button @onclick="PassCards" disabled="@(!this.IsMyTurn)">
+                    Pass
+                </button>
+            </div>
+        </div>
     </div>
 </li>
 
@@ -54,6 +54,9 @@
 
     [Parameter]
     public PlayerAndCardsWrapper Wrapper{ get; set; }
+
+    [Parameter]
+    public string CssClass{ get; set; }
 
     [Parameter]
     public bool IsLandLord { get; set; }

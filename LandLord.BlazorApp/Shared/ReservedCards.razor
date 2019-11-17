@@ -5,9 +5,7 @@
         @foreach (var card in Cards)
         {
             <li>
-                <div class="@(this.cardConverter.PlayingCardToStyle(card))">
-                    @(this.cardConverter.PlayingCardToString(card))
-                </div>
+                <Card CardItem="card"/>
             </li>
         }
     </ul>

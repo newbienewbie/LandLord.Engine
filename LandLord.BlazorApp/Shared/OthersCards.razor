@@ -18,10 +18,11 @@
             <ul class="cards">
                 @foreach (var (c, i) in this.Wrapper.Cards.Select((card, idx) => (card, idx)))
                 {
-                    <li>
-                        <div class="@(this.cardConverter.PlayerCardToString(c))">
+                    <li class="">
+                        @*<div class="@(this.cardConverter.PlayerCardToString(c))">
                             @(this.cardConverter.PlayerCardToString(c))
-                        </div>
+                        </div>*@
+                        <Card CardItem="c" />
                     </li>
                 }
             </ul>

@@ -11,33 +11,51 @@
 {
     <div class="container">
         <CascadingValue Name="GameRoomId" Value="this.Id">
-        <ul class="player-desk">
-            @if (!this.HasLandLord())
-            {
-                <ReservedCards Cards="@(this.State.GameRoom.ReservedCards)" BeLandLord="@BeLandLord"></ReservedCards>
-            }
-            else
-            {
-                <PreviousCards Cards="@this.State.GameRoom.PrevCards" />
-            }
+        <div class="player-desk">
+            <div class="row">
+                @{
+                    var desk = this.GetPlayerDesk();
+                }
 
-            @{
-                var desk = this.GetPlayerDesk();
-            }
+                <OthersCards Wrapper="@desk.Left"
+                             IsItsTurn="@this.IsItsTurn(desk.Left.TurnIndex)"
+                             IsLandLord="@this.IsTheLandLord(desk.Left.TurnIndex)"
+                             CssClass="left-player-cards col-2"
+                             >
+                </OthersCards>
 
-            <OthersCards Wrapper="@desk.Left"
-                         IsItsTurn="@this.IsItsTurn(desk.Left.TurnIndex)"
-                         IsLandLord="@this.IsTheLandLord(desk.Left.TurnIndex)">
-            </OthersCards>
-            <OthersCards Wrapper="@desk.Right"
-                         IsItsTurn="@this.IsItsTurn(desk.Right.TurnIndex)"
-                         IsLandLord="@this.IsTheLandLord(desk.Right.TurnIndex)">
-            </OthersCards>
-            <MyCards Wrapper="@desk.Me"
-                     IsMyTurn="@this.IsMyTurn()"
-                     IsLandLord="@this.IsTheLandLord(desk.Me.TurnIndex)">
-            </MyCards>
-        </ul>
+                <div class="col">
+                    <div class="row desk-common">
+                        @if (!this.HasLandLord())
+                        {
+                            <ReservedCards Cards="@(this.State.GameRoom.ReservedCards)" BeLandLord="@BeLandLord"></ReservedCards>
+                        }
+                        else
+                        {
+                            <PreviousCards Cards="@this.State.GameRoom.PrevCards" />
+                        }
+                    </div>
+                    <div>
+
+                    </div>
+                    <div class="row">
+                        <MyCards Wrapper="@desk.Me"
+                                 IsMyTurn="@this.IsMyTurn()"
+                                 IsLandLord="@this.IsTheLandLord(desk.Me.TurnIndex)"
+                                 CssClass="me col-12"
+                                 >
+                        </MyCards>
+                    </div>
+                </div>
+
+                <OthersCards Wrapper="@desk.Right"
+                             IsItsTurn="@this.IsItsTurn(desk.Right.TurnIndex)"
+                             IsLandLord="@this.IsTheLandLord(desk.Right.TurnIndex)"
+                             CssClass="right-player-cards col-2"
+                             >
+                </OthersCards>
+            </div>
+        </div>
         </CascadingValue>
     </div>
 }
