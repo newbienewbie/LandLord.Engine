@@ -1,7 +1,7 @@
 ﻿@inject LandLord.BlazorApp.Services.CardConverterService cardConverter
 
-<li>
-    <ul class="prev-cards">
+<div class="prev-cards">
+    <ul class="cards">
         @foreach (var c in this.Cards)
         {
             <li>
@@ -9,7 +9,7 @@
             </li>
         }
     </ul>
-</li>
+</div>
 
 @code{
 

@@ -1,34 +1,29 @@
 ﻿@inject LandLord.BlazorApp.Services.CardConverterService cardConverter
 
-<li class="@(this.CssClass)">
+<div class="@(this.CssClass)">
     <div class='@(this.IsItsTurn? "isCurrentTurn": " ")'>
         @{
             var player = this.Wrapper.Player;
         }
         @if (player != null)
         {
-            <div>
+            <div class="player-info">
                 <span class="@this.BadgeCssClass()"></span>
                 <span>
                     @(string.IsNullOrEmpty(player.Name) ? player.Name : "None")
                 </span>
             </div>
         }
-        <form>
-            <ul class="cards">
-                @foreach (var (c, i) in this.Wrapper.Cards.Select((card, idx) => (card, idx)))
-                {
-                    <li class="">
-                        @*<div class="@(this.cardConverter.PlayerCardToString(c))">
-                            @(this.cardConverter.PlayerCardToString(c))
-                        </div>*@
-                        <Card CardItem="c" />
-                    </li>
-                }
-            </ul>
-        </form>
+        <ul class="cards">
+            @foreach (var (c, i) in this.Wrapper.Cards.Select((card, idx) => (card, idx)))
+            {
+                <li class="">
+                    <Card CardItem="c" />
+                </li>
+            }
+        </ul>
     </div>
-</li>
+</div>
 
 @code{
 

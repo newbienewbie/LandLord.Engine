@@ -1,7 +1,7 @@
 ﻿@inject LandLord.BlazorApp.Services.CardConverterService cardConverter
 
-<li class="reserved-cards">
-    <ul>
+<div class="reserved-cards">
+    <ul class="cards">
         @foreach (var card in Cards)
         {
             <li>
@@ -13,7 +13,7 @@
     <div>
         <button @onclick="TryToBeLandLord">抢</button>
     </div>
-</li>
+</div>
 
 
 @code{

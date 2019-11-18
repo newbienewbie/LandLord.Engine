@@ -1,7 +1,7 @@
 ﻿@inject LandLord.BlazorApp.Services.CardConverterService cardConverter
 @inject LandLord.BlazorApp.Services.SignalRService signalRService
 
-<li class="@CssClass">
+<div class="@CssClass">
 
     <div class='@(this.IsMyTurn ? "isCurrentTurn" : " ")'>
         @{ 
@@ -9,7 +9,7 @@
         }
         @if (player != null)
         {
-            <div>
+            <div class="row player-info">
                 <span class='@this.BadgeCssClass()'></span>
                 <span>
                     @(string.IsNullOrEmpty(player.Name) ? player.Name : "None" )
@@ -46,7 +46,7 @@
             </div>
         </div>
     </div>
-</li>
+</div>
 
 @code{
     [CascadingParameter(Name="GameRoomId")]
