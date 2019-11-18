@@ -1,0 +1,47 @@
+﻿
+
+// other.cards : display vertically
+ul.cards {
+    list-style:none;
+}
+ul.cards li{
+    height: 30px;
+    list-style:none;
+}
+.left-player-cards, .right-player-cards {
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+
+.desk-common-area {
+    min-height: 150px;
+}
+
+// display horizontally
+.me ul.cards, 
+.reserved-cards ul {
+    list-style: none;
+}
+
+.me ul.cards li, 
+.reserved-cards ul.cards li, 
+.prev-cards ul.cards li{
+    width: 30px;
+    height: 150px;
+    float: left;
+    overflow: hidden;
+}
+
+.me ul.cards li:last-child, 
+.reserved-cards ul.cards li:last-child, 
+.prev-cards ul.cards li:last-child{
+    width:105px;
+}
+
+.card img {
+    width:105px;
+    height: 150px;
+    max-width:105px;
+    max-height:150px;
+}
