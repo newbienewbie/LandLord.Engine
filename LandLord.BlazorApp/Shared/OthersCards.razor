@@ -10,7 +10,7 @@
             <div class="player-info">
                 <span class="@this.BadgeCssClass()"></span>
                 <span>
-                    @(string.IsNullOrEmpty(player.Name) ? player.Name : "None")
+                    @(!string.IsNullOrEmpty(player.Name) ? player.Name : "None")
                 </span>
             </div>
         }
