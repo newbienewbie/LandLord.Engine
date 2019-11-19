@@ -99,10 +99,7 @@ namespace LandLord.Web
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapHub<GameHub>("/gamehub");
-                endpoints.MapFallback((ctx) => {
-                    ctx.Response.Redirect("/");
-                    return Task.CompletedTask;
-                });
+                endpoints.MapFallbackToController("/room/{id:guid}","Index","Home");
             });
         }
     }
