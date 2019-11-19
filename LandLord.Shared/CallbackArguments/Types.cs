@@ -21,6 +21,9 @@ namespace LandLord.Shared.Hub.CallbackArguments
         public int LandLordIndex { get; set; }
     }
 
+    public class StartGameCallbackArgs : CallbackArgs
+    {
+    }
 
     public class PassCardsCallbackArgs : CallbackArgs
     {

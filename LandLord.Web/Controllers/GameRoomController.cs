@@ -47,7 +47,7 @@ namespace LandLord.Web.Controllers
         [HttpPut()]
         public IActionResult Put()
         {
-            var room = GameRoom.Prepare();
+            var room = GameRoom.Create(Guid.NewGuid());
             this._repo.Save(room);
             return new JsonResult(new {
                 Id = room.Id,

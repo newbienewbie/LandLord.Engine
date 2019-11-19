@@ -11,7 +11,7 @@ namespace LandLord.Shared.Test
         [Fact]
         public void Test1()
         {
-            var room = GameRoom.Prepare();
+            var room = GameRoom.CreateAndDeal();
             var playerCardJsonConverter = JsonSubtypesConverterBuilder
                 .Of(typeof(PlayerCard), "Kind") // type property is only defined here
                 .RegisterSubtype(typeof(NormalCard), PlayerCardKind.NormalCard)

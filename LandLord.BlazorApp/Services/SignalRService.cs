@@ -95,6 +95,11 @@ namespace LandLord.BlazorApp.Services
             await this.thenable;
             await this.Connection.InvokeAsync("AddToRoom", roomId);
         }
+        public async Task StartGame(Guid roomId)
+        {
+            await this.thenable;
+            await this.Connection.InvokeAsync("StartGame", roomId);
+        }
 
         public async Task BeLandLord(Guid roomId)
         {

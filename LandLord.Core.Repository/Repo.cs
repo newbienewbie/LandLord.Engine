@@ -85,7 +85,7 @@ namespace LandLord.Core.Repository
         {
             using (var db = new LiteDatabase(this.DbName )) { 
                 var roomCollection = db.GetCollection<GameRoom>(this.RoomCollectionName);
-                return roomCollection.FindOne(r => r.Players.Any(p => p.Name == userId && r.HasFinished == false ));
+                return roomCollection.FindOne(r => r.Players.Any(p => p.Name == userId && (r.RoomState != Shared.Room.GameRoomState.GameCompleted)));
             }
         }
 

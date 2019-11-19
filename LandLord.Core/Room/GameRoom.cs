@@ -13,6 +13,7 @@ namespace LandLord.Core.Room
             var room = new GameRoom()
             {
                 Id = Id,
+                RoomState = Shared.Room.GameRoomState.CreatedButHasNotStarted,
             };
             // initialize the _cards with 3 emtpy cards list
             room.Cards.Add(new List<PlayerCard>());
@@ -25,9 +26,8 @@ namespace LandLord.Core.Room
             return room;
         }
 
-        public static GameRoom Prepare()
+        private static GameRoom prepare(GameRoom room)
         {
-            var room = GameRoom.Create(Guid.NewGuid());
             var cards = Facade.CreateFullCards();
             cards = Facade.Shuffle(cards);
             var (reserved, (cards1, cards2, cards3)) = Facade.Deal(cards);
@@ -44,10 +44,22 @@ namespace LandLord.Core.Room
             room.ReservedCards = new List<PlayingCard>(reserved);
             return room;
         }
+        public static GameRoom CreateAndDeal()
+        {
+            var room = GameRoom.Create(Guid.NewGuid());
+            room.RoomState = Shared.Room.GameRoomState.GamePlaying;
+            return prepare(room);
+        }
+        public GameRoom StartGame()
+        {
+            this.RoomState = Shared.Room.GameRoomState.GamePlaying;
+            return prepare(this);
+        }
 
         public static GameRoom FromMetaData(IGameRoomMetaData data)
         {
             var room = GameRoom.Create(data.Id);
+            room.RoomState = data.RoomState;
             room.LandLordIndex = data.LandLordIndex;
             room.CurrentTurn = data.CurrentTurn;
             room.Cards = data.Cards;
@@ -110,7 +122,7 @@ namespace LandLord.Core.Room
                 this.CurrentTurn = (this.CurrentTurn + 1) % 3;
                 if (this.Cards[nth].Count == 0)
                 { 
-                    this.HasFinished = true;
+                    this.RoomState = Shared.Room.GameRoomState.GameCompleted;
                 }
                 return true;
             }
@@ -119,7 +131,9 @@ namespace LandLord.Core.Room
         }
 
         private bool HasStarted() 
-        { 
+        {
+            if (this.RoomState == Shared.Room.GameRoomState.CreatedButHasNotStarted)
+                return false;
             var turn = this.LandLordIndex;
             if (this.Cards[turn].Count == 20)
                 return false;
@@ -164,7 +178,7 @@ namespace LandLord.Core.Room
         }
 
         public bool PlayCardsEx(int nth, IList<PlayingCard> cards) =>
-            (this.HasFinished, this.Players.Count, this.Cards[this.LandLordIndex].Count)
+            (this.RoomState == Shared.Room.GameRoomState.GameCompleted, this.Players.Count, this.Cards[this.LandLordIndex].Count)
             switch {
                 (false, 3, 20) => this.StartPlayingCards(cards),
                 (false, 3, var count) when count < 20 => this.PlayCards(nth, cards),
@@ -242,6 +256,7 @@ namespace LandLord.Core.Room
         public GameRoom ShadowCopy()
         {
             var room = GameRoom.Create(this.Id);
+            room.RoomState = this.RoomState;
             room.LandLordIndex = this.LandLordIndex;
             room.CurrentTurn = this.CurrentTurn;
             room.PrevCards = this.PrevCards;

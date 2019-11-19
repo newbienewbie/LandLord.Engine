@@ -9,51 +9,64 @@
 {
     <div class="container">
         <CascadingValue Name="GameRoomId" Value="this.Id">
-        <div class="player-desk">
-            <div class="row">
-                @{
-                    var desk = this.GetPlayerDesk();
-                }
+            @switch (this.State.GameRoom.RoomState)
+            {
+                case LandLord.Shared.Room.GameRoomState.CreatedButHasNotStarted:
+                    <ul>
+                    @foreach (var p in this.State.GameRoom.Players) 
+                    {
+                        <li> @if (p.Id == string.Empty) { <span> 空缺 </span>  } else {<span> @p.Name </span>}  </li>
+                    }
+                    </ul>
+                    <button class="btn btn-primary" disabled="@( this.State.TurnIndex != 0 || !this.PlayersReady() )" @onclick="StartGame" >开始游戏</button>
+                    break;
+                case LandLord.Shared.Room.GameRoomState.GamePlaying:
+                    <div class="player-desk">
+                        <div class="row">
+                            @{ var desk = this.GetPlayerDesk(); }
+                            <OthersCards Wrapper="@desk.Left"
+                                         IsItsTurn="@this.IsItsTurn(desk.Left.TurnIndex)"
+                                         IsLandLord="@this.IsTheLandLord(desk.Left.TurnIndex)"
+                                         CssClass="left-player-cards col-2">
+                            </OthersCards>
 
-                <OthersCards Wrapper="@desk.Left"
-                             IsItsTurn="@this.IsItsTurn(desk.Left.TurnIndex)"
-                             IsLandLord="@this.IsTheLandLord(desk.Left.TurnIndex)"
-                             CssClass="left-player-cards col-2"
-                             >
-                </OthersCards>
+                            <div class="col">
+                                <div class="row desk-common-area">
+                                    @if (!this.HasLandLord())
+                                    {
+                                        <ReservedCards Cards="@(this.State.GameRoom.ReservedCards)" BeLandLord="@BeLandLord"></ReservedCards>
+                                    }
+                                    else
+                                    {
+                                        <PreviousCards Cards="@this.State.GameRoom.PrevCards" />
+                                    }
+                                </div>
+                                <div>
 
-                <div class="col">
-                    <div class="row desk-common-area">
-                        @if (!this.HasLandLord())
-                        {
-                            <ReservedCards Cards="@(this.State.GameRoom.ReservedCards)" BeLandLord="@BeLandLord"></ReservedCards>
-                        }
-                        else
-                        {
-                            <PreviousCards Cards="@this.State.GameRoom.PrevCards" />
-                        }
+                                </div>
+                                <div class="row">
+                                    <MyCards Wrapper="@desk.Me"
+                                             IsMyTurn="@this.IsMyTurn()"
+                                             IsLandLord="@this.IsTheLandLord(desk.Me.TurnIndex)"
+                                             CssClass="me col-12">
+                                    </MyCards>
+                                </div>
+                            </div>
+
+                            <OthersCards Wrapper="@desk.Right"
+                                         IsItsTurn="@this.IsItsTurn(desk.Right.TurnIndex)"
+                                         IsLandLord="@this.IsTheLandLord(desk.Right.TurnIndex)"
+                                         CssClass="right-player-cards col-2">
+                            </OthersCards>
+                        </div>
                     </div>
-                    <div>
-
-                    </div>
-                    <div class="row">
-                        <MyCards Wrapper="@desk.Me"
-                                 IsMyTurn="@this.IsMyTurn()"
-                                 IsLandLord="@this.IsTheLandLord(desk.Me.TurnIndex)"
-                                 CssClass="me col-12"
-                                 >
-                        </MyCards>
-                    </div>
-                </div>
-
-                <OthersCards Wrapper="@desk.Right"
-                             IsItsTurn="@this.IsItsTurn(desk.Right.TurnIndex)"
-                             IsLandLord="@this.IsTheLandLord(desk.Right.TurnIndex)"
-                             CssClass="right-player-cards col-2"
-                             >
-                </OthersCards>
-            </div>
-        </div>
+                    break;
+                case LandLord.Shared.Room.GameRoomState.GameCompleted:
+                    <div>"Win!</div>
+                    break;
+                default:
+                    break;
+            }
         </CascadingValue>
     </div>
 }
@@ -76,8 +89,8 @@
         {
             if (cbarg.Kind == KindValues.Success)
             {
-            // clear selections
-            Console.WriteLine("Playing Cards Succeeds");
+                // clear selections
+                Console.WriteLine("Playing Cards Succeeds");
             }
             else if (cbarg.Kind == KindValues.Fail)
             {
@@ -85,6 +98,20 @@
             }
             return Task.CompletedTask;
         });
+
+        this.sigalRService.Connection.On<CallbackArgs>("StartGameCallback", (cbarg) =>
+        {
+            if (cbarg.Kind == KindValues.Success)
+            {
+                Console.WriteLine("Being LandLord Succeeds");
+            }
+            else if (cbarg.Kind == KindValues.Fail)
+            {
+                Console.WriteLine("Being LandLord Fails");
+            }
+            return Task.CompletedTask;
+        });
+
         this.sigalRService.Connection.On<CallbackArgs>("BeLandLordCallback", (cbarg) =>
         {
             if (cbarg.Kind == KindValues.Success)
@@ -100,6 +127,10 @@
 
         await sigalRService.PullLatestStateAsync(this.Id);
         await sigalRService.JoinRoomAsync(this.Id);
+    }
+
+    private async Task StartGame() {
+        await this.sigalRService.StartGame(this.State.GameRoom.Id);
     }
 
     private async Task BeLandLord()
@@ -143,7 +174,12 @@
         return room.GetPlayersAndCardsOnDesk(this.State.TurnIndex);
     }
 
-
+    private bool PlayersReady() {
+        var playersNumber = this.State.GameRoom.Players.Where(p => p.Id != string.Empty).Count();
+        if (playersNumber != 3)
+            return false;
+        return true;
+    }
 
 
 

@@ -35,12 +35,12 @@
         </div>
         <div class="row">
             <div class="col">
-                <button @onclick="PlayCards" disabled="@(!this.IsMyTurn)">
+                <button @onclick="PlayCards" disabled="@(!this.IsMyTurn)" class="btn btn-primary">
                     Play
                 </button>
             </div>
             <div class="col">
-                <button @onclick="PassCards" disabled="@(!this.IsMyTurn)">
+                <button @onclick="PassCards" disabled="@(!this.IsMyTurn)" class="btn btn-danger">
                     Pass
                 </button>
             </div>

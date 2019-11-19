@@ -152,7 +152,41 @@ namespace LandLord.Shared.Hub.Services
             }
         }
 
+        public async Task StartGame(Guid roomId)
+        {
+            var roomName = roomId.ToString();
+            var userId = Context.UserIdentifier;
+            using (var scope = this._sp.CreateScope())
+            {
+                var roomRepo = scope.ServiceProvider.GetRequiredService<GameRoomRepository>();
+                var room = roomRepo.Load(roomId);
 
+                if (room.RoomState == Room.GameRoomState.CreatedButHasNotStarted && room.LandLordIndex < 0)
+                {
+                    var findings = room.FindPlayer(userId);
+                    // only the first one has this rights
+                    if (findings.Index == 0 )
+                    {
+                        room.StartGame();
+                        roomRepo.Save(room);
+
+                        await this.PushStateToGroupAsync(room);
+                        var args = new StartGameCallbackArgs { };
+                        await Clients.Group(roomName).StartGameCallback(args);
+                        return;
+                    }
+                }
+                else
+                {
+                    var args = new StartGameCallbackArgs()
+                    {
+                        Kind = KindValues.Fail,
+                    };
+                    await Clients.Caller.StartGameCallback(args);
+                }
+            }
+
+        }
         public async Task BeLandLord(Guid roomId)
         {
             var roomName = roomId.ToString();

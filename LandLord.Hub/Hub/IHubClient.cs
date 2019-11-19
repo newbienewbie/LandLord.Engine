@@ -20,8 +20,9 @@ namespace LandLord.Shared.Hub
         Task Win(int index);
         Task ReceiveError(string msg);
 
-        Task PlayCardsCallback(PlayCardsCallbackArgs args);
+        Task StartGameCallback(StartGameCallbackArgs args);
         Task BeLandLordCallback(BeLandLordCallbackArgs args);
+        Task PlayCardsCallback(PlayCardsCallbackArgs args);
         Task PassCardsCallback(PassCardsCallbackArgs args);
     }
 }

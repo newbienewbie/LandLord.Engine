@@ -1,4 +1,5 @@
 ﻿using LandLord.Shared;
+using LandLord.Shared.Room;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -22,6 +23,7 @@ namespace LandLord.BlazorApp.Data
     public class GameRoomMetaData
     {
         public Guid Id { get; set; }
+        public GameRoomState RoomState { get; set; }
         public List<Player> Players { get; set; }
         public int LandLordIndex { get; set; }
         public int CurrentTurn { get; set; }

@@ -1,5 +1,7 @@
 ﻿namespace LandLord.Core.Tests
 
+open System.Buffers
+
 
 
 module TestGameRoom =
@@ -22,7 +24,7 @@ module TestGameRoom =
 
     [<Fact>]
     let ``测试GameRoom Prepare() Cards 各个分组的长度`` () =
-        let gameRoom = GameRoom.Prepare() 
+        let gameRoom = GameRoom.CreateAndDeal() 
         // every player has 17 cards
         for p in gameRoom.Cards do
             Assert.Equal(17, p.Count)
@@ -51,7 +53,7 @@ module TestGameRoom =
 
         let fullCardsSet = Facade.CreateFullCards() |> List.ofSeq |> Set.ofList
 
-        let gameRoom = GameRoom.Prepare()
+        let gameRoom = GameRoom.CreateAndDeal()
 
         Assert.Equal(17, gameRoom.Cards.[0].Count)
         Assert.Equal(17, gameRoom.Cards.[1].Count)
@@ -79,7 +81,7 @@ module TestGameRoom =
 
     [<Fact>]
     let ``test AddPlayer() normal use`` () =
-        let room = GameRoom.Prepare()
+        let room = GameRoom.CreateAndDeal()
         let players = createTestPlayers()
         for i in [0..2] do
             let p = players.[i]
@@ -88,7 +90,7 @@ module TestGameRoom =
 
     [<Fact>]
     let ``test AddPlayer() cannot add player with an index that has already had a player`` () =
-        let room = GameRoom.Prepare()
+        let room = GameRoom.CreateAndDeal()
         let players = createTestPlayers()
         for i in [0..2] do
             let p = players.[i]
@@ -100,7 +102,7 @@ module TestGameRoom =
 
     [<Fact>]
     let ``test AddPlayer() cannot add more then 3 players`` () =
-        let room = GameRoom.Prepare()
+        let room = GameRoom.CreateAndDeal()
         let players = createTestPlayers()
         for i in [0..2] do
             let p = players.[i]
@@ -111,7 +113,7 @@ module TestGameRoom =
 
     [<Fact>]
     let ``test FindPlayer(userId)`` () =
-        let room = GameRoom.Prepare()
+        let room = GameRoom.CreateAndDeal()
         let players = createTestPlayers()
         for i in [0..2] do
             let p = players.[i]
@@ -157,7 +159,7 @@ module TestGameRoom =
         
     [<Fact>]
     let ``test ShadowCards(connId)`` () =
-        let room = GameRoom.Prepare()
+        let room = GameRoom.CreateAndDeal()
         let players = createTestPlayers()
 
         for i in [0..2] do
@@ -172,7 +174,7 @@ module TestGameRoom =
             TestShadowCards(room.Cards, shadowedRoom.Cards , findings.Index)
 
     let private createRoomAndAddUserAndSetLandLord landlordIndex = 
-        let room = GameRoom.Prepare()
+        let room = GameRoom.CreateAndDeal()
         let players = createTestPlayers()
 
         for i in [0..2] do
@@ -326,7 +328,7 @@ module TestGameRoom =
                 room.StartPlayingCards(cards)
 
             let rec _play(nth) = 
-                if not room.HasFinished then 
+                if not (room.RoomState = LandLord.Shared.Room.GameRoomState.GameCompleted) then 
                     let turnIndex' = getTurn nth
                     let cardsOption =
                         if room.PrevIndex = room.CurrentTurn then 
