@@ -1,0 +1,38 @@
+﻿@using LandLord.Shared.Room;
+
+@{ 
+    var gameEnds = this.GameData.RoomState == GameRoomState.GameCompleted;
+}
+<div class="modal @(gameEnds ? "show" : "" ) " tabindex="-1" role="dialog" style="display: @(gameEnds ? "block" : "none");">
+    <div class="modal-dialog modal-dialog-centered " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Game Over</h5>
+            </div>
+            <div class="modal-body" style="min-height: 200px;">
+                @{ 
+                    var winnerIndex = this.GameData.WinnerIndex;
+                }
+                <p>
+                    You @if (winnerIndex == TurnIndex) { <span>Win!</span> } else {<span>Lose!</span>}
+                </p>
+                <p>
+                    @if (winnerIndex > -1 && winnerIndex < 3)
+                    {
+                        var winner = this.GameData.Players[winnerIndex];
+                        <div> The winner is @winner.Name !</div>
+                    }
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [CascadingParameter(Name="GameData")]
+    public GameRoomMetaData GameData { get; set; }
+
+    [CascadingParameter(Name="TurnIndex")]
+    public int TurnIndex{ get; set; }
+}

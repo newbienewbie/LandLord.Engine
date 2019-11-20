@@ -16,13 +16,9 @@
                 case LandLord.Shared.Room.GameRoomState.CreatedButHasNotStarted:
                     <GameReception />
                     break;
-                case LandLord.Shared.Room.GameRoomState.GamePlaying:
-                    <GamePlaying />
-                    break;
-                case LandLord.Shared.Room.GameRoomState.GameCompleted:
-                    <div>"Win!</div>
-                    break;
                 default:
+                    <GamePlaying />
+                    <GameEnding />
                     break;
             }
         </CascadingValue>
