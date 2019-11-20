@@ -3,13 +3,13 @@
 
 <div class="@CssClass">
 
-    <div class='@(this.IsMyTurn ? "isCurrentTurn" : " ")'>
+    <div>
         @{ 
             var player = this.Wrapper.Player;
         }
         @if (player != null)
         {
-            <div class="row player-info">
+            <div class="row player-info @(this.IsMyTurn ? "isCurrentTurn" : " ") ">
                 <span class='@this.BadgeCssClass()'></span>
                 <span>
                     @(!string.IsNullOrEmpty(player.Name) ? player.Name : "None" )

@@ -45,3 +45,8 @@ ul.cards li{
     max-width:105px;
     max-height:150px;
 }
+
+.isCurrentTurn {
+    border: 1px solid ;
+    background-color: darkorange;
+}

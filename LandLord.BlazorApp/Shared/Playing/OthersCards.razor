@@ -1,13 +1,13 @@
 ﻿@inject LandLord.BlazorApp.Services.CardConverterService cardConverter
 
 <div class="@(this.CssClass)">
-    <div class='@(this.IsItsTurn? "isCurrentTurn": " ")'>
+    <div>
         @{
             var player = this.Wrapper.Player;
         }
         @if (player != null)
         {
-            <div class="player-info">
+            <div class="player-info @(this.IsItsTurn? "isCurrentTurn": " ")">
                 <span class="@this.BadgeCssClass()"></span>
                 <span>
                     @(!string.IsNullOrEmpty(player.Name) ? player.Name : "None")
