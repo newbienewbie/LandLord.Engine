@@ -5,6 +5,7 @@
 @using LandLord.BlazorApp.Data
 @inject HttpClient Http
 @inject LandLord.BlazorApp.Services.SignalRService signalrService
+@inject NavigationManager navManager
 
 
 
@@ -56,6 +57,7 @@
         var room= await Http.PutJsonAsync<GameRoomMetaData>(GameRoomEndPoint, new { });
         this._rooms.Add(room);
         await this.signalrService.JoinRoomAsync(room.Id);
+        this.navManager.NavigateTo($"/room/{room.Id}");
     }
 
 

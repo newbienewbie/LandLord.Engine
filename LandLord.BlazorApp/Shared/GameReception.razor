@@ -1,0 +1,42 @@
+﻿@inject LandLord.BlazorApp.Services.SignalRService sigalRService
+
+<h3>ReceptionRoom</h3>
+<div>
+
+</div>
+<ul>
+    @foreach (var p in this.GameData.Players)
+    {
+        <li>
+            @if (p.Id == string.Empty)
+            {<span> 空缺 </span> }
+            else
+            {<span> @p.Name </span>}
+        </li>
+    }
+</ul>
+<button class="btn btn-primary"
+        disabled="@( this.TurnIndex != 0 || !this.PlayersReady() )" 
+        @onclick="StartGame">
+    开始游戏
+</button>
+
+@code {
+    [CascadingParameter(Name="GameData")]
+    public GameRoomMetaData GameData{ get; set; }
+    [CascadingParameter(Name="TurnIndex")]
+    public int TurnIndex { get; set; }
+
+    private bool PlayersReady()
+    {
+        var playersNumber = this.GameData.Players.Where(p => p.Id != string.Empty).Count();
+        if (playersNumber != 3)
+            return false;
+        return true;
+    }
+
+    private async Task StartGame()
+    {
+        await this.sigalRService.StartGame(this.GameData.Id);
+    }
+}

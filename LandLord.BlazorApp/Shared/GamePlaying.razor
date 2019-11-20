@@ -1,0 +1,96 @@
+﻿@using LandLord.BlazorApp.Data
+@using LandLord.Shared.Hub.CallbackArguments
+@using Itminus.LandLord.BlazorExtensions.SignalR.Patch
+@using LandLord.BlazorApp.Shared.Playing
+@inject LandLord.BlazorApp.Services.SignalRService sigalRService
+
+
+<div class="player-desk">
+    <div class="row">
+        @{ var desk = this.GetPlayerDesk(); }
+        <OthersCards Wrapper="@desk.Left"
+                     IsItsTurn="@this.IsItsTurn(desk.Left.TurnIndex)"
+                     IsLandLord="@this.IsTheLandLord(desk.Left.TurnIndex)"
+                     CssClass="left-player-cards col-2">
+        </OthersCards>
+
+        <div class="col">
+            <div class="row desk-common-area">
+                @if (!this.HasLandLord())
+                {
+                    <ReservedCards Cards="@(this.GameData.ReservedCards)" BeLandLord="@BeLandLord"></ReservedCards>
+                }
+                else
+                {
+                    <PreviousCards Cards="@this.GameData.PrevCards" />
+                }
+            </div>
+            <div>
+
+            </div>
+            <div class="row">
+                <MyCards Wrapper="@desk.Me"
+                         IsMyTurn="@this.IsMyTurn()"
+                         IsLandLord="@this.IsTheLandLord(desk.Me.TurnIndex)"
+                         CssClass="me col-12">
+                </MyCards>
+            </div>
+        </div>
+
+        <OthersCards Wrapper="@desk.Right"
+                     IsItsTurn="@this.IsItsTurn(desk.Right.TurnIndex)"
+                     IsLandLord="@this.IsTheLandLord(desk.Right.TurnIndex)"
+                     CssClass="right-player-cards col-2">
+        </OthersCards>
+    </div>
+</div>
+
+
+@code {
+
+    [CascadingParameter(Name="GameData")]
+    public GameRoomMetaData GameData{ get; set; }
+
+    [CascadingParameter(Name="TurnIndex")]
+    public int TurnIndex { get; set; }
+
+    public Guid Id { get { return this.GameData.Id; } }
+
+    private async Task BeLandLord()
+    {
+        if (this.HasLandLord())
+        {
+            // show fail message
+        }
+        else
+        {
+            await this.sigalRService.BeLandLord(Id);
+        }
+    }
+
+    private bool IsMyTurn()
+    {
+        return this.GameData.CurrentTurn == this.TurnIndex;
+    }
+
+    private bool IsItsTurn(int nth)
+    {
+        return this.GameData.CurrentTurn == nth;
+    }
+
+    private bool HasLandLord()
+    {
+        return this.GameData.LandLordIndex >= 0;
+    }
+
+    private bool IsTheLandLord(int index)
+    {
+        return this.GameData.LandLordIndex == index;
+    }
+
+    private RoomDesk GetPlayerDesk()
+    {
+        return this.GameData.GetPlayersAndCardsOnDesk(this.TurnIndex);
+    }
+
+}

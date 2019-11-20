@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Itminus.LandLord.BlazorExte
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LandLord.Shared.Test", "LandLord.Shared.Test\LandLord.Shared.Test.csproj", "{E34E68DB-842F-4978-AABD-3A31F2BB81F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LandLord.Core.Repository", "LandLord.Core.Repository\LandLord.Core.Repository.csproj", "{C46AC2C3-B17D-4F8B-B0FC-2E6D926B2055}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LandLord.Core.Repository", "LandLord.Core.Repository\LandLord.Core.Repository.csproj", "{C46AC2C3-B17D-4F8B-B0FC-2E6D926B2055}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
