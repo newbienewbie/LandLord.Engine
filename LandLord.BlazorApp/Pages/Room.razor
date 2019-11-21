@@ -2,7 +2,9 @@
 @using LandLord.BlazorApp.Data
 @using LandLord.Shared.Hub.CallbackArguments
 @using Itminus.LandLord.BlazorExtensions.SignalR.Patch
+@using LandLord.BlazorApp.Shared.General.Toasts
 @inject LandLord.BlazorApp.Services.SignalRService sigalRService
+
 
 
 @if (this.State?.GameRoom != null)
@@ -29,6 +31,7 @@
 
 @code {
 
+    [CascadingParameter] public ToastContainer ToastContainer { get; set; }
     [Parameter] public Guid Id { get; set; }
     [Parameter] public GameStateDto State { get; set; }
 
@@ -51,6 +54,12 @@
             else if (cbarg.Kind == KindValues.Fail)
             {
                 Console.WriteLine("Error happens");
+                this.ToastContainer.CreateNewToast(new Shared.General.Toasts.Toast { 
+                    Kind=ToastKind.Danger,
+                    Title="错误", 
+                    Content="出牌失败！",
+                });
+
             }
             return Task.CompletedTask;
         });
@@ -63,7 +72,11 @@
             }
             else if (cbarg.Kind == KindValues.Fail)
             {
-                Console.WriteLine("Being LandLord Fails");
+                this.ToastContainer.CreateNewToast(new Shared.General.Toasts.Toast { 
+                    Kind=ToastKind.Danger,
+                    Title="错误", 
+                    Content="游戏开始时出错了！",
+                });
             }
             return Task.CompletedTask;
         });
@@ -73,10 +86,19 @@
             if (cbarg.Kind == KindValues.Success)
             {
                 Console.WriteLine("Being LandLord Succeeds");
+                this.ToastContainer.CreateNewToast(new Shared.General.Toasts.Toast { 
+                    Kind=ToastKind.Success,
+                    Title="操作成功", 
+                    Content="成功抢到了地主！",
+                });
             }
             else if (cbarg.Kind == KindValues.Fail)
             {
-                Console.WriteLine("Being LandLord Fails");
+                this.ToastContainer.CreateNewToast(new Shared.General.Toasts.Toast { 
+                    Kind=ToastKind.Warning,
+                    Title="错误", 
+                    Content="地主没抢到！",
+                });
             }
             return Task.CompletedTask;
         });
