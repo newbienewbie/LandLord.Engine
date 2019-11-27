@@ -6,16 +6,16 @@
 
 
 <div class="player-desk">
-    <div class="row">
-        @{ var desk = this.GetPlayerDesk(); }
-        <OthersCards Wrapper="@desk.Left"
-                     IsItsTurn="@this.IsItsTurn(desk.Left.TurnIndex)"
-                     IsLandLord="@this.IsTheLandLord(desk.Left.TurnIndex)"
-                     CssClass="left-player-cards col-2">
-        </OthersCards>
+    @{ var desk = this.GetPlayerDesk(); }
+    <OthersCards Wrapper="@desk.Left"
+                 IsItsTurn="@this.IsItsTurn(desk.Left.TurnIndex)"
+                 IsLandLord="@this.IsTheLandLord(desk.Left.TurnIndex)"
+                 CssClass="left-player-cards">
+    </OthersCards>
 
-        <div class="col">
-            <div class="row desk-common-area">
+    <div class="middle">
+        <div class="middle-wrapper">
+            <div class="desk-common-area">
                 @if (!this.HasLandLord())
                 {
                     <ReservedCards Cards="@(this.GameData.ReservedCards)" BeLandLord="@BeLandLord"></ReservedCards>
@@ -25,24 +25,19 @@
                     <PreviousCards Cards="@this.GameData.PrevCards" />
                 }
             </div>
-            <div>
-
-            </div>
-            <div class="row">
-                <MyCards Wrapper="@desk.Me"
-                         IsMyTurn="@this.IsMyTurn()"
-                         IsLandLord="@this.IsTheLandLord(desk.Me.TurnIndex)"
-                         CssClass="me col-12">
-                </MyCards>
-            </div>
+            <MyCards Wrapper="@desk.Me"
+                     IsMyTurn="@this.IsMyTurn()"
+                     IsLandLord="@this.IsTheLandLord(desk.Me.TurnIndex)"
+                     CssClass="me">
+            </MyCards>
         </div>
-
-        <OthersCards Wrapper="@desk.Right"
-                     IsItsTurn="@this.IsItsTurn(desk.Right.TurnIndex)"
-                     IsLandLord="@this.IsTheLandLord(desk.Right.TurnIndex)"
-                     CssClass="right-player-cards col-2">
-        </OthersCards>
     </div>
+
+    <OthersCards Wrapper="@desk.Right"
+                 IsItsTurn="@this.IsItsTurn(desk.Right.TurnIndex)"
+                 IsLandLord="@this.IsTheLandLord(desk.Right.TurnIndex)"
+                 CssClass="right-player-cards">
+    </OthersCards>
 </div>
 
 

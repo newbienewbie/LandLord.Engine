@@ -4,48 +4,48 @@
 <div class="@CssClass">
 
     <div>
-        @{ 
+        @{
             var player = this.Wrapper.Player;
         }
-        @if (player != null)
-        {
-            <div class="row player-info @(this.IsMyTurn ? "isCurrentTurn" : " ") ">
-                <span class='@this.BadgeCssClass()'></span>
-                <span>
-                    @(!string.IsNullOrEmpty(player.Name) ? player.Name : "None" )
-                </span>
-            </div>
-        }
-
-        <div class="row">
-            <ul class="cards">
-                @foreach (var item in this.Wrapper.Cards.Select((card, idx) => (card, idx)))
-                {
-                    <li class="">
-                        <div class="@(this.cardConverter.PlayerCardToStyle(item.card))">
-                            <input type="checkbox" name="selectedCards"
-                                   @onchange="@(e => { this.SelectCard(item.idx, Convert.ToBoolean(e.Value)); })" 
-                                   checked="@Selections[item.idx]"
-                                   disabled="@(!IsMyTurn)" />
-                            <Card CardItem="@item.card" />
-                        </div>
-                    </li>
-                }
-            </ul>
-        </div>
-        <div class="row">
-            <div class="col">
-                <button @onclick="PlayCards" disabled="@(!this.IsMyTurn)" class="btn btn-primary">
+        <div class="me-headline">
+            @if (player != null)
+            {
+                <div class="player-info @(this.IsMyTurn ? "isCurrentTurn" : " ") ">
+                    <span class='@this.BadgeCssClass()'></span>
+                    <span>
+                        @(!string.IsNullOrEmpty(player.Name) ? player.Name : "None")
+                    </span>
+                </div>
+            }
+            <div class="me-op">
+                <button @onclick="PlayCards" disabled="@(!this.IsMyTurn)" class="btn btn-primary btn-xs">
                     Play
                 </button>
-            </div>
-            <div class="col">
-                <button @onclick="PassCards" disabled="@(!this.IsMyTurn)" class="btn btn-danger">
+                <button @onclick="PassCards" disabled="@(!this.IsMyTurn)" class="btn btn-danger btn-xs">
                     Pass
                 </button>
             </div>
         </div>
+
+        <ul class="cards">
+            @foreach (var item in this.Wrapper.Cards.Select((card, idx) => (card, idx)))
+            {
+                <li class="">
+                    <div class="@(this.cardConverter.PlayerCardToStyle(item.card))">
+                        <input type="checkbox" name="selectedCards"
+                               @onchange="@(e => { this.SelectCard(item.idx, Convert.ToBoolean(e.Value)); })"
+                               checked="@Selections[item.idx]"
+                               disabled="@(!IsMyTurn)" />
+                        <Card CardItem="@item.card" />
+                    </div>
+                </li>
+            }
+        </ul>
     </div>
+    <div>
+
+    </div>
+
 </div>
 
 @code{

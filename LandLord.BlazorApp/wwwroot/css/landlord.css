@@ -1,52 +1,155 @@
-﻿
+﻿* {
+    box-sizing: border-box;
+}
+.LandLordGame {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+.player-desk {
+    width: 100%;
+    overflow: hidden;
+    display:flex;
+    flex-direction:row;
+}
 
-// other.cards : display vertically
-ul.cards {
-    list-style:none;
-}
-ul.cards li{
-    height: 30px;
-    list-style:none;
-}
 .left-player-cards, .right-player-cards {
     max-height: 600px;
-    overflow-y: auto;
+    overflow-y: hidden;
+    margin: 0 4px;
+    width: 71px;
+}
+.middle {
+    width: 280px;
+}
+
+.middle-wrapper {
+    display: flex;
+    flex-direction:column;
+    justify-content: space-between;
+    height:100vh;
+}
+
+.reserved-cards {
+    display:flex;
+    flex-direction: row;
+    flex-wrap:nowrap;
+}
+
+.prev-cards .cards {
+    display:flex;
+    flex-direction:row;
+    flex-wrap:nowrap;
 }
 
 
-.desk-common-area {
-    min-height: 150px;
+
+.desk-common-area, me {
+    padding-top: 4px;
+    height: 150px;
+    overflow-x: auto;
 }
 
-// display horizontally
-.me ul.cards, 
-.reserved-cards ul {
+.me-headline {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+.me-headline .player-info {
+    width: 120px;
+    overflow-x: hidden;
+}
+.me-headline .me-op {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+
+ul.cards {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+ul.cards li {
+    height: 20px;
     list-style: none;
 }
+.card img {
+    width: 105px;
+    max-width: 105px;
+    max-height: 150px;
+}
+.left-player-cards .card img, .right-player-cards .card img {
+    max-width:100%;
+    max-height:100%;
+}
 
-.me ul.cards li, 
-.reserved-cards ul.cards li, 
-.prev-cards ul.cards li{
-    width: 30px;
+.left-player-cards .cards li:last-child, .right-player-cards .cards li:last-child{
+    height:auto;
+    max-height: 150px;
+}
+
+
+.me ul.cards, .reserved-cards ul {
+    list-style:none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.me ul.cards li, .reserved-cards ul.cards li, .prev-cards ul.cards li {
+    width: 20px;
     height: 150px;
-    float: left;
     overflow: hidden;
 }
 
-.me ul.cards li:last-child, 
-.reserved-cards ul.cards li:last-child, 
-.prev-cards ul.cards li:last-child{
-    width:105px;
+
+.reserved-cards ul.cards li:last-child,
+.prev-cards ul.cards li:last-child {
+    width: 105px;
 }
 
-.card img {
-    width:105px;
-    height: 150px;
-    max-width:105px;
-    max-height:150px;
-}
+
 
 .isCurrentTurn {
-    border: 1px solid ;
+    border: 1px solid;
     background-color: darkorange;
 }
+
+
+@media screen and (min-width: 320px) and (max-width: 767px) and (orientation:portrait) {
+    html {
+        transform: rotate(-90deg);
+        transform-origin: left top;
+        width: 100vh;
+        position: absolute;
+        top: 100%;
+        left: 0;
+    }
+
+}
+
+
+
+@media screen and (min-width: 320px) and (max-width: 767px) {
+
+    .left-player-cards, .right-player-cards {
+        width: 74px;
+    }
+    .desk-common-area, me {
+        min-height: 100px;
+    }
+    .card {
+        width: 73px;
+    }
+
+        .card img {
+            width: 73px;
+        }
+}
+
+
