@@ -19,5 +19,14 @@ jobs:
         dotnet-version: 3.0.100
     - name: Build with dotnet
       run:
-        dotnet test DouDiZhu.sln 
-        dotnet build DouDiZhu.sln -c Release
+        dotnet test ./LandLord.Core.Test/Landlord.Core.Test.fsproj
+        dotnet test ./LandLord.Shared.Test/LandLord.Shared.Test.csproj
+        dotnet build ./LandLord.Shared/LandLord.Shared.csproj
+        dotnet build ./LandLord.Core/LandLord.Core.csproj
+        dotnet build ./LandLord.Hub/LandLord.Hub.csproj
+        dotnet build ./LandLord.BlazorApp/LandLord.BlazorApp.csproj
+        dotnet build ./Itminus.LandLord.BlazorExtensions.SignalR.Patch/Itminus.LandLord.BlazorExtensions.SignalR.Patch.csproj
+        dotnet build ./LandLord.BlazorApp/LandLord.BlazorApp.csproj
+        dotnet build ./LandLord.Web/LandLord.Web.csproj
+        
+        
