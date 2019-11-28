@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="app.db" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="LandLord.IdentityData.db" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>
