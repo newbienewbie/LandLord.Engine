@@ -28,12 +28,12 @@
 
 @code {
 
-    private const string GameRoomEndPoint = "https://localhost:44376/api/GameRoom";
-
+    private string GameRoomEndPoint ="api/GameRoom";   
     private IList<GameRoomMetaData> _rooms = new List<GameRoomMetaData>();
 
     protected override async Task OnInitializedAsync()
     {
+        this.GameRoomEndPoint = this.navManager.BaseUri +  this.GameRoomEndPoint;
         var req = new HttpRequestMessage()
         {
             Method = HttpMethod.Get,
