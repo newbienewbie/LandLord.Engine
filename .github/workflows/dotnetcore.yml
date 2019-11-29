@@ -13,7 +13,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [windows-latest, ubuntu-lastest, macOS-latest]
+        os: [windows-latest, ubuntu-latest, macOS-latest]
         dotnet: [3.0.100]
     runs-on: ${{ matrix.os }}
     steps:
