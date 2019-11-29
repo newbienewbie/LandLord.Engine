@@ -1,10 +1,10 @@
-using JsonSubTypes;
 using LandLord.Core.Room;
-using Newtonsoft.Json;
+using System.Text.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
+using LandLord.Shared.CardJsonConverters;
 
 namespace LandLord.Shared.Test
 {
@@ -41,26 +41,11 @@ namespace LandLord.Shared.Test
         public void TestSerializationAndDeserialization()
         {
             var room = GameRoom.CreateAndDeal();
-            var playerCardJsonConverter = JsonSubtypesConverterBuilder
-                .Of(typeof(PlayerCard), "Kind") // type property is only defined here
-                .RegisterSubtype(typeof(NormalCard), PlayerCardKind.NormalCard)
-                .RegisterSubtype(typeof(BlackJokerCard), PlayerCardKind.BlackJokerCard)
-                .RegisterSubtype(typeof(RedJokerCard), PlayerCardKind.RedJokerCard)
-                .RegisterSubtype(typeof(Shadowed), PlayerCardKind.Shadowed)
-                .SerializeDiscriminatorProperty() // ask to serialize the type property
-                .Build();
-            var playingCardJsonConverter = JsonSubtypesConverterBuilder
-                .Of(typeof(PlayingCard), "Kind") // type property is only defined here
-                .RegisterSubtype(typeof(NormalCard), PlayerCardKind.NormalCard)
-                .RegisterSubtype(typeof(BlackJokerCard), PlayerCardKind.BlackJokerCard)
-                .RegisterSubtype(typeof(RedJokerCard), PlayerCardKind.RedJokerCard)
-                .SerializeDiscriminatorProperty() // ask to serialize the type property
-                .Build();
-            var settings = new JsonSerializerSettings();
-            settings.Converters.Add(playerCardJsonConverter);
-            settings.Converters.Add(playingCardJsonConverter);
-            var json = JsonConvert.SerializeObject(room, settings);
-            var room2 = JsonConvert.DeserializeObject<GameRoom>(json, settings);
+            var settings = new JsonSerializerOptions();
+            settings.Converters.Add(new PlayerCardJsonConverter());
+            settings.Converters.Add(new PlayingCardJsonConverter());
+            var json = JsonSerializer.Serialize(room, settings);
+            var room2 = JsonSerializer.Deserialize<GameRoom>(json, settings);
             Assert.Equal(room.Id, room2.Id);
             Assert.Equal(room.WinnerIndex, room2.WinnerIndex);
 
