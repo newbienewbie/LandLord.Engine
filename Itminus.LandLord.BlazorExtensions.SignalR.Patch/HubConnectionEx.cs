@@ -2,12 +2,12 @@
 
 
 using Blazor.Extensions;
-using JsonSubTypes;
 using LandLord.Shared;
+using LandLord.Shared.CardJsonConverters;
 using Microsoft.JSInterop;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Itminus.LandLord.BlazorExtensions.SignalR.Patch
@@ -31,7 +31,7 @@ namespace Itminus.LandLord.BlazorExtensions.SignalR.Patch
         private Dictionary<string, Dictionary<string, HubMethodCallbackEx>> callbacks = new Dictionary<string, Dictionary<string, HubMethodCallbackEx>>();
 
         private HubCloseCallback closeCallback;
-        public JsonSerializerSettings JsonSerializerSettings { get; set; }
+        public JsonSerializerOptions JsonSerializerOptions { get; set; }
 
         public HubConnectionEx(IJSRuntime runtime, HttpConnectionOptions options)
         {
@@ -41,28 +41,15 @@ namespace Itminus.LandLord.BlazorExtensions.SignalR.Patch
             runtime.InvokeSync<object>(CREATE_CONNECTION_METHOD,
                 this.InternalConnectionId,
                 DotNetObjectReference.Create(this.Options));
-            this.JsonSerializerSettings = GetJsonSerializerSettings();
+            this.JsonSerializerOptions = GetJsonSerializerSettings();
         }
-        private JsonSerializerSettings GetJsonSerializerSettings()
+        private JsonSerializerOptions GetJsonSerializerSettings()
         {
-            var playerCardJsonConverter = JsonSubtypesConverterBuilder
-                .Of(typeof(PlayerCard), "Kind") // type property is only defined here
-                .RegisterSubtype(typeof(NormalCard), PlayerCardKind.NormalCard)
-                .RegisterSubtype(typeof(BlackJokerCard), PlayerCardKind.BlackJokerCard)
-                .RegisterSubtype(typeof(RedJokerCard), PlayerCardKind.RedJokerCard)
-                .RegisterSubtype(typeof(Shadowed), PlayerCardKind.Shadowed)
-                .SerializeDiscriminatorProperty() // ask to serialize the type property
-                .Build();
-            var playingCardJsonConverter = JsonSubtypesConverterBuilder
-                .Of(typeof(PlayingCard), "Kind") // type property is only defined here
-                .RegisterSubtype(typeof(NormalCard), PlayerCardKind.NormalCard)
-                .RegisterSubtype(typeof(BlackJokerCard), PlayerCardKind.BlackJokerCard)
-                .RegisterSubtype(typeof(RedJokerCard), PlayerCardKind.RedJokerCard)
-                .SerializeDiscriminatorProperty() // ask to serialize the type property
-                .Build();
-            var settings = new JsonSerializerSettings();
-            settings.Converters.Add(playerCardJsonConverter);
-            settings.Converters.Add(playingCardJsonConverter);
+            var settings = new System.Text.Json.JsonSerializerOptions();
+            settings.Converters.Add(new PlayerCardJsonConverter());
+            settings.Converters.Add(new PlayingCardJsonConverter());
+            settings.PropertyNameCaseInsensitive = true;
+
             return settings;
         }
 

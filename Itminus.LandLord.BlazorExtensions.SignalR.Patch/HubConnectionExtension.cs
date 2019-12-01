@@ -1,7 +1,7 @@
 using Microsoft.JSInterop;
 using System;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace Itminus.LandLord.BlazorExtensions.SignalR.Patch
 {
@@ -26,14 +26,14 @@ namespace Itminus.LandLord.BlazorExtensions.SignalR.Patch
 
         public static string Serialize<TObject>(this HubConnectionEx connection, TObject obj)
         {
-            var result = JsonConvert.SerializeObject(obj, connection.JsonSerializerSettings);
+            var result = JsonSerializer.Serialize(obj, obj.GetType(), connection.JsonSerializerOptions);
             return result;
         }
 
         public static TResult Deserialize<TResult>(this HubConnectionEx connection, string str) 
         {
             Console.WriteLine("deserialize json: "+ str);
-            var result = JsonConvert.DeserializeObject<TResult>(str, connection.JsonSerializerSettings );
+            var result = JsonSerializer.Deserialize<TResult>(str, connection.JsonSerializerOptions );
             return result;
         }
 
