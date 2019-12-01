@@ -3,7 +3,6 @@ using Itminus.LandLord.BlazorExtensions.SignalR.Patch;
 using LandLord.Shared;
 using LandLord.Shared.Hub.CallbackArguments;
 using Microsoft.JSInterop;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -110,13 +109,7 @@ namespace LandLord.BlazorApp.Services
         public async Task PlayCards(Guid roomId, List<PlayingCard> cards)
         {
             await this.thenable;
-            // dirty : because IJsRunTime doesn't support Newton.Json
-            //    see https://github.com/aspnet/AspNetCore/issues/11954
-            //    and System.Text.Json doesn't support F# types 
-            var cardsJson = this.Connection.Serialize(cards);
-            Console.WriteLine($"PlayingCards={cardsJson}");
-            var payload = System.Text.Json.JsonSerializer.Deserialize<List<TagedCard>>(cardsJson);
-            await this.Connection.InvokeAsync("PlayCards", roomId, payload);
+            await this.Connection.InvokeAsync("PlayCards", roomId, cards);
         }
 
         private class TagedCard
