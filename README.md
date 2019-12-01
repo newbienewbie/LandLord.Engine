@@ -1,7 +1,7 @@
 
 练手项目：斗地主
 
-![](https://github.com/newbienewbie/LandLord.Engine/workflows/.NET%20Core/badge.svg)
+![](https://github.com/newbienewbie/LandLord.Engine/workflows/LandLord.NET/badge.svg)
 
 
 - `LandLord.Engine`: 游戏引擎

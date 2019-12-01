@@ -1,4 +1,4 @@
-name: .NET Core
+name: LandLord.NET
 
 on: 
   push:
@@ -22,10 +22,11 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: ${{matrix.dotnet}}
+    - name: Test 
+      run: 
+        dotnet test ./DouDiZhu.sln
     - name: Build with dotnet
       run: |
-        dotnet test ./LandLord.Core.Test/Landlord.Core.Test.fsproj
-        dotnet test ./LandLord.Shared.Test/LandLord.Shared.Test.csproj
         dotnet build ./LandLord.Shared/LandLord.Shared.csproj
         dotnet build ./LandLord.Core/LandLord.Core.csproj
         dotnet build ./LandLord.Hub/LandLord.Hub.csproj
