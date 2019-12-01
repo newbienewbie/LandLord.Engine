@@ -23,7 +23,7 @@ jobs:
       with:
         dotnet-version: ${{matrix.dotnet}}
     - name: Test 
-      run: 
+      run: |
         dotnet test ./LandLord.Shared.Test/LandLord.Shared.Test.csproj
         dotnet test ./LandLord.Core.Test/Landlord.Core.Test.fsproj
         dotnet test ./LandLord.Core.Repository.Test/LandLord.Core.Repository.Test.csproj
