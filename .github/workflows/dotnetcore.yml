@@ -24,7 +24,9 @@ jobs:
         dotnet-version: ${{matrix.dotnet}}
     - name: Test 
       run: 
-        dotnet test ./DouDiZhu.sln
+        dotnet test ./LandLord.Shared.Test/LandLord.Shared.Test.csproj
+        dotnet test ./LandLord.Core.Test/Landlord.Core.Test.fsproj
+        dotnet test ./LandLord.Core.Repository.Test/LandLord.Core.Repository.Test.csproj
     - name: Build with dotnet
       run: |
         dotnet build ./LandLord.Shared/LandLord.Shared.csproj
