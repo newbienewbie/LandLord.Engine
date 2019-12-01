@@ -1,8 +1,7 @@
-﻿using JsonSubTypes;
-using LandLord.Core.Room;
+﻿using LandLord.Core.Room;
 using LandLord.Shared;
+using LandLord.Shared.CardJsonConverters;
 using LiteDB;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,42 +12,26 @@ namespace LandLord.Core.Repository
     {
         public GameRoomRepository(string dbName, string roomCollectionName) {
 
-            var playingCardJsonConverter = JsonSubtypesConverterBuilder
-                .Of(typeof(PlayingCard), "Kind") // type property is only defined here
-                .RegisterSubtype(typeof(NormalCard), PlayerCardKind.NormalCard)
-                .RegisterSubtype(typeof(BlackJokerCard), PlayerCardKind.BlackJokerCard)
-                .RegisterSubtype(typeof(RedJokerCard), PlayerCardKind.RedJokerCard)
-                .SerializeDiscriminatorProperty() // ask to serialize the type property
-                .Build();
-            var playerCardJsonConverter = JsonSubtypesConverterBuilder
-                .Of(typeof(PlayerCard), "Kind") // type property is only defined here
-                .RegisterSubtype(typeof(NormalCard), PlayerCardKind.NormalCard)
-                .RegisterSubtype(typeof(BlackJokerCard), PlayerCardKind.BlackJokerCard)
-                .RegisterSubtype(typeof(RedJokerCard), PlayerCardKind.RedJokerCard)
-                .RegisterSubtype(typeof(Shadowed), PlayerCardKind.Shadowed)
-                .SerializeDiscriminatorProperty() // ask to serialize the type property
-                .Build();
 
-            var settings = new JsonSerializerSettings();
-            settings.Converters.Add(playerCardJsonConverter);
-            settings.Converters.Add(playingCardJsonConverter);
+            var settings = new System.Text.Json.JsonSerializerOptions();
+            settings.Converters.Add(new PlayerCardJsonConverter());
+            settings.Converters.Add(new PlayingCardJsonConverter());
 
             BsonMapper.Global.RegisterType<PlayingCard>
             (
-                serialize: obj => JsonConvert.SerializeObject(obj, settings),
+                serialize: obj => System.Text.Json.JsonSerializer.Serialize(obj, settings),
                 deserialize: bson => {
-                    var josn = LiteDB.JsonSerializer.Serialize(bson.AsDocument);
-                    return JsonConvert.DeserializeObject<PlayingCard>(bson, settings);
+                    var obj = System.Text.Json.JsonSerializer.Deserialize<PlayingCard>(bson, settings);
+                    return obj;
                 }
             );
             BsonMapper.Global.RegisterType<PlayerCard>
             (
-                serialize: obj => JsonConvert.SerializeObject(obj, settings),
+                serialize: obj => System.Text.Json.JsonSerializer.Serialize(obj, settings),
                 deserialize: bson => {
-                    //var json = LiteDB.JsonSerializer.Serialize(bson.AsDocument.Values.FirstOrDefault());
-                    return JsonConvert.DeserializeObject<PlayerCard>(bson.AsString, settings);
+                    var obj = System.Text.Json.JsonSerializer.Deserialize<PlayerCard>(bson, settings);
+                    return obj;
                 }
-                
             );
             this.DbName = dbName;
             RoomCollectionName = roomCollectionName;
