@@ -12,7 +12,7 @@ namespace LandLord.Core.Repository.Test
         [Fact]
         public void Test1()
         {
-            var repo = new LandLord.Core.Repository.GameRoomRepository("GameRepo.Test.db","gameRooms");
+            var repo = new LandLord.Core.Repository.GameRoomRepository("Filename=GameRepo.Test.db;Mode=Exclusive", "gameRooms");
             var game = GameRoom.CreateAndDeal();
             repo.Save(game);
 
