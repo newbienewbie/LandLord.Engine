@@ -109,7 +109,11 @@ namespace LandLord.BlazorApp.Services
         public async Task PlayCards(Guid roomId, List<PlayingCard> cards)
         {
             await this.thenable;
-            await this.Connection.InvokeAsync("PlayCards", roomId, cards);
+            // this is a dirty hack
+            //     because currently the IJsRuntime doesn't support customize JsonConverter
+            // so I pass the JSON string as the payload
+            var payload = this.Connection.Serialize(cards);
+            await this.Connection.InvokeAsync("PlayCards", roomId, payload);
         }
 
         private class TagedCard

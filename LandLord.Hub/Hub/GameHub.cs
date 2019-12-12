@@ -11,6 +11,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using LandLord.Hub;
 using LandLord.Core.Repository;
+using Microsoft.Extensions.Options;
+using System.Text.Json;
 
 namespace LandLord.Shared.Hub.Services
 {
@@ -19,10 +21,14 @@ namespace LandLord.Shared.Hub.Services
     public class GameHub : Hub<IGameHubClient>
     {
         private readonly IServiceProvider _sp;
+        private JsonSerializerOptions _jsonSerializerOptions;
 
-        public GameHub(IServiceProvider sp)
+        public GameHub(IServiceProvider sp, IOptions<JsonHubProtocolOptions> options)
         {
             this._sp = sp;
+
+            JsonHubProtocolOptions opts = options.Value;
+            this._jsonSerializerOptions = opts.PayloadSerializerOptions;
         }
 
         //public override async Task OnConnectedAsync()
@@ -222,11 +228,14 @@ namespace LandLord.Shared.Hub.Services
            
         }
 
-        public async Task PlayCards(Guid roomId, List<PlayingCard> cards)
+        // because the IJsRuntime doesn't support custom JsonConverter,
+        //     so I have to pass the List<PlayingCard> as a JSON string from the client
+        public async Task PlayCards(Guid roomId, string payload)
         {
+            var cards = JsonSerializer.Deserialize<List<PlayingCard>>(payload, this._jsonSerializerOptions);
             await PlayCardsCore(roomId,cards);
         }
-        private async Task PlayCardsCore(Guid roomId, List<PlayingCard> cards)
+        private async Task PlayCardsCore(Guid roomId, IList<PlayingCard> cards)
         {
             var roomName = roomId.ToString();
             var userId = Context.UserIdentifier;
