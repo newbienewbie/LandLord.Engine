@@ -50,8 +50,8 @@ namespace LandLord.Core.Repository.Test
 
             bool IsDisctinctList<T>(IList<T> cards)
             {
-                var cards2 = cards.Distinct();
-                return cards2.Count() == cards.Count();
+                var distinctCards = cards.Distinct();
+                return distinctCards.Count() == cards.Count();
             }
         }
 

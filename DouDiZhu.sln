@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LandLord.Shared.Test", "Lan
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LandLord.Core.Repository", "LandLord.Core.Repository\LandLord.Core.Repository.csproj", "{C46AC2C3-B17D-4F8B-B0FC-2E6D926B2055}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LandLord.Core.Repository.Test", "LandLord.Core.Repository.Test\LandLord.Core.Repository.Test.csproj", "{64B52989-EBE3-4FBA-8F11-617210EE0136}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LandLord.Core.Repository.Test", "LandLord.Core.Repository.Test\LandLord.Core.Repository.Test.csproj", "{64B52989-EBE3-4FBA-8F11-617210EE0136}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LandLord.Hub.Test", "LandLord.Hub.Test\LandLord.Hub.Test.csproj", "{654ADC02-17DD-4C1A-9B5B-C15F76A05081}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -153,6 +155,18 @@ Global
 		{64B52989-EBE3-4FBA-8F11-617210EE0136}.Release|x64.Build.0 = Release|Any CPU
 		{64B52989-EBE3-4FBA-8F11-617210EE0136}.Release|x86.ActiveCfg = Release|Any CPU
 		{64B52989-EBE3-4FBA-8F11-617210EE0136}.Release|x86.Build.0 = Release|Any CPU
+		{654ADC02-17DD-4C1A-9B5B-C15F76A05081}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{654ADC02-17DD-4C1A-9B5B-C15F76A05081}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{654ADC02-17DD-4C1A-9B5B-C15F76A05081}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{654ADC02-17DD-4C1A-9B5B-C15F76A05081}.Debug|x64.Build.0 = Debug|Any CPU
+		{654ADC02-17DD-4C1A-9B5B-C15F76A05081}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{654ADC02-17DD-4C1A-9B5B-C15F76A05081}.Debug|x86.Build.0 = Debug|Any CPU
+		{654ADC02-17DD-4C1A-9B5B-C15F76A05081}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{654ADC02-17DD-4C1A-9B5B-C15F76A05081}.Release|Any CPU.Build.0 = Release|Any CPU
+		{654ADC02-17DD-4C1A-9B5B-C15F76A05081}.Release|x64.ActiveCfg = Release|Any CPU
+		{654ADC02-17DD-4C1A-9B5B-C15F76A05081}.Release|x64.Build.0 = Release|Any CPU
+		{654ADC02-17DD-4C1A-9B5B-C15F76A05081}.Release|x86.ActiveCfg = Release|Any CPU
+		{654ADC02-17DD-4C1A-9B5B-C15F76A05081}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
